@@ -5,11 +5,9 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -300,11 +298,8 @@ public class DrawInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
-        for (Point p : points) {
-            //g.drawLine((int)p.getX(), (int)p.getY(), (int)p.getX(), (int)p.getY());
-            g.drawOval((int) p.getX(), (int) p.getY(), 3, 3);
-            g.fillOval((int) p.getX(), (int) p.getY(), 3, 3);
-        }
+        SimplePolygon polygon = new SimplePolygon(points);
+        polygon.draw(g);
         jLabel5.setText("Number of points: " + this.points.size());
     }
 
@@ -319,7 +314,7 @@ public class DrawInterface extends javax.swing.JFrame {
     }
 
     private void removeDuplicates() {
-        HashSet h = new HashSet(points);
+        HashSet h = new LinkedHashSet(points);
         points.clear();
         points.addAll(h);
     }
