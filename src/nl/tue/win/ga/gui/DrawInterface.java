@@ -25,6 +25,7 @@ public class DrawInterface extends javax.swing.JFrame {
     List<Point> points = new ArrayList<>();
     File outputFile;
     final int MAX_POINTS = 100000;
+    int selected = -1;
 
     /**
      * Creates new form DrawInterface
@@ -242,13 +243,20 @@ public class DrawInterface extends javax.swing.JFrame {
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         //start drawing
+        for (int i = 0; i < points.size(); i++) {
+            if (points.get(i).distanceSq(evt.getPoint()) <= 50) {
+                selected = i;
+                return;
+            }
+        }
         points.add(evt.getPoint());
         removeDuplicates();
         repaint();
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
-        //stop drawing
+        //stop dragging
+        selected = -1;
     }//GEN-LAST:event_jPanel1MouseReleased
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
@@ -265,6 +273,9 @@ public class DrawInterface extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Maximum points has been reached.");
         }*/
+        if (selected >= 0) {
+            points.get(selected).setLocation(evt.getPoint());
+        }
         repaint();
     }//GEN-LAST:event_jPanel1MouseDragged
 
