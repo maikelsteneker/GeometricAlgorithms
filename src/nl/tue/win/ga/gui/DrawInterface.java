@@ -231,6 +231,10 @@ public class DrawInterface extends javax.swing.JFrame {
             } catch (IOException ex) {
                 fc.showDialog(this, "There was a problem when writing to the "
                         + "specified file.");
+            } catch (Exception ex) {
+                //Logger.getLogger(DrawInterface.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.toString(),
+                        "error", JOptionPane.ERROR_MESSAGE);
             }
         }
         repaint();
@@ -284,7 +288,7 @@ public class DrawInterface extends javax.swing.JFrame {
             SimplePolygon polygon = new SimplePolygon();
             try {
                 polygon = ReadPolygonFromFile.readPolygonFromFile(currentFile);
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 //Logger.getLogger(DrawInterface.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, ex.toString(),
                         "error", JOptionPane.ERROR_MESSAGE);
