@@ -300,7 +300,8 @@ public class DrawInterface extends javax.swing.JFrame {
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
         polygon.draw(g);
-        jLabel5.setText("Number of points: " + this.points.size());
+        jLabel5.setText("Number of points: " + this.points.size()
+        + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
     }
 
     private Point generateRandomPoint(int x, int y) {

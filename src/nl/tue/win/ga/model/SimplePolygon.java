@@ -56,18 +56,22 @@ public class SimplePolygon implements Iterable<Point> {
         // invariant: polygon is simple
         // we check this by computing the cross product between consecutive edges
         // these should all have the same sign
-        int prev = 0; // previous cross product
-        if (hull.length < 2) {
+        boolean sign = false; // previous sign
+        if (hull.length <= 2) {
             return true;
         }
-        for (int i = 0; i < hull.length - 2; i++) {
-            int dx1 = hull[i + 1].x - hull[i].x;
-            int dy1 = hull[i + 1].y - hull[i].y;
-            int dx2 = hull[i + 2].x - hull[i + 1].x;
-            int dy2 = hull[i + 2].y - hull[i + 1].y;
+        for (int i = 0; i < hull.length; i++) {
+            int dx1 = hull[(i + 1) % hull.length].x - hull[i % hull.length].x;
+            int dy1 = hull[(i + 1) % hull.length].y - hull[i % hull.length].y;
+            int dx2 = hull[(i + 2) % hull.length].x - hull[(i + 1) % hull.length].x;
+            int dy2 = hull[(i + 2) % hull.length].y - hull[(i + 1) % hull.length].y;
             int crossProduct = dx1 * dy2 - dy1 * dx2;
-            if ((crossProduct < 0) == (prev < 0) && i > 0) {
-                return false;
+            if (i > 0) {
+                if ((crossProduct < 0) != sign) {
+                    return false;
+                }
+            } else {
+                sign = (crossProduct < 0);
             }
         }
         return true;
