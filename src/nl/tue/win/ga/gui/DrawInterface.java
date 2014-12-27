@@ -26,6 +26,7 @@ public class DrawInterface extends javax.swing.JFrame {
     List<Point> points = new ArrayList<>();
     File outputFile;
     final int MAX_POINTS = 100000;
+    final static String EXTENSION = "txt";
     int selected = -1;
 
     /**
@@ -213,7 +214,7 @@ public class DrawInterface extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         fc.setDialogType(JFileChooser.SAVE_DIALOG);
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "Simple Polygon", "in");
+                "Simple Polygon", EXTENSION);
         fc.setFileFilter(filter);
         if (outputFile != null) {
             fc.setCurrentDirectory(new File(outputFile, ".."));
@@ -222,8 +223,8 @@ public class DrawInterface extends javax.swing.JFrame {
 
         outputFile = fc.getSelectedFile();
         if (fc.getFileFilter().equals(filter)) {
-            if (outputFile != null && !outputFile.toString().endsWith(".in")) {
-                outputFile = new File(outputFile.toString() + ".in");
+            if (outputFile != null && !outputFile.toString().endsWith("." + EXTENSION)) {
+                outputFile = new File(outputFile.toString() + "." + EXTENSION);
             }
         }
 
@@ -250,7 +251,7 @@ public class DrawInterface extends javax.swing.JFrame {
                 break;
             }
         }
-        System.out.println("button:" + evt.getButton() + ", selected:" + selected);
+        //System.out.println("button:" + evt.getButton() + ", selected:" + selected);
         switch (evt.getButton()) {
             case MouseEvent.BUTTON3:
                 if (selected >= 0) {
@@ -300,7 +301,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         JFileChooser fc = new JFileChooser();
         fc.setDialogType(JFileChooser.OPEN_DIALOG);
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Points input files", "in");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Simple polygon", EXTENSION);
         fc.setFileFilter(filter);
 
         fc.setCurrentDirectory(new File("./Input/"));
