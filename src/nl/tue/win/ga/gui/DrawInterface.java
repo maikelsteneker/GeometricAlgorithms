@@ -2,6 +2,7 @@ package nl.tue.win.ga.gui;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -246,11 +247,23 @@ public class DrawInterface extends javax.swing.JFrame {
         for (int i = 0; i < points.size(); i++) {
             if (points.get(i).distanceSq(evt.getPoint()) <= 50) {
                 selected = i;
-                return;
+                break;
             }
         }
-        points.add(evt.getPoint());
-        removeDuplicates();
+        System.out.println("button:" + evt.getButton() + ", selected:" + selected);
+        switch (evt.getButton()) {
+            case MouseEvent.BUTTON3:
+                if (selected >= 0) {
+                    points.remove(selected);
+                }
+                selected = -1;
+                break;
+            default:
+                if (selected < 0) {
+                    points.add(evt.getPoint());
+                }
+                removeDuplicates();
+        }
         repaint();
     }//GEN-LAST:event_jPanel1MousePressed
 
@@ -262,17 +275,17 @@ public class DrawInterface extends javax.swing.JFrame {
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
         //points.add(evt.getPoint());
         /*if (points.size() < MAX_POINTS) {
-            for (int i = 0; i < Math.min(intensitySlider.getValue(), MAX_POINTS-1); i++) {
-                Point p = generateRandomPoint(evt.getX(), evt.getY());
-                points.add(p);
-                if(points.size() > MAX_POINTS){
-                    points.remove(p);
-                }
-            }
-            removeDuplicates();
-        } else {
-            JOptionPane.showMessageDialog(this, "Maximum points has been reached.");
-        }*/
+         for (int i = 0; i < Math.min(intensitySlider.getValue(), MAX_POINTS-1); i++) {
+         Point p = generateRandomPoint(evt.getX(), evt.getY());
+         points.add(p);
+         if(points.size() > MAX_POINTS){
+         points.remove(p);
+         }
+         }
+         removeDuplicates();
+         } else {
+         JOptionPane.showMessageDialog(this, "Maximum points has been reached.");
+         }*/
         if (selected >= 0) {
             points.get(selected).setLocation(evt.getPoint());
         }
@@ -305,7 +318,7 @@ public class DrawInterface extends javax.swing.JFrame {
                         "error", JOptionPane.ERROR_MESSAGE);
             }
             points = polygon.getHull();
-            
+
             //this.jTextFieldMin.setText(input.getMinClusters() + "");
             //this.jTextFieldMax.setText(input.getMaxClusters() + "");
         }
@@ -316,7 +329,7 @@ public class DrawInterface extends javax.swing.JFrame {
         SimplePolygon polygon = new SimplePolygon(points);
         polygon.draw(g);
         jLabel5.setText("Number of points: " + this.points.size()
-        + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
+                + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
     }
 
     private Point generateRandomPoint(int x, int y) {
