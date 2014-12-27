@@ -34,6 +34,14 @@ public class DrawInterface extends javax.swing.JFrame {
      */
     public DrawInterface() {
         initComponents();
+        jLabel1.setVisible(false);
+        jLabel2.setVisible(false);
+        jLabel3.setVisible(false);
+        jLabel4.setVisible(false);
+        jTextFieldMin.setVisible(false);
+        jTextFieldMax.setVisible(false);
+        intensitySlider.setVisible(false);
+        radiusSlider.setVisible(false);
     }
 
     /**
