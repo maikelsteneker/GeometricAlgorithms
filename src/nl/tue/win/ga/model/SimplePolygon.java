@@ -62,6 +62,9 @@ public class SimplePolygon implements Iterable<Point> {
         }
 
         Point prev = size() > 0 ? hull[size() - 1] : null;
+        if (scale && prev != null) {
+            prev = scaled(prev, minx, miny, maxx, maxy);
+        }
 
         for (Point p : hull) {
             final Point scaled;
