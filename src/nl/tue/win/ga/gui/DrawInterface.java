@@ -79,6 +79,7 @@ public class DrawInterface extends javax.swing.JFrame {
             jLabel5 = new javax.swing.JLabel();
             jButton3 = new javax.swing.JButton();
             jCheckBox1 = new javax.swing.JCheckBox();
+            jCheckBox2 = new javax.swing.JCheckBox();
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -158,6 +159,13 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
+            jCheckBox2.setText("invert Y");
+            jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jCheckBox2ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -191,7 +199,10 @@ public class DrawInterface extends javax.swing.JFrame {
                                             .addComponent(jLabel2)
                                             .addGap(18, 18, 18)
                                             .addComponent(jLabel5))
-                                        .addComponent(jCheckBox1))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jCheckBox1)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jCheckBox2)))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -214,7 +225,8 @@ public class DrawInterface extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton2)
-                        .addComponent(jCheckBox1))
+                        .addComponent(jCheckBox1)
+                        .addComponent(jCheckBox2))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -352,9 +364,13 @@ public class DrawInterface extends javax.swing.JFrame {
         repaint();
     }//GEN-LAST:event_jCheckBox1ActionPerformed
 
+    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+        repaint();
+    }//GEN-LAST:event_jCheckBox2ActionPerformed
+
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
-        polygon.draw(g, jCheckBox1.isSelected());
+        polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
     }
@@ -429,6 +445,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

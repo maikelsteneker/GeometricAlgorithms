@@ -42,9 +42,9 @@ public class SimplePolygon implements Iterable<Point> {
         return Arrays.asList(hull);
     }
 
-    public void draw(Graphics g, boolean scale) {
+    public void draw(Graphics g, boolean scale, boolean invertY) {
         int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
-        if (scale) {
+        if (scale || invertY) {
             for (Point p : hull) {
                 if (p.x < minx) {
                     minx = p.x;
@@ -62,23 +62,29 @@ public class SimplePolygon implements Iterable<Point> {
         }
 
         Point prev = size() > 0 ? hull[size() - 1] : null;
-        if (scale && prev != null) {
-            prev = scaled(prev, minx, miny, maxx, maxy);
+        if (prev != null) {
+            if (invertY) {
+                prev = invert(prev, miny, maxy);
+            }
+            if (scale) {
+                prev = scaled(prev, minx, miny, maxx, maxy);
+            }
         }
 
         for (Point p : hull) {
-            final Point scaled;
+            Point transformed = p;
+            if (invertY) {
+                transformed = invert(transformed, miny, maxy);
+            }
             if (scale) {
-                scaled = scaled(p, minx, miny, maxx, maxy);
-            } else {
-                scaled = p;
+                transformed = scaled(transformed, minx, miny, maxx, maxy);
             }
-            g.drawOval((int) scaled.getX(), (int) scaled.getY(), 3, 3);
-            g.fillOval((int) scaled.getX(), (int) scaled.getY(), 3, 3);
+            g.drawOval((int) transformed.getX(), (int) transformed.getY(), 3, 3);
+            g.fillOval((int) transformed.getX(), (int) transformed.getY(), 3, 3);
             if (prev != null) {
-                g.drawLine(prev.x, prev.y, scaled.x, scaled.y);
+                g.drawLine(prev.x, prev.y, transformed.x, transformed.y);
             }
-            prev = scaled;
+            prev = transformed;
         }
     }
 
@@ -124,5 +130,10 @@ public class SimplePolygon implements Iterable<Point> {
         y *= YRES;
 
         return new Point((int) x, (int) y);
+    }
+
+    private Point invert(Point p, int miny, int maxy) {
+        // max eraf, flippen, min erbij
+        return new Point(p.x, -(p.y-maxy)+miny);
     }
 }
