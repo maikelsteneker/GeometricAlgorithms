@@ -45,24 +45,22 @@ public class SimplePolygon implements Iterable<Point> {
     }
 
     public void draw(Graphics g, boolean scale) {
-int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
+        int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
         if (scale) {
-            
-        
-        for (Point p : hull) {
-            if (p.x < minx) {
-                minx = p.x;
+            for (Point p : hull) {
+                if (p.x < minx) {
+                    minx = p.x;
+                }
+                if (p.y < miny) {
+                    miny = p.y;
+                }
+                if (p.x > maxx) {
+                    maxx = p.x;
+                }
+                if (p.y > maxy) {
+                    maxy = p.y;
+                }
             }
-            if (p.y < miny) {
-                miny = p.y;
-            }
-            if (p.x > maxx) {
-                maxx = p.x;
-            }
-            if (p.y > maxy) {
-                maxy = p.y;
-            }
-        }
         }
 
         Point prev = size() > 0 ? hull[size() - 1] : null;
@@ -82,7 +80,7 @@ int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE
             prev = scaled;
         }
     }
-    
+
     public boolean invariant() {
         return true; // TODO: implement
     }
