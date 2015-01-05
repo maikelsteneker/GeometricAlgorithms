@@ -2,6 +2,7 @@ package nl.tue.win.ga.model;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.List;
 public class SimplePolygon implements Iterable<Point> {
 
     final private Point[] hull;
+    final static int XRES = 1024;
+    final static int YRES = 768;
 
     public SimplePolygon() {
         this(new Point[0]);
@@ -37,18 +40,46 @@ public class SimplePolygon implements Iterable<Point> {
     }
 
     public List<Point> getHull() {
-        return Arrays.asList(hull);
+        //return Arrays.asList(hull);
+        return new ArrayList<>(Arrays.asList(hull));
     }
 
-    public void draw(Graphics g) {
-        Point prev = size() > 0 ? hull[size() - 1] : null;
+    public void draw(Graphics g, boolean scale) {
+int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
+        if (scale) {
+            
+        
         for (Point p : hull) {
-            g.drawOval((int) p.getX(), (int) p.getY(), 3, 3);
-            g.fillOval((int) p.getX(), (int) p.getY(), 3, 3);
-            if (prev != null) {
-                g.drawLine(prev.x, prev.y, p.x, p.y);
+            if (p.x < minx) {
+                minx = p.x;
             }
-            prev = p;
+            if (p.y < miny) {
+                miny = p.y;
+            }
+            if (p.x > maxx) {
+                maxx = p.x;
+            }
+            if (p.y > maxy) {
+                maxy = p.y;
+            }
+        }
+        }
+
+        Point prev = size() > 0 ? hull[size() - 1] : null;
+
+        for (Point p : hull) {
+            final Point scaled;
+            if (scale) {
+                scaled = scaled(p, minx, miny, maxx, maxy);
+            } else {
+                scaled = p;
+            }
+            g.drawOval((int) scaled.getX(), (int) scaled.getY(), 3, 3);
+            g.fillOval((int) scaled.getX(), (int) scaled.getY(), 3, 3);
+            if (prev != null) {
+                g.drawLine(prev.x, prev.y, scaled.x, scaled.y);
+            }
+            prev = scaled;
         }
     }
 
@@ -75,5 +106,20 @@ public class SimplePolygon implements Iterable<Point> {
             }
         }
         return true;
+    }
+
+    private Point scaled(Point p, int minx, int miny, int maxx, int maxy) {
+        double x = p.x;
+        x -= minx;
+        x /= (maxx - minx);
+
+        double y = p.y;
+        y -= miny;
+        y /= (maxy - miny);
+
+        x *= XRES;
+        y *= YRES;
+
+        return new Point((int) x, (int) y);
     }
 }

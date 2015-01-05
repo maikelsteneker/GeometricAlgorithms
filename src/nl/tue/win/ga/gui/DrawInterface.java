@@ -77,6 +77,7 @@ public class DrawInterface extends javax.swing.JFrame {
             jLabel4 = new javax.swing.JLabel();
             jLabel5 = new javax.swing.JLabel();
             jButton3 = new javax.swing.JButton();
+            jCheckBox1 = new javax.swing.JCheckBox();
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -149,6 +150,13 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
+            jCheckBox1.setText("scaled");
+            jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jCheckBox1ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -177,10 +185,13 @@ public class DrawInterface extends javax.swing.JFrame {
                                     .addComponent(jLabel4)
                                     .addGap(0, 260, Short.MAX_VALUE))
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jLabel5)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 259, Short.MAX_VALUE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel2)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jLabel5))
+                                        .addComponent(jCheckBox1))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))))))
@@ -200,7 +211,9 @@ public class DrawInterface extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addComponent(jLabel5))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jButton2)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton2)
+                        .addComponent(jCheckBox1))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -334,9 +347,13 @@ public class DrawInterface extends javax.swing.JFrame {
         repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+        repaint();
+    }//GEN-LAST:event_jCheckBox1ActionPerformed
+
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
-        polygon.draw(g);
+        polygon.draw(g, jCheckBox1.isSelected());
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
     }
@@ -410,6 +427,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
