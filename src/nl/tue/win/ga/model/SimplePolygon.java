@@ -40,8 +40,7 @@ public class SimplePolygon implements Iterable<Point> {
     }
 
     public List<Point> getHull() {
-        //return Arrays.asList(hull);
-        return new ArrayList<>(Arrays.asList(hull));
+        return Arrays.asList(hull);
     }
 
     public void draw(Graphics g, boolean scale) {

@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -339,7 +340,7 @@ public class DrawInterface extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, ex.toString(),
                         "error", JOptionPane.ERROR_MESSAGE);
             }
-            points = polygon.getHull();
+            points = new ArrayList<>(polygon.getHull());
 
             //this.jTextFieldMin.setText(input.getMinClusters() + "");
             //this.jTextFieldMax.setText(input.getMaxClusters() + "");
