@@ -82,9 +82,13 @@ int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE
             prev = scaled;
         }
     }
-
+    
     public boolean invariant() {
-        // invariant: polygon is simple
+        return true;
+    }
+
+    public boolean isSimple() {
+        // check if polygon is simple
         // we check this by computing the cross product between consecutive edges
         // these should all have the same sign
         boolean sign = false; // previous sign
