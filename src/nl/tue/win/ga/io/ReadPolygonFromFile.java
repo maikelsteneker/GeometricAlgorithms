@@ -30,7 +30,7 @@ import nl.tue.win.ga.model.SimplePolygon;
 public class ReadPolygonFromFile {
 
     final static Pattern FIRST_LINE = Pattern.compile("\\d*");
-    final static Pattern REMAINING_LINES = Pattern.compile("-?\\d*[ ]+-?\\d*");
+    final static Pattern REMAINING_LINES = Pattern.compile("-?\\d*[ \\t]+-?\\d*");
 
     public static SimplePolygon readPolygonFromFile(File file)
             throws IOException {
@@ -73,7 +73,7 @@ public class ReadPolygonFromFile {
         if (!REMAINING_LINES.matcher(currentLine).matches()) {
             throw new IOException("Line does not contain two positive integers!");
         }
-        String[] tokens = currentLine.split("[ ]+");
+        String[] tokens = currentLine.split("[ \\t]+");
         int x = Integer.parseInt(tokens[0]);
         int y = Integer.parseInt(tokens[1]);
         return new Point(x, y);
