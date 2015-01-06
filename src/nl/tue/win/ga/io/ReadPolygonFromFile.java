@@ -30,7 +30,7 @@ import nl.tue.win.ga.model.SimplePolygon;
 public class ReadPolygonFromFile {
 
     final static Pattern FIRST_LINE = Pattern.compile("\\d*");
-    final static Pattern REMAINING_LINES = Pattern.compile("\\d*[ ]+\\d*");
+    final static Pattern REMAINING_LINES = Pattern.compile("-?\\d*[ ]+-?\\d*");
 
     public static SimplePolygon readPolygonFromFile(File file)
             throws IOException {
