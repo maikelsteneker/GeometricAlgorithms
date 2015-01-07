@@ -8,16 +8,11 @@ import javax.imageio.ImageIO;
 import nl.tue.win.ga.model.SimplePolygon;
 
 /**
+ * Exports a polygon as an image.
  *
  * @author maikel
  */
 public class ExportPolygonToBitmap {
-
-    public static void main(String[] args) throws IOException {
-        String path = "/home/maikel/NetBeansProjects/TrapezoidalMap/random.txt";
-        String outPath = "/home/maikel/NetBeansProjects/TrapezoidalMap/random.bmp";
-        SimplePolygon polygon = ReadPolygonFromFile.readPolygonFromFile(path);
-    }
 
     public static void exportPolygonToImage(String filename, SimplePolygon polygon) throws IOException {
         File file = new File(filename);
