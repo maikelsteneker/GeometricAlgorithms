@@ -19,7 +19,6 @@ public class GenerateRandomPolygon {
     final static int YRES = 768;
     final static int MAX_SIZE = 100;
     final static private Random GENERATOR = new Random();
-    final static private Point CENTER = new Point(XRES / 2, YRES / 2);
 
     /**
      * Generates a random point.
@@ -39,7 +38,7 @@ public class GenerateRandomPolygon {
         for (int i = 0; i < size; i++) {
             hull[i] = generateRandomPoint();
         }
-        Arrays.sort(hull, new PolarPointComparator());
+        Arrays.sort(hull, new PolarPointComparator(hull));
         return new SimplePolygon(hull);
     }
 
@@ -49,14 +48,50 @@ public class GenerateRandomPolygon {
 
     private static class PolarPointComparator implements Comparator<Point> {
 
+        final private Point center;
+
+        public PolarPointComparator(Point center) {
+            this.center = center;
+        }
+
+        public PolarPointComparator(Point[] points) {
+            this(Arrays.asList(points));
+        }
+
+        public PolarPointComparator(Iterable<Point> points) {
+            this(determineCenter(points));
+        }
+
+        private static Point determineCenter(Iterable<Point> points) {
+            int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE,
+                    maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
+            for (Point p : points) {
+                if (p.x < minx) {
+                    minx = p.x;
+                }
+                if (p.x > maxx) {
+                    maxx = p.x;
+                }
+                if (p.y < miny) {
+                    miny = p.y;
+                }
+                if (p.y > maxy) {
+                    maxy = p.y;
+                }
+            }
+            final int cx = minx + (maxx - minx) / 2;
+            final int cy = miny + (maxy - miny) / 2;
+            return new Point(cx, cy);
+        }
+
         private int crossProduct(Point p1, Point p2) {
             return p1.x * p2.y - p1.y * p2.x;
         }
 
         @Override
         public int compare(Point p, Point q) {
-            final Point p1 = new Point(p.x - CENTER.x, p.y - CENTER.y);
-            final Point p2 = new Point(q.x - CENTER.x, q.y - CENTER.y);
+            final Point p1 = new Point(p.x - center.x, p.y - center.y);
+            final Point p2 = new Point(q.x - center.x, q.y - center.y);
 
             if (p1.y == 0 && p1.x > 0) {
                 return -1; //angle of p1 is 0, thus p2>p1
