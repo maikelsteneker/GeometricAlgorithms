@@ -1,3 +1,5 @@
+package nl.tue.win.ga.generate;
+
 import java.awt.Point;
 import java.io.IOException;
 import java.util.Arrays;
@@ -57,18 +59,18 @@ public class GenerateRandomPolygon {
             final Point p2 = new Point(q.x - CENTER.x, q.y - CENTER.y);
 
             if (p1.y == 0 && p1.x > 0) {
-                return 1; //angle of p1 is 0, thus p2>p1
+                return -1; //angle of p1 is 0, thus p2>p1
             }
             if (p2.y == 0 && p2.x > 0) {
-                return -1; //angle of p2 is 0 , thus p1>p2
+                return 1; //angle of p2 is 0 , thus p1>p2
             }
             if (p1.y > 0 && p2.y < 0) {
-                return 1; //p1 is between 0 and 180, p2 between 180 and 360
+                return -1; //p1 is between 0 and 180, p2 between 180 and 360
             }
             if (p1.y < 0 && p2.y > 0) {
-                return -1;
+                return 1;
             }
-            return crossProduct(p1, p2) > 0 ? 1 : -1; //return true if p1 is clockwise from p2
+            return crossProduct(p1, p2) > 0 ? -1 : 1; // p1<p2 if p1 is clockwise from p2
         }
     }
 }
