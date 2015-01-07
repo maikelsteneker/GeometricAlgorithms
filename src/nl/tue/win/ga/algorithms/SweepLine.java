@@ -27,16 +27,26 @@ public class SweepLine {
     }
 
     public void sweep() {
+        int i = 0;
         for (Point p : SortedPoints) {
             Point below = null;
             Point above = null;
             SearchTree.put(p.y, p);
-            
+
             Point begin = getBeginPoint(p);
-            if (begin != null) {
-                SearchTree.remove(begin.y);
+            if (i != 1) {
+                if (begin != null) {
+                    SearchTree.remove(begin.y);
+                }
             }
-            
+
+            if (i == SortedPoints.size() - 1) {
+                Point begin2 = getBeginPoint(p);
+                if (begin2 != null) {
+                    SearchTree.remove(begin2.y);
+                }
+            }
+
             if (SearchTree.lowerKey(p.y) != null) {
                 below = (Point) SearchTree.get(SearchTree.lowerKey(p.y));
             }
@@ -62,6 +72,7 @@ public class SweepLine {
 
             Verticals.add(ls1);
             Verticals.add(ls2);
+            i++;
         }
     }
 
@@ -101,7 +112,7 @@ public class SweepLine {
     private Point getBeginPoint(Point end) {
         for (LineSegment edge : edges) {
             if (edge.getEndPoint().x == end.x && edge.getEndPoint().y == end.y) {
-
+                edges.remove(edge);
                 return edge.getStartPoint();
             }
         }
@@ -117,7 +128,7 @@ public class SweepLine {
             }
         }
         if (end != null) {
-            double slope = ( (double )start.y - (double) end.y) / ( (double) start.x - (double) end.x);
+            double slope = ((double) start.y - (double) end.y) / ((double) start.x - (double) end.x);
             double y = start.y + slope * p.x - slope * start.x;
             return new Point(p.x, (int) y);
         }
