@@ -14,8 +14,8 @@ import java.util.List;
 public class SimplePolygon implements Iterable<Point> {
 
     final private Point[] hull;
-    final static int XRES = 1024;
-    final static int YRES = 768;
+    final public static int XRES = 1024;
+    final public static int YRES = 768;
 
     public SimplePolygon() {
         this(new Point[0]);
@@ -79,8 +79,8 @@ public class SimplePolygon implements Iterable<Point> {
             if (scale) {
                 transformed = scaled(transformed, minx, miny, maxx, maxy);
             }
-            g.drawOval((int) transformed.getX(), (int) transformed.getY(), 3, 3);
-            g.fillOval((int) transformed.getX(), (int) transformed.getY(), 3, 3);
+            g.drawOval(transformed.x-1, transformed.y-1, 3, 3);
+            g.fillOval(transformed.x-1, transformed.y-1, 3, 3);
             if (prev != null) {
                 g.drawLine(prev.x, prev.y, transformed.x, transformed.y);
             }
