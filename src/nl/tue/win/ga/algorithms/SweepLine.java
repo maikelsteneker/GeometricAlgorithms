@@ -118,18 +118,17 @@ public class SweepLine {
             }
         }
 
-        
         List<Point> removePoint = new ArrayList<>();
-        for(Point sPoint : multiple) {
-            if(isStartPoint(sPoint)) {
+        for (Point sPoint : multiple) {
+            if (isStartPoint(sPoint)) {
                 removePoint.add(sPoint);
             }
         }
-        
-        for(Point rPoint : removePoint) {
+
+        for (Point rPoint : removePoint) {
             multiple.remove(rPoint);
         }
-        if(multiple.isEmpty()) {
+        if (multiple.isEmpty()) {
             return null;
         }
         return multiple;
@@ -147,44 +146,49 @@ public class SweepLine {
 
     private Point calculateIntersection(Point p, Point start) {
         List<Point> end = new ArrayList<>();
-        Point intersect = null;
+        List<Point> intersect = new ArrayList<>();
+        Point winner = null;
         for (LineSegment edge : edges) {
             if (edge.getStartPoint().x == start.x && edge.getStartPoint().y == start.y) {
                 end.add(new Point(edge.getEndPoint().x, edge.getEndPoint().y));
             }
         }
-        if (end.size() > 1) {
-            intersect = getClosestPoint(end, p);
-        } else if (end.isEmpty()) {
+
+        if (end.isEmpty()) {
             return null;
         } else {
-            intersect = end.get(0);
+
+            for (Point intersection : end) {
+                double slope = ((double) start.y - (double) intersection.y) / ((double) start.x - (double) intersection.x);
+                double y = start.y + slope * p.x - slope * start.x;
+                intersect.add(new Point(p.x, (int) y));
+            }
+            
+            if(intersect.size() > 1) {
+                winner = getClosestPoint(intersect, p);
+            }
+            else {
+                winner  = intersect.get(0);
+            }
         }
-
-        double slope = ((double) start.y - (double) intersect.y) / ((double) start.x - (double) intersect.x);
-        double y = start.y + slope * p.x - slope * start.x;
-
-        return new Point(p.x,
-                (int) y
-        );
-
+        
+        return winner;
     }
 
     private Point getClosestPoint(List<Point> candidates, Point p) {
         double distanceTo1 = calculateDistance(candidates.get(0), p);
-        double distanceTo2 = calculateDistance(candidates.get(0), p);
-        
-        if(distanceTo1 < distanceTo2) {
+        double distanceTo2 = calculateDistance(candidates.get(1), p);
+
+        if (distanceTo1 < distanceTo2) {
             return candidates.get(0);
-        }
-        else {
+        } else {
             return candidates.get(1);
         }
     }
-    
-    private double calculateDistance(Point p, Point q){
+
+    private double calculateDistance(Point p, Point q) {
         double ydiff = Math.abs((double) p.y - (double) q.y);
         double xdiff = Math.abs((double) p.x - (double) q.x);
-        return Math.sqrt((ydiff * ydiff) + (xdiff*xdiff));
+        return Math.sqrt((ydiff * ydiff) + (xdiff * xdiff));
     }
 }
