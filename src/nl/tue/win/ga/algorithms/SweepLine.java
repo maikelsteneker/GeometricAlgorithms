@@ -28,20 +28,24 @@ public class SweepLine {
         for (Point p : SortedPoints) {
             Point below = null;
             Point above = null;
-            SearchTree.put(p.y, p);
+            if (isStartPoint(p)) {
+                SearchTree.put(p.y, p);
+            }
 
-            Point begin = getBeginPoint(p);
+            List<Point> begin = getBeginPoint(p);
 
             if (begin != null) {
-                SearchTree.remove(begin.y);
-            }
+                for (Point po : begin) {
+                    SearchTree.remove(po.y);
+                }
 
+            }
 
             if (SearchTree.lowerKey(p.y) != null) {
-                above = (Point) SearchTree.get(SearchTree.lowerKey(p.y));
+                below = (Point) SearchTree.get(SearchTree.lowerKey(p.y));
             }
             if (SearchTree.higherKey(p.y) != null) {
-                below = (Point) SearchTree.get(SearchTree.higherKey(p.y));
+                above = (Point) SearchTree.get(SearchTree.higherKey(p.y));
             }
 
             LineSegment ls1;
@@ -63,6 +67,7 @@ public class SweepLine {
             Verticals.add(ls1);
             Verticals.add(ls2);
         }
+
     }
 
     public List<LineSegment> getVerticals() {
@@ -98,43 +103,88 @@ public class SweepLine {
         edges.add(closingSegment);
     }
 
-    private Point getBeginPoint(Point end) {
-        Point multiple = null;
-        LineSegment edge = null;
+    private List<Point> getBeginPoint(Point end) {
+        ArrayList<Point> multiple = new ArrayList<>();
+        ArrayList<LineSegment> edge = new ArrayList<>();
         for (LineSegment firstEdge : edges) {
             if (firstEdge.getEndPoint().x == end.x && firstEdge.getEndPoint().y == end.y) {
-                edge = firstEdge;
-                multiple = firstEdge.getStartPoint();
+                edge.add(firstEdge);
+                multiple.add(firstEdge.getStartPoint());
             }
         }
-        if(edge != null) {
-           edges.remove(edge);
-        }
-        if (multiple != null) {
-            for (LineSegment secondEdge : edges) {
-                if (secondEdge.getStartPoint().x == multiple.x && secondEdge.getStartPoint().y == multiple.y) {
-                    return null;
-                }
+        if (!edge.isEmpty()) {
+            for (LineSegment edgePart : edge) {
+                edges.remove(edgePart);
             }
         }
 
+        
+        List<Point> removePoint = new ArrayList<>();
+        for(Point sPoint : multiple) {
+            if(isStartPoint(sPoint)) {
+                removePoint.add(sPoint);
+            }
+        }
+        
+        for(Point rPoint : removePoint) {
+            multiple.remove(rPoint);
+        }
+        if(multiple.isEmpty()) {
+            return null;
+        }
         return multiple;
     }
 
-    private Point calculateIntersection(Point p, Point start) {
-        Point end = null;
+    private boolean isStartPoint(Point p) {
         for (LineSegment edge : edges) {
-            if (edge.getStartPoint().x == start.x && edge.getStartPoint().y == start.y) {
-                end = new Point(edge.getEndPoint().x, edge.getEndPoint().y);
-                break;
+            if (edge.getStartPoint().x == p.x && edge.getStartPoint().y == p.y) {
+                return true;
             }
         }
-        if (end != null) {
-            double slope = ((double) start.y - (double) end.y) / ((double) start.x - (double) end.x);
-            double y = start.y + slope * p.x - slope * start.x;
-            return new Point(p.x, (int) y);
+        return false;
+
+    }
+
+    private Point calculateIntersection(Point p, Point start) {
+        List<Point> end = new ArrayList<>();
+        Point intersect = null;
+        for (LineSegment edge : edges) {
+            if (edge.getStartPoint().x == start.x && edge.getStartPoint().y == start.y) {
+                end.add(new Point(edge.getEndPoint().x, edge.getEndPoint().y));
+            }
+        }
+        if (end.size() > 1) {
+            intersect = getClosestPoint(end, p);
+        } else if (end.isEmpty()) {
+            return null;
+        } else {
+            intersect = end.get(0);
         }
 
-        return null;
+        double slope = ((double) start.y - (double) intersect.y) / ((double) start.x - (double) intersect.x);
+        double y = start.y + slope * p.x - slope * start.x;
+
+        return new Point(p.x,
+                (int) y
+        );
+
+    }
+
+    private Point getClosestPoint(List<Point> candidates, Point p) {
+        double distanceTo1 = calculateDistance(candidates.get(0), p);
+        double distanceTo2 = calculateDistance(candidates.get(0), p);
+        
+        if(distanceTo1 < distanceTo2) {
+            return candidates.get(0);
+        }
+        else {
+            return candidates.get(1);
+        }
+    }
+    
+    private double calculateDistance(Point p, Point q){
+        double ydiff = Math.abs((double) p.y - (double) q.y);
+        double xdiff = Math.abs((double) p.x - (double) q.x);
+        return Math.sqrt((ydiff * ydiff) + (xdiff*xdiff));
     }
 }

@@ -305,6 +305,7 @@ public class DrawInterface extends javax.swing.JFrame {
                         "error", JOptionPane.ERROR_MESSAGE);
             }
         }
+        
         repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -389,6 +390,7 @@ public class DrawInterface extends javax.swing.JFrame {
             //this.jTextFieldMin.setText(input.getMinClusters() + "");
             //this.jTextFieldMax.setText(input.getMaxClusters() + "");
         }
+        segments.clear();
         repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
 
