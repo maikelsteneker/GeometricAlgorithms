@@ -171,7 +171,7 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
-            jButton4.setText("jButton4");
+            jButton4.setText("Apply sweepline algorithm");
             jButton4.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton4ActionPerformed(evt);
@@ -211,7 +211,7 @@ public class DrawInterface extends javax.swing.JFrame {
                                             .addComponent(jCheckBox1)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(jCheckBox2)))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(jButton4)
