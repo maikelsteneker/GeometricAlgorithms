@@ -86,6 +86,7 @@ public class DrawInterface extends javax.swing.JFrame {
             jCheckBox2 = new javax.swing.JCheckBox();
             jButton4 = new javax.swing.JButton();
             jButton5 = new javax.swing.JButton();
+            jButton6 = new javax.swing.JButton();
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -186,6 +187,13 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
+            jButton6.setText("Apply RIC algorithm");
+            jButton6.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton6ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -213,12 +221,15 @@ public class DrawInterface extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(jCheckBox2)))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(jButton4)
                                             .addGap(31, 31, 31)
                                             .addComponent(jButton1))
-                                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jButton6)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jButton2))))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(intensitySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -255,7 +266,8 @@ public class DrawInterface extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton2)
                         .addComponent(jCheckBox1)
-                        .addComponent(jCheckBox2))
+                        .addComponent(jCheckBox2)
+                        .addComponent(jButton6))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -447,6 +459,18 @@ public class DrawInterface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if (segments.isEmpty()) {
+            TrapezoidalMap t = new TrapezoidalMap(points);
+            t.RandomIncrementalMap();
+            segments = t.getResult();
+        } else {
+            segments.clear();
+        }
+
+        repaint();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
         /*polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
@@ -531,6 +555,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
