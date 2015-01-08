@@ -431,7 +431,7 @@ public class DrawInterface extends javax.swing.JFrame {
 
         if (showSaveDialog == JFileChooser.APPROVE_OPTION) {
             try {
-                ExportPolygonToBitmap.exportPolygonToImage(outputFile, new SimplePolygon(points), "bmp", !jCheckBox2.isEnabled());
+                ExportPolygonToBitmap.exportPolygonToImage(outputFile, new ResultDrawable(new SimplePolygon(points), segments), "bmp", !jCheckBox2.isEnabled());
             } catch (IOException ex) {
                 fc.showDialog(this, "There was a problem when writing to the "
                         + "specified file.");
