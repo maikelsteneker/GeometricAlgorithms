@@ -146,8 +146,23 @@ public class Face {
     public LineSegment getLeftLineSegment() {
         final int xLo = getLeftp().x;
         //final int xHi = getRightp().x;
-        final int yLo = getBottom().getStartPoint().y;
-        final int yHi = getTop().getStartPoint().y;
+        final Point start = getBottom().getStartPoint();
+        final Point end = getBottom().getEndPoint();
+        
+        double div = (end.y - start.y) / (end.x - start.x);
+        double divx = xLo - start.x;
+        
+        final int yLo = start.y + (int) (div * divx);
+        
+        final Point start2 = getTop().getStartPoint();
+        final Point end2 = getTop().getEndPoint();
+        
+        double div2 = (end2.y - start2.y) / (end2.x - start2.x);
+        double divx2 = xLo - start2.x;
+        
+        final int yHi = start2.y + (int) (div2 * divx2);
+        //final int yLo = getBottom().getStartPoint().y;
+        //final int yHi = getTop().getStartPoint().y;
         final Point topPoint = new Point(xLo, yHi);
         final Point bottomPoint = new Point(xLo, yLo);
         return new LineSegment(topPoint, bottomPoint, null);
@@ -155,9 +170,32 @@ public class Face {
 
     public LineSegment getRightLineSegment() {
         //final int xLo = getLeftp().x;
-        final int xHi = getRightp().x;
+        /*final int xHi = getRightp().x;
         final int yLo = getBottom().getStartPoint().y;
         final int yHi = getTop().getStartPoint().y;
+        final Point topPoint = new Point(xHi, yHi);
+        final Point bottomPoint = new Point(xHi, yLo);
+        return new LineSegment(topPoint, bottomPoint, null);*/
+        
+        //final int xLo = getLeftp().x;
+        final int xHi = getRightp().x;
+        final Point start = getBottom().getStartPoint();
+        final Point end = getBottom().getEndPoint();
+        
+        double div = (end.y - start.y) / (end.x - start.x);
+        double divx = xHi - start.x;
+        
+        final int yLo = start.y + (int) (div * divx);
+        
+        final Point start2 = getTop().getStartPoint();
+        final Point end2 = getTop().getEndPoint();
+        
+        double div2 = (end2.y - start2.y) / (end2.x - start2.x);
+        double divx2 = xHi - start2.x;
+        
+        final int yHi = start2.y + (int) (div2 * divx2);
+        //final int yLo = getBottom().getStartPoint().y;
+        //final int yHi = getTop().getStartPoint().y;
         final Point topPoint = new Point(xHi, yHi);
         final Point bottomPoint = new Point(xHi, yLo);
         return new LineSegment(topPoint, bottomPoint, null);
