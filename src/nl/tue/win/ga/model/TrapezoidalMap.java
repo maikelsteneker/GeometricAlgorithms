@@ -4,8 +4,11 @@
  */
 package nl.tue.win.ga.model;
 
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import nl.tue.win.ga.model.Node.NodeType;
 
 /**
  *
@@ -24,7 +27,7 @@ public class TrapezoidalMap {
     /**
      * The node containing all the faces
      */
-    private Node tree;
+    private Graph graph;
     /**
      * Random Generator
      */
@@ -32,16 +35,19 @@ public class TrapezoidalMap {
     
     public TrapezoidalMap() {
         linesegments = null;
-        tree = null;
         //init the bounding box
         boundingbox = new Face();
-        Face[] neighbours = {null, null, null, null};
+        Face[] neighbours = {null, null, null, null, null, null};
         boundingbox.setAllNeighbours(neighbours);
+        //init the graph
+        Node root = new Node();
+        root.setFace(boundingbox);
+        graph = new Graph(root);
     }
     
     public TrapezoidalMap(ArrayList<LineSegment> linesegments){
         this.linesegments = linesegments;
-        tree = null;
+        graph = null;
         //init the bounding box
         boundingbox = new Face();
         Face[] neighbours = {null, null, null, null};
@@ -59,6 +65,34 @@ public class TrapezoidalMap {
             return linesegments.get(index);
             
         }
+    }
+    
+    private List<Face> getIntersectedFaces(LineSegment linesegment){
+        
+        List<Face> faces = new ArrayList<>();
+        
+        Point[] endpoints = linesegment.getEndPoints();
+        Point startp = endpoints[0]; 
+        Point endp = endpoints[1];
+        
+        Face start = graph.getFace(startp);
+        
+        faces.add(start);
+        
+        Face help = start;
+        
+        while (help != null && (help.getRightp() != null && endp.x > help.getRightp().x)){
+            if (linesegment.belowPoint(help.getRightp())){
+                help = help.getLowerRightNeighbour();
+            } else {
+                help = help.getUpperRightNeighbour();
+            }
+            if(help != null){
+                faces.add(help);
+            }
+        }
+        
+        return faces;
     }
        
 }

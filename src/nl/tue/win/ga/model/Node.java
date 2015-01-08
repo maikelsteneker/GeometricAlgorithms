@@ -1,5 +1,7 @@
 package nl.tue.win.ga.model;
 
+import java.awt.Point;
+
 /**
  *
  * @author maikel
@@ -13,6 +15,37 @@ public class Node {
 
     private NodeType type;
     private Node parent, lchild, rchild;
+    private Face face;
+    private Point point;
+    private LineSegment segment;
+    
+    public Node(){
+        
+    }
+
+    public LineSegment getSegment() {
+        return segment;
+    }
+
+    public void setSegment(LineSegment segment) {
+        this.segment = segment;
+    }
+
+    public Point getPoint() {
+        return point;
+    }
+
+    public void setPoint(Point point) {
+        this.point = point;
+    }
+
+    public Face getFace() {
+        return face;
+    }
+
+    public void setFace(Face face) {
+        this.face = face;
+    }
 
     public Node(NodeType type, Node parent) {
         this.type = type;
