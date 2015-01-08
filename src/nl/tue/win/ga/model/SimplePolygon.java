@@ -1,5 +1,6 @@
 package nl.tue.win.ga.model;
 
+import nl.tue.win.ga.model.drawing.Drawable;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Arrays;

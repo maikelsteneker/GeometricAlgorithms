@@ -1,6 +1,9 @@
-package nl.tue.win.ga.model;
+package nl.tue.win.ga.model.drawing;
 
+import nl.tue.win.ga.model.drawing.Drawable;
 import java.awt.Graphics;
+import nl.tue.win.ga.model.LineSegment;
+import nl.tue.win.ga.model.SimplePolygon;
 import nl.tue.win.ga.utilities.DrawingUtilities;
 
 /**

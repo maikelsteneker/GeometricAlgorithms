@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import nl.tue.win.ga.model.Drawable;
+import nl.tue.win.ga.model.drawing.Drawable;
 import nl.tue.win.ga.utilities.DrawingUtilities;
 
 /**

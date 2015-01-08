@@ -1,5 +1,6 @@
 package nl.tue.win.ga.gui;
 
+import nl.tue.win.ga.model.drawing.ResultDrawable;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;

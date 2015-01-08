@@ -1,4 +1,4 @@
-package nl.tue.win.ga.model;
+package nl.tue.win.ga.model.drawing;
 
 import java.awt.Graphics;
 
