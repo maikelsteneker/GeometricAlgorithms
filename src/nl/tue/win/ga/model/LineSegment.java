@@ -16,6 +16,10 @@ public class LineSegment implements Drawable {
     private Face face; // face directly above this segment in the original subdivision
     public DrawingUtilities drawingUtilities;
 
+    public LineSegment(Point p1, Point p2) {
+        this(p1, p2, null);
+    }
+    
     public LineSegment(Point p1, Point p2, Face f) {
         if (p1.x <= p2. x){
             this.endPoints[0] = p1;

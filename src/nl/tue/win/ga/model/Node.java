@@ -6,7 +6,7 @@ import java.awt.Point;
  *
  * @author maikel
  */
-public class Node {
+public final class Node {
 
     public enum NodeType {
 
@@ -18,22 +18,22 @@ public class Node {
     private Face face;
     private Point point;
     private LineSegment segment;
-    
-    public Node(){
-        
+
+    public Node() {
+
     }
-    
-    public Node(Face face){
-        this.face = face;
+
+    public Node(Face face) {
+        setFace(face);
         this.type = NodeType.LEAF;
     }
-    
-    public Node(Point point){
+
+    public Node(Point point) {
         this.point = point;
         this.type = NodeType.POINT;
     }
-    
-    public Node(LineSegment linesegment){
+
+    public Node(LineSegment linesegment) {
         this.segment = linesegment;
         this.type = NodeType.SEGMENT;
     }
@@ -60,6 +60,9 @@ public class Node {
 
     public void setFace(Face face) {
         this.face = face;
+        if (face != null) {
+            face.setNode(this);
+        }
     }
 
     public Node(NodeType type, Node parent) {
@@ -100,7 +103,7 @@ public class Node {
         this.rchild = rchild;
         rchild.setParent(this);
     }
-    
+
     public boolean isRoot() {
         return this.parent == null;
     }
