@@ -11,9 +11,12 @@ import nl.tue.win.ga.io.ReadPolygonFromFile;
  * @author maikel
  */
 public class PreprocessedEdges {
-
+    
     public static List<LineSegment> preprocess(SimplePolygon polygon) {
-        List<Point> hull = polygon.getHull();
+        return preprocess(polygon.getHull());
+    }
+
+    public static List<LineSegment> preprocess(List<Point> hull) {
         //Face inside = new Face();
         //Face outside = new Face();
         List<LineSegment> segments = new ArrayList<>();
