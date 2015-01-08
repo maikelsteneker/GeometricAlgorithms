@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import nl.tue.win.ga.model.Face;
 import nl.tue.win.ga.model.LineSegment;
 import nl.tue.win.ga.model.drawing.Drawable;
 
@@ -104,6 +105,16 @@ public class BoundingBox implements Iterable<LineSegment>, Drawable {
      */
     public Point getRightPoint() {
         return new Point(maxx, (miny + maxy) / 2);
+    }
+    
+    /**
+     * Returns this bounding box as a face.
+     * 
+     * @return the face
+     */
+    public Face asFace() {
+        return new Face(getTopLine(), getBottomLine(),
+                getLeftPoint(), getRightPoint());
     }
 
     @Override
