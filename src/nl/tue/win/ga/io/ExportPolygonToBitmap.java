@@ -1,5 +1,6 @@
 package nl.tue.win.ga.io;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -28,7 +29,7 @@ public class ExportPolygonToBitmap {
         File file = new File(filename);
         exportPolygonToImage(file, polygon, format);
     }
-    
+
     public static void exportPolygonToImage(File file, Drawable polygon, String format) throws IOException {
         exportPolygonToImage(file, polygon, format, true);
     }
@@ -36,6 +37,9 @@ public class ExportPolygonToBitmap {
     public static void exportPolygonToImage(File file, Drawable polygon, String format, boolean invertY) throws IOException {
         BufferedImage image = new BufferedImage(DrawingUtilities.XRES, DrawingUtilities.YRES, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = image.getGraphics();
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, DrawingUtilities.XRES, DrawingUtilities.YRES);
+        graphics.setColor(Color.BLACK);
         polygon.draw(graphics, true, invertY);
         ImageIO.write(image, format, file);
     }
