@@ -12,46 +12,36 @@ import java.util.TreeMap;
  */
 public class SweepLine {
 
-    private List<Point> SortedPoints;
-    private BinarySearchTree Bst;
-    private TreeMap SearchTree = new TreeMap();
-    private List<LineSegment> Verticals = new ArrayList<>();
-    private List<LineSegment> edges = new ArrayList<>();
+    final private List<Point> SortedPoints;
+    final private TreeMap SearchTree = new TreeMap();
+    final private List<LineSegment> Verticals = new ArrayList<>();
+    final private List<LineSegment> edges = new ArrayList<>();
 
     public SweepLine(ArrayList<Point> points) {
         MergeSort ms = new MergeSort();
         SortedPoints = ms.sort(points);
         initializeEdges(points);
-        Bst = new BinarySearchTree();
 
     }
 
     public void sweep() {
-        int i = 0;
         for (Point p : SortedPoints) {
             Point below = null;
             Point above = null;
             SearchTree.put(p.y, p);
 
             Point begin = getBeginPoint(p);
-            if (i != 1) {
-                if (begin != null) {
-                    SearchTree.remove(begin.y);
-                }
+
+            if (begin != null) {
+                SearchTree.remove(begin.y);
             }
 
-            if (i == SortedPoints.size() - 1) {
-                Point begin2 = getBeginPoint(p);
-                if (begin2 != null) {
-                    SearchTree.remove(begin2.y);
-                }
-            }
 
             if (SearchTree.lowerKey(p.y) != null) {
-                below = (Point) SearchTree.get(SearchTree.lowerKey(p.y));
+                above = (Point) SearchTree.get(SearchTree.lowerKey(p.y));
             }
             if (SearchTree.higherKey(p.y) != null) {
-                above = (Point) SearchTree.get(SearchTree.higherKey(p.y));
+                below = (Point) SearchTree.get(SearchTree.higherKey(p.y));
             }
 
             LineSegment ls1;
@@ -72,7 +62,6 @@ public class SweepLine {
 
             Verticals.add(ls1);
             Verticals.add(ls2);
-            i++;
         }
     }
 
@@ -110,13 +99,26 @@ public class SweepLine {
     }
 
     private Point getBeginPoint(Point end) {
-        for (LineSegment edge : edges) {
-            if (edge.getEndPoint().x == end.x && edge.getEndPoint().y == end.y) {
-                edges.remove(edge);
-                return edge.getStartPoint();
+        Point multiple = null;
+        LineSegment edge = null;
+        for (LineSegment firstEdge : edges) {
+            if (firstEdge.getEndPoint().x == end.x && firstEdge.getEndPoint().y == end.y) {
+                edge = firstEdge;
+                multiple = firstEdge.getStartPoint();
             }
         }
-        return null;
+        if(edge != null) {
+           edges.remove(edge);
+        }
+        if (multiple != null) {
+            for (LineSegment secondEdge : edges) {
+                if (secondEdge.getStartPoint().x == multiple.x && secondEdge.getStartPoint().y == multiple.y) {
+                    return null;
+                }
+            }
+        }
+
+        return multiple;
     }
 
     private Point calculateIntersection(Point p, Point start) {

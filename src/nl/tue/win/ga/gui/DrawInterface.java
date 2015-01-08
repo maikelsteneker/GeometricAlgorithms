@@ -383,9 +383,14 @@ public class DrawInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        SweepLine sl =  new SweepLine(points);
+        if(segments.isEmpty()) {
+                   SweepLine sl =  new SweepLine(points);
         sl.sweep();
-        segments = sl.getVerticals();
+        segments = sl.getVerticals(); 
+        } else {
+            segments.clear();
+        }
+
         repaint();
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -393,7 +398,7 @@ public class DrawInterface extends javax.swing.JFrame {
         SimplePolygon polygon = new SimplePolygon(points);
         polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         for(LineSegment ls: segments) {
-            g.drawLine(ls.getStartPoint().x, ls.getStartPoint().y, ls.getEndPoint().x, ls.getEndPoint().y);
+            ls.draw(g);
         }
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));

@@ -1,5 +1,6 @@
 package nl.tue.win.ga.model;
 
+import java.awt.Graphics;
 import java.awt.Point;
 
 /**
@@ -29,5 +30,9 @@ public class LineSegment {
 
     public Point getEndPoint() {
         return endPoints[1];
+    }
+    
+    public void draw(Graphics g) {
+        g.drawLine(endPoints[0].x, endPoints[0].y, endPoints[1].x, endPoints[1].y);
     }
 }
