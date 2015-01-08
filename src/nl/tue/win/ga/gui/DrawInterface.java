@@ -447,7 +447,8 @@ public class DrawInterface extends javax.swing.JFrame {
         SimplePolygon polygon = new SimplePolygon(points);
         polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         for(LineSegment ls: segments) {
-            ls.draw(g);
+            ls.drawingUtilities = polygon.drawingUtilities;
+            ls.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         }
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
