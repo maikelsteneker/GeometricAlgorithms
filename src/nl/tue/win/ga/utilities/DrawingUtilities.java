@@ -3,7 +3,7 @@ package nl.tue.win.ga.utilities;
 import java.awt.Point;
 
 /**
- * Provides classes to help with drawing.
+ * Provides methods to help with drawing.
  *
  * @author maikel
  */
@@ -12,23 +12,18 @@ public class DrawingUtilities {
     final public static int XRES = 1024;
     final public static int YRES = 768;
 
-    private int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
+    final private BoundingBox bb;
+    final private int minx;
+    final private int miny;
+    final private int maxx;
+    final private int maxy;
 
     public DrawingUtilities(Iterable<Point> points) {
-        for (Point p : points) {
-            if (p.x < minx) {
-                minx = p.x;
-            }
-            if (p.y < miny) {
-                miny = p.y;
-            }
-            if (p.x > maxx) {
-                maxx = p.x;
-            }
-            if (p.y > maxy) {
-                maxy = p.y;
-            }
-        }
+        bb = new BoundingBox(points);
+        this.minx = bb.getMinx();
+        this.maxx = bb.getMaxx();
+        this.miny = bb.getMiny();
+        this.maxy = bb.getMaxy();
     }
 
     public Point scaled(Point p) {

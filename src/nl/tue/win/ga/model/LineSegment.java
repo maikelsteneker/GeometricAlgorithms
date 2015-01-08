@@ -54,6 +54,7 @@ public class LineSegment implements Drawable {
         return endPoints[1];
     }
     
+    @Override
     public void draw(Graphics g, boolean scale, boolean invertY) {
         Point beginPoint = endPoints[0];
         Point endPoint = endPoints[1];

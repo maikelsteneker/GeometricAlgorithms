@@ -18,6 +18,7 @@ import nl.tue.win.ga.io.WritePolygonToFile;
 import nl.tue.win.ga.model.*;
 import nl.tue.win.ga.algorithms.*;
 import nl.tue.win.ga.io.ExportPolygonToBitmap;
+import nl.tue.win.ga.utilities.BoundingBox;
 
 /**
  * GUI for drawing input files for DBL Algorithms
@@ -453,7 +454,7 @@ public class DrawInterface extends javax.swing.JFrame {
          ls.drawingUtilities = polygon.drawingUtilities;
          ls.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
          }*/
-        ResultDrawable r = new ResultDrawable(polygon, segments);
+        ResultDrawable r = new ResultDrawable(polygon, segments, new BoundingBox(points, 0.1f));
         r.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
