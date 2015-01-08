@@ -13,22 +13,7 @@ public class Face {
     private LineSegment bottom;
     private Point leftp;
     private Point rightp;
-
-    public Point getLeftp() {
-        return leftp;
-    }
-
-    public void setLeftp(Point leftp) {
-        this.leftp = leftp;
-    }
-
-    public Point getRightp() {
-        return rightp;
-    }
-
-    public void setRightp(Point rightp) {
-        this.rightp = rightp;
-    }
+    private Node node;
 
     private Face[] neighbours = new Face[6];
     
@@ -46,8 +31,68 @@ public class Face {
         this.rightp = rightp;
     }
     
+    public Face(Face upperleft, Face lowerleft, Face upperright, Face lowerright){
+        top = null;
+        bottom = null;
+        leftp = null;
+        rightp = null;
+        neighbours[2] = upperleft;
+        neighbours[3] = lowerleft;
+        neighbours[4] = upperright;
+        neighbours[5] = lowerright;
+    }
+    
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        this.node = node;
+    }
+
+    public Point getLeftp() {
+        return leftp;
+    }
+
+    public void setLeftp(Point leftp) {
+        this.leftp = leftp;
+    }
+
+    public Point getRightp() {
+        return rightp;
+    }
+
+    public void setRightp(Point rightp) {
+        this.rightp = rightp;
+    }
+
+    public LineSegment getTop() {
+        return top;
+    }
+
+    public void setTop(LineSegment top) {
+        this.top = top;
+    }
+
+    public LineSegment getBottom() {
+        return bottom;
+    }
+
+    public void setBottom(LineSegment bottom) {
+        this.bottom = bottom;
+    }
+    
     public void setAllNeighbours(Face[] neighbours){
         this.neighbours = neighbours;
+    }
+    
+    public void setAllSideNeighbours(Face upperleft, Face lowerleft, Face upperright, Face lowerright){
+        
+        neighbours[2] = upperleft;
+        neighbours[3] = lowerleft;
+        neighbours[4] = upperright;
+        neighbours[5] = lowerright;
+        
     }
     
     public Face getTopNeighbour() {
