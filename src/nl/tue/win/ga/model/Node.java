@@ -22,6 +22,21 @@ public class Node {
     public Node(){
         
     }
+    
+    public Node(Face face){
+        this.face = face;
+        this.type = NodeType.LEAF;
+    }
+    
+    public Node(Point point){
+        this.point = point;
+        this.type = NodeType.POINT;
+    }
+    
+    public Node(LineSegment linesegment){
+        this.segment = linesegment;
+        this.type = NodeType.SEGMENT;
+    }
 
     public LineSegment getSegment() {
         return segment;
@@ -74,6 +89,7 @@ public class Node {
 
     public void setLchild(Node lchild) {
         this.lchild = lchild;
+        lchild.setParent(this);
     }
 
     public Node getRchild() {
@@ -82,6 +98,7 @@ public class Node {
 
     public void setRchild(Node rchild) {
         this.rchild = rchild;
+        rchild.setParent(this);
     }
     
     public boolean isRoot() {
