@@ -142,34 +142,32 @@ public class Face {
     public void setLowerRightNeighbour(Face right) {
         neighbours[5] = right;
     }
-    
+
     public static int getIntersection(LineSegment s, int x) {
         final Point startPoint = s.getStartPoint();
         final Point endPoint = s.getEndPoint();
-        final float slope = ((float)(endPoint.y - startPoint.y) / (endPoint.x - startPoint.x));
+        final float slope = (float) (endPoint.y - startPoint.y)
+                / (endPoint.x - startPoint.x);
         final int y = (int) (startPoint.y + (x - startPoint.x) * slope);
         return y;
     }
 
     public LineSegment getLeftLineSegment() {
-        final int xLo = getLeftp().x;
-        //final int xHi = getRightp().x;
-        final int yLo = getIntersection(bottom, xLo);
-        final int yHi = getIntersection(top, xLo);
-        
-        final Point topPoint = new Point(xLo, yHi);
-        final Point bottomPoint = new Point(xLo, yLo);
-        return new LineSegment(topPoint, bottomPoint, null);
+        return getSideLineSegment(true);
     }
-    
+
     public LineSegment getRightLineSegment() {
-        //final int xLo = getLeftp().x;
-        final int xHi = getRightp().x;
-        final int yLo = getIntersection(bottom, xHi);
-        final int yHi = getIntersection(top, xHi);
-        
-        final Point topPoint = new Point(xHi, yHi);
-        final Point bottomPoint = new Point(xHi, yLo);
+        return getSideLineSegment(false);
+    }
+
+    private LineSegment getSideLineSegment(boolean left) {
+        // left == true: left side; left == false: right side
+        final int x = left ? getLeftp().x : getRightp().x;
+        final int yLo = getIntersection(bottom, x);
+        final int yHi = getIntersection(top, x);
+
+        final Point topPoint = new Point(x, yHi);
+        final Point bottomPoint = new Point(x, yLo);
         return new LineSegment(topPoint, bottomPoint, null);
     }
 }
