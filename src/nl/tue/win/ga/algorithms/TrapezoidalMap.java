@@ -33,7 +33,7 @@ public class TrapezoidalMap {
     /**
      * Random Generator
      */
-    private Random randomGen = new Random();
+    private Random randomGen = new Random(20);
     /**
      * If the actual trapezoidalMap has been made
      */
