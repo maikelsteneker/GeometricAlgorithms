@@ -14,7 +14,7 @@ public class MergeSort {
 
     private int number;
 
-    public List<Point> sort(ArrayList<Point> values) {
+    public List<Point> sort(List<Point> values) {
         numbers = new Point[values.size()];
         for(int i = 0; i < values.size(); i++) {
             numbers[i] = new Point(values.get(i).x, values.get(i).y);

@@ -20,7 +20,7 @@ public class SweepLine {
     final private List<LineSegment> edges = new ArrayList<>();
     final private BoundingBox Box;
 
-    public SweepLine(ArrayList<Point> points) {
+    public SweepLine(List<Point> points) {
         MergeSort ms = new MergeSort();
         SortedPoints = ms.sort(points);
         initializeEdges(points);
