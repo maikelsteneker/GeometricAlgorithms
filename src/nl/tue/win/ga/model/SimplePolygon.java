@@ -1,21 +1,22 @@
 package nl.tue.win.ga.model;
 
+import nl.tue.win.ga.model.drawing.Drawable;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import nl.tue.win.ga.utilities.DrawingUtilities;
 
 /**
  * Represents a simple polygon.
  *
  * @author maikel
  */
-public class SimplePolygon implements Iterable<Point> {
+public class SimplePolygon implements Iterable<Point>, Drawable {
 
     final private Point[] hull;
-    final public static int XRES = 1024;
-    final public static int YRES = 768;
+    final public DrawingUtilities drawingUtilities;
 
     public SimplePolygon() {
         this(new Point[0]);
@@ -27,6 +28,7 @@ public class SimplePolygon implements Iterable<Point> {
 
     public SimplePolygon(Point[] hull) {
         this.hull = hull;
+        drawingUtilities = new DrawingUtilities(this);
     }
 
     public int size() {
@@ -43,44 +45,26 @@ public class SimplePolygon implements Iterable<Point> {
     }
 
     public void draw(Graphics g, boolean scale, boolean invertY) {
-        int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
-        if (scale || invertY) {
-            for (Point p : hull) {
-                if (p.x < minx) {
-                    minx = p.x;
-                }
-                if (p.y < miny) {
-                    miny = p.y;
-                }
-                if (p.x > maxx) {
-                    maxx = p.x;
-                }
-                if (p.y > maxy) {
-                    maxy = p.y;
-                }
-            }
-        }
-
         Point prev = size() > 0 ? hull[size() - 1] : null;
         if (prev != null) {
             if (invertY) {
-                prev = invert(prev, miny, maxy);
+                prev = drawingUtilities.invert(prev);
             }
             if (scale) {
-                prev = scaled(prev, minx, miny, maxx, maxy);
+                prev = drawingUtilities.scaled(prev);
             }
         }
 
         for (Point p : hull) {
             Point transformed = p;
             if (invertY) {
-                transformed = invert(transformed, miny, maxy);
+                transformed = drawingUtilities.invert(transformed);
             }
             if (scale) {
-                transformed = scaled(transformed, minx, miny, maxx, maxy);
+                transformed = drawingUtilities.scaled(transformed);
             }
-            g.drawOval(transformed.x-1, transformed.y-1, 3, 3);
-            g.fillOval(transformed.x-1, transformed.y-1, 3, 3);
+            g.drawOval(transformed.x - 1, transformed.y - 1, 3, 3);
+            g.fillOval(transformed.x - 1, transformed.y - 1, 3, 3);
             if (prev != null) {
                 g.drawLine(prev.x, prev.y, transformed.x, transformed.y);
             }
@@ -115,25 +99,5 @@ public class SimplePolygon implements Iterable<Point> {
             }
         }
         return true;
-    }
-
-    private Point scaled(Point p, int minx, int miny, int maxx, int maxy) {
-        double x = p.x;
-        x -= minx;
-        x /= (maxx - minx);
-
-        double y = p.y;
-        y -= miny;
-        y /= (maxy - miny);
-
-        x *= XRES;
-        y *= YRES;
-
-        return new Point((int) x, (int) y);
-    }
-
-    private Point invert(Point p, int miny, int maxy) {
-        // max eraf, flippen, min erbij
-        return new Point(p.x, -(p.y-maxy)+miny);
     }
 }
