@@ -15,6 +15,7 @@ import nl.tue.win.ga.utilities.DrawingUtilities;
 public class SimplePolygon implements Iterable<Point> {
 
     final private Point[] hull;
+    final public DrawingUtilities drawingUtilities;
 
     public SimplePolygon() {
         this(new Point[0]);
@@ -26,6 +27,7 @@ public class SimplePolygon implements Iterable<Point> {
 
     public SimplePolygon(Point[] hull) {
         this.hull = hull;
+        drawingUtilities = new DrawingUtilities(this);
     }
 
     public int size() {
@@ -42,44 +44,26 @@ public class SimplePolygon implements Iterable<Point> {
     }
 
     public void draw(Graphics g, boolean scale, boolean invertY) {
-        int minx = Integer.MAX_VALUE, miny = Integer.MAX_VALUE, maxx = Integer.MIN_VALUE, maxy = Integer.MIN_VALUE;
-        if (scale || invertY) {
-            for (Point p : hull) {
-                if (p.x < minx) {
-                    minx = p.x;
-                }
-                if (p.y < miny) {
-                    miny = p.y;
-                }
-                if (p.x > maxx) {
-                    maxx = p.x;
-                }
-                if (p.y > maxy) {
-                    maxy = p.y;
-                }
-            }
-        }
-
         Point prev = size() > 0 ? hull[size() - 1] : null;
         if (prev != null) {
             if (invertY) {
-                prev = DrawingUtilities.invert(prev, miny, maxy);
+                prev = drawingUtilities.invert(prev);
             }
             if (scale) {
-                prev = DrawingUtilities.scaled(prev, minx, miny, maxx, maxy);
+                prev = drawingUtilities.scaled(prev);
             }
         }
 
         for (Point p : hull) {
             Point transformed = p;
             if (invertY) {
-                transformed = DrawingUtilities.invert(transformed, miny, maxy);
+                transformed = drawingUtilities.invert(transformed);
             }
             if (scale) {
-                transformed = DrawingUtilities.scaled(transformed, minx, miny, maxx, maxy);
+                transformed = drawingUtilities.scaled(transformed);
             }
-            g.drawOval(transformed.x-1, transformed.y-1, 3, 3);
-            g.fillOval(transformed.x-1, transformed.y-1, 3, 3);
+            g.drawOval(transformed.x - 1, transformed.y - 1, 3, 3);
+            g.fillOval(transformed.x - 1, transformed.y - 1, 3, 3);
             if (prev != null) {
                 g.drawLine(prev.x, prev.y, transformed.x, transformed.y);
             }
