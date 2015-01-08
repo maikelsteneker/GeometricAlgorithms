@@ -400,10 +400,10 @@ public class DrawInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        if(segments.isEmpty()) {
-                   SweepLine sl =  new SweepLine(points);
-        sl.sweep();
-        segments = sl.getVerticals(); 
+        if (segments.isEmpty()) {
+            SweepLine sl = new SweepLine(points);
+            sl.sweep();
+            segments = sl.getVerticals();
         } else {
             segments.clear();
         }
@@ -445,15 +445,15 @@ public class DrawInterface extends javax.swing.JFrame {
 
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
-        polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
-        for(LineSegment ls: segments) {
-            ls.drawingUtilities = polygon.drawingUtilities;
-            ls.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
-        }
+        /*polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
+         for(LineSegment ls: segments) {
+         ls.drawingUtilities = polygon.drawingUtilities;
+         ls.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
+         }*/
+        ResultDrawable r = new ResultDrawable(polygon, segments);
+        r.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
-        
-        
     }
 
     private Point generateRandomPoint(int x, int y) {

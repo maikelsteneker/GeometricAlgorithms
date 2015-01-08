@@ -12,7 +12,7 @@ import nl.tue.win.ga.utilities.DrawingUtilities;
  *
  * @author maikel
  */
-public class SimplePolygon implements Iterable<Point> {
+public class SimplePolygon implements Iterable<Point>, Drawable {
 
     final private Point[] hull;
     final public DrawingUtilities drawingUtilities;

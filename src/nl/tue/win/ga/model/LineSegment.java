@@ -9,7 +9,7 @@ import nl.tue.win.ga.utilities.DrawingUtilities;
  *
  * @author maikel
  */
-public class LineSegment {
+public class LineSegment implements Drawable {
 
     private Point[] endPoints = new Point[2];
     private Face face; // face directly above this segment in the original subdivision
