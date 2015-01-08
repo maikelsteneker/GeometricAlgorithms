@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import nl.tue.win.ga.utilities.DrawingUtilities;
 
 /**
  * Represents a simple polygon.
@@ -14,8 +15,6 @@ import java.util.List;
 public class SimplePolygon implements Iterable<Point> {
 
     final private Point[] hull;
-    final public static int XRES = 1024;
-    final public static int YRES = 768;
 
     public SimplePolygon() {
         this(new Point[0]);
@@ -64,20 +63,20 @@ public class SimplePolygon implements Iterable<Point> {
         Point prev = size() > 0 ? hull[size() - 1] : null;
         if (prev != null) {
             if (invertY) {
-                prev = invert(prev, miny, maxy);
+                prev = DrawingUtilities.invert(prev, miny, maxy);
             }
             if (scale) {
-                prev = scaled(prev, minx, miny, maxx, maxy);
+                prev = DrawingUtilities.scaled(prev, minx, miny, maxx, maxy);
             }
         }
 
         for (Point p : hull) {
             Point transformed = p;
             if (invertY) {
-                transformed = invert(transformed, miny, maxy);
+                transformed = DrawingUtilities.invert(transformed, miny, maxy);
             }
             if (scale) {
-                transformed = scaled(transformed, minx, miny, maxx, maxy);
+                transformed = DrawingUtilities.scaled(transformed, minx, miny, maxx, maxy);
             }
             g.drawOval(transformed.x-1, transformed.y-1, 3, 3);
             g.fillOval(transformed.x-1, transformed.y-1, 3, 3);
@@ -115,25 +114,5 @@ public class SimplePolygon implements Iterable<Point> {
             }
         }
         return true;
-    }
-
-    private Point scaled(Point p, int minx, int miny, int maxx, int maxy) {
-        double x = p.x;
-        x -= minx;
-        x /= (maxx - minx);
-
-        double y = p.y;
-        y -= miny;
-        y /= (maxy - miny);
-
-        x *= XRES;
-        y *= YRES;
-
-        return new Point((int) x, (int) y);
-    }
-
-    private Point invert(Point p, int miny, int maxy) {
-        // max eraf, flippen, min erbij
-        return new Point(p.x, -(p.y-maxy)+miny);
     }
 }
