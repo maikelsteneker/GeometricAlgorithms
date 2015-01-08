@@ -2,13 +2,19 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package nl.tue.win.ga.model;
+package nl.tue.win.ga.algorithms;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import nl.tue.win.ga.model.Face;
+import nl.tue.win.ga.model.Graph;
+import nl.tue.win.ga.model.LineSegment;
+import nl.tue.win.ga.model.Node;
 import nl.tue.win.ga.model.Node.NodeType;
+import nl.tue.win.ga.model.PreprocessedEdges;
+import nl.tue.win.ga.utilities.BoundingBox;
 
 /**
  *
@@ -19,7 +25,7 @@ public class TrapezoidalMap {
     /**
      * list containing all the line segments (to be inserted)
      */
-    private ArrayList<LineSegment> linesegments = new ArrayList<>();
+    private List<LineSegment> linesegments = new ArrayList<>();
     /**
      * The bounding box of all the points
      */
@@ -49,16 +55,16 @@ public class TrapezoidalMap {
         graph = new Graph(root);
     }
 
-    public TrapezoidalMap(ArrayList<LineSegment> linesegments, BoundingBox b) {
-        this.linesegments = linesegments;
+    public TrapezoidalMap(List<Point> points) {
+        this.linesegments = PreprocessedEdges.preprocess(points);
         graph = null;
         //init the bounding box
-        boundingbox = new Face();
+        boundingbox = new BoundingBox(points, 0.1f).asFace();
         Face[] neighbours = {null, null, null, null, null, null};
         boundingbox.setAllNeighbours(neighbours);
     }
 
-    public void makeTrapezoidalMap() {
+    public void RandomIncrementalMap() {
 
         ArrayList<LineSegment> handled = new ArrayList<>();
 
@@ -69,7 +75,9 @@ public class TrapezoidalMap {
             List<Face> intersections = getIntersectedFaces(seg);
             Point begin = seg.getStartPoint();
             Point end = seg.getEndPoint();
-
+            
+            ArrayList<Face> newFaces = new ArrayList<>();
+            
             if (intersections.size() == 1) {
                 Face face = intersections.get(0);
                 trapFaces.remove(face);
@@ -150,6 +158,7 @@ public class TrapezoidalMap {
                 for (Face intersect : intersections) {
 
                     trapFaces.remove(intersect);
+                    
                     //this is the first of the intersections
                     if (intersections.indexOf(intersect) == 0) {
 
@@ -161,7 +170,7 @@ public class TrapezoidalMap {
                         A.setAllSideNeighbours(intersect.getUpperLeftNeighbour(), intersect.getLowerLeftNeighbour(), C, D);
                         C.setAllSideNeighbours(A, A, intersect.getUpperRightNeighbour(), null);
                         D.setAllSideNeighbours(A, A, null, intersect.getLowerRightNeighbour());
-
+                        
                         upper = C;
                         lower = D;
 
@@ -182,6 +191,9 @@ public class TrapezoidalMap {
                         trapFaces.add(A);
                         trapFaces.add(C);
                         trapFaces.add(D);
+                       
+                        //newFaces.add(C);
+                        //newFaces.add(D);
 
                         Node n = intersect.getNode();
 
@@ -217,6 +229,13 @@ public class TrapezoidalMap {
 
                         C.setAllSideNeighbours(CUpper, upper, B, B);
                         D.setAllSideNeighbours(lower, DLower, B, B);
+                        
+                        trapFaces.add(B);
+                        trapFaces.add(C);
+                        trapFaces.add(D);
+                        
+                        //newFaces.add(C);
+                        //newFaces.add(D);
 
                         if (upper.getUpperRightNeighbour() == intersect) {
                             upper.setUpperRightNeighbour(C);
@@ -271,6 +290,12 @@ public class TrapezoidalMap {
 
                         C.setAllSideNeighbours(CUpper, upper, intersect.getUpperRightNeighbour(), null);
                         D.setAllSideNeighbours(lower, DLower, null, intersect.getLowerRightNeighbour());
+                        
+                        trapFaces.add(C);
+                        trapFaces.add(D);
+                        
+                        //newFaces.add(C);
+                        //newFaces.add(D);
 
                         if (upper.getUpperRightNeighbour() == intersect) {
                             upper.setUpperRightNeighbour(C);
@@ -279,6 +304,9 @@ public class TrapezoidalMap {
                         if (lower.getLowerRightNeighbour() == intersect) {
                             lower.setLowerRightNeighbour(D);
                         }
+                        
+                        upper.setLowerRightNeighbour(C);
+                        lower.setUpperRightNeighbour(D);
                         
                         if (intersect.getUpperRightNeighbour().getUpperLeftNeighbour() == intersect) {
                             intersect.getUpperRightNeighbour().setUpperLeftNeighbour(C);
@@ -296,9 +324,6 @@ public class TrapezoidalMap {
                             intersect.getLowerLeftNeighbour().setLowerRightNeighbour(D);
                         }
 
-                        upper.setLowerRightNeighbour(C);
-                        lower.setUpperRightNeighbour(D);
-
                         upper = C;
                         lower = D;
                         
@@ -315,15 +340,17 @@ public class TrapezoidalMap {
                     }
                 }
             }
+            
+            //start possible merges
+            /*Boolean merged = false;
+            
+            while (!merged){
+                
+            }*/
+            
         }
 
         linesegments = handled;
-
-
-
-
-
-
     }
 
     private LineSegment getRandomLineSegment() {
