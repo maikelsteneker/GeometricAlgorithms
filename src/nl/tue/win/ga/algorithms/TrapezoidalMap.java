@@ -342,10 +342,42 @@ public class TrapezoidalMap {
             }
             
             //start possible merges
-            /*Boolean merged = false;
             
-            while (!merged){
-                
+            /*while (!newFaces.isEmpty()){
+                for (Face f: newFaces){
+                    if(f.getUpperRightNeighbour().getTop() == f.getTop() && f.getUpperRightNeighbour().getBottom() == f.getBottom()){
+                        Face neigh = f.getUpperRightNeighbour();
+                        f.setUpperRightNeighbour(neigh.getUpperRightNeighbour());
+                        f.setLowerRightNeighbour(neigh.getLowerRightNeighbour());
+                        f.setRightp(neigh.getRightp());
+                        
+                        Node neighn = neigh.getNode();
+                        if (neighn.getParent().getLchild() == neighn){
+                            neighn.getParent().setLchild(f.getNode());
+                        } else {
+                            neighn.getParent().setRchild(f.getNode());
+                        }
+                        
+                        newFaces.remove(neigh);
+                    } else if (f.getLowerRightNeighbour().getBottom() == f.getBottom() && f.getLowerRightNeighbour().getTop() == f.getTop()){
+                        Face neigh = f.getLowerRightNeighbour();
+                        f.setUpperRightNeighbour(neigh.getUpperRightNeighbour());
+                        f.setLowerRightNeighbour(neigh.getLowerRightNeighbour());
+                        f.setRightp(neigh.getRightp());
+                        
+                        Node neighn = neigh.getNode();
+                        if (neighn.getParent().getLchild() == neighn){
+                            neighn.getParent().setLchild(f.getNode());
+                        } else {
+                            neighn.getParent().setRchild(f.getNode());
+                        }
+                        
+                        newFaces.remove(neigh);
+                    } else {
+                        newFaces.remove(f);
+                        trapFaces.add(f);
+                    }
+                }
             }*/
             
         }
