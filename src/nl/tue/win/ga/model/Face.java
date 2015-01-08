@@ -14,7 +14,23 @@ public class Face {
     private Point leftp;
     private Point rightp;
 
-    private Face[] neighbours = new Face[4];
+    public Point getLeftp() {
+        return leftp;
+    }
+
+    public void setLeftp(Point leftp) {
+        this.leftp = leftp;
+    }
+
+    public Point getRightp() {
+        return rightp;
+    }
+
+    public void setRightp(Point rightp) {
+        this.rightp = rightp;
+    }
+
+    private Face[] neighbours = new Face[6];
     
     public Face(){
         top = null;
@@ -47,22 +63,38 @@ public class Face {
     }
     
     public void setBottomNeighbour(Face bot){
-        neighbours[0] = bot;
+        neighbours[1] = bot;
     }
     
-    public Face getLeftNeighbour() {
+    public Face getUpperLeftNeighbour() {
         return neighbours[2];
     }
     
-    public void setLeftNeighbour(Face left){
-        neighbours[0] = left;
+    public void setUpperLeftNeighbour(Face left){
+        neighbours[2] = left;
     }
     
-    public Face getRightNeighbour() {
+    public Face getLowerLeftNeighbour() {
         return neighbours[3];
     }
     
-    public void setRightNeighbour(Face right){
-        neighbours[0] = right;
+    public void setLowerLeftNeighbour(Face left){
+        neighbours[3] = left;
+    }
+    
+    public Face getUpperRightNeighbour() {
+        return neighbours[4];
+    }
+    
+    public void setUpperRightNeighbour(Face right){
+        neighbours[4] = right;
+    }
+    
+    public Face getLowerRightNeighbour(){
+        return neighbours[5];
+    }
+    
+    public void setLowerRightNeighbour(Face right){
+        neighbours[5] = right;
     }
 }
