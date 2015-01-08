@@ -46,6 +46,10 @@ public class LineSegment implements Drawable {
         return endPoints[0] + ", " + endPoints[1] + ", " + face;
     }
 
+    public void setEndPoint(int x, int y) {
+        this.endPoints[1].x = x;
+        this.endPoints[1].y = y;
+    }
     public Point getStartPoint() {
         return endPoints[0];
     }
