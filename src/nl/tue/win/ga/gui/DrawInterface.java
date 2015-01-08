@@ -1,5 +1,6 @@
 package nl.tue.win.ga.gui;
 
+import nl.tue.win.ga.model.drawing.ResultDrawable;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -16,6 +17,8 @@ import nl.tue.win.ga.io.ReadPolygonFromFile;
 import nl.tue.win.ga.io.WritePolygonToFile;
 import nl.tue.win.ga.model.*;
 import nl.tue.win.ga.algorithms.*;
+import nl.tue.win.ga.io.ExportPolygonToBitmap;
+import nl.tue.win.ga.utilities.BoundingBox;
 
 /**
  * GUI for drawing input files for DBL Algorithms
@@ -82,6 +85,8 @@ public class DrawInterface extends javax.swing.JFrame {
             jCheckBox1 = new javax.swing.JCheckBox();
             jCheckBox2 = new javax.swing.JCheckBox();
             jButton4 = new javax.swing.JButton();
+            jButton5 = new javax.swing.JButton();
+            jButton6 = new javax.swing.JButton();
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -168,10 +173,24 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
-            jButton4.setText("jButton4");
+            jButton4.setText("Apply sweepline algorithm");
             jButton4.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton4ActionPerformed(evt);
+                }
+            });
+
+            jButton5.setText("Export");
+            jButton5.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton5ActionPerformed(evt);
+                }
+            });
+
+            jButton6.setText("Apply RIC algorithm");
+            jButton6.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton6ActionPerformed(evt);
                 }
             });
 
@@ -192,17 +211,6 @@ public class DrawInterface extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addComponent(intensitySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
-                                    .addComponent(jButton3))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(radiusSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel4)
-                                    .addGap(0, 260, Short.MAX_VALUE))
-                                .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabel2)
@@ -212,13 +220,32 @@ public class DrawInterface extends javax.swing.JFrame {
                                             .addComponent(jCheckBox1)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(jCheckBox2)))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(jButton4)
                                             .addGap(31, 31, 31)
                                             .addComponent(jButton1))
-                                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING))))))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jButton6)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jButton2))))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(intensitySlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(radiusSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jLabel4)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel3)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 228, Short.MAX_VALUE)
+                                            .addComponent(jButton3))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addGap(0, 0, Short.MAX_VALUE)
+                                            .addComponent(jButton5)))))))
                     .addContainerGap())
             );
             layout.setVerticalGroup(
@@ -239,7 +266,8 @@ public class DrawInterface extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton2)
                         .addComponent(jCheckBox1)
-                        .addComponent(jCheckBox2))
+                        .addComponent(jCheckBox2)
+                        .addComponent(jButton6))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -250,7 +278,10 @@ public class DrawInterface extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel4)
                                 .addComponent(radiusSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jButton3))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jButton3)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton5)))
                     .addGap(7, 7, 7))
             );
 
@@ -287,6 +318,7 @@ public class DrawInterface extends javax.swing.JFrame {
                         "error", JOptionPane.ERROR_MESSAGE);
             }
         }
+        
         repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -371,6 +403,7 @@ public class DrawInterface extends javax.swing.JFrame {
             //this.jTextFieldMin.setText(input.getMinClusters() + "");
             //this.jTextFieldMax.setText(input.getMaxClusters() + "");
         }
+        segments.clear();
         repaint();
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -383,22 +416,72 @@ public class DrawInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        SweepLine sl =  new SweepLine(points);
-        sl.sweep();
-        segments = sl.getVerticals();
+        if (segments.isEmpty()) {
+            SweepLine sl = new SweepLine(points);
+            sl.sweep();
+            segments = sl.getVerticals();
+        } else {
+            segments.clear();
+        }
+
         repaint();
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogType(JFileChooser.SAVE_DIALOG);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Bitmap", "bmp");
+        fc.setFileFilter(filter);
+        if (outputFile != null) {
+            fc.setCurrentDirectory(new File(outputFile, ".."));
+        }
+        int showSaveDialog = fc.showSaveDialog(this);
+
+        outputFile = fc.getSelectedFile();
+        if (fc.getFileFilter().equals(filter)) {
+            if (outputFile != null && !outputFile.toString().endsWith(".bmp")) {
+                outputFile = new File(outputFile.toString() + ".bmp");
+            }
+        }
+
+        if (showSaveDialog == JFileChooser.APPROVE_OPTION) {
+            try {
+                ExportPolygonToBitmap.exportPolygonToImage(outputFile, new ResultDrawable(new SimplePolygon(points), segments), "bmp", !jCheckBox2.isEnabled());
+            } catch (IOException ex) {
+                fc.showDialog(this, "There was a problem when writing to the "
+                        + "specified file.");
+            } catch (Exception ex) {
+                //Logger.getLogger(DrawInterface.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, ex.toString(),
+                        "error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        if (segments.isEmpty()) {
+            TrapezoidalMap t = new TrapezoidalMap(points);
+            t.RandomIncrementalMap();
+            segments = t.getResult();
+        } else {
+            segments.clear();
+        }
+
+        repaint();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
-        polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
-        for(LineSegment ls: segments) {
-            g.drawLine(ls.getStartPoint().x, ls.getStartPoint().y, ls.getEndPoint().x, ls.getEndPoint().y);
-        }
+        /*polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
+         for(LineSegment ls: segments) {
+         ls.drawingUtilities = polygon.drawingUtilities;
+         ls.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
+         }*/
+        ResultDrawable r = new ResultDrawable(polygon, segments, new BoundingBox(points, 0.1f));
+        r.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
-        
-        
     }
 
     private Point generateRandomPoint(int x, int y) {
@@ -471,6 +554,8 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
