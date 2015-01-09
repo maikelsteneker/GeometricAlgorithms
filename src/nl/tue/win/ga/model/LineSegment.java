@@ -12,6 +12,18 @@ import nl.tue.win.ga.utilities.DrawingUtilities;
  */
 public class LineSegment implements Drawable {
 
+    public static int getIntersection(LineSegment s, int x) {
+        final Point startPoint = s.getStartPoint();
+        final Point endPoint = s.getEndPoint();
+        final float slope = (float) (endPoint.y - startPoint.y) / (endPoint.x - startPoint.x);
+        final int y = (int) (startPoint.y + (x - startPoint.x) * slope);
+        return y;
+    }
+    
+    public int getIntersection(int x) {
+        return getIntersection(this, x);
+    }
+
     private Point[] endPoints = new Point[2];
     private Face face; // face directly above this segment in the original subdivision
     public DrawingUtilities drawingUtilities;
