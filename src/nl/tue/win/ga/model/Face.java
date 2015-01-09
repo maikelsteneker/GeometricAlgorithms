@@ -143,15 +143,6 @@ public class Face {
         neighbours[5] = right;
     }
 
-    public static int getIntersection(LineSegment s, int x) {
-        final Point startPoint = s.getStartPoint();
-        final Point endPoint = s.getEndPoint();
-        final float slope = (float) (endPoint.y - startPoint.y)
-                / (endPoint.x - startPoint.x);
-        final int y = (int) (startPoint.y + (x - startPoint.x) * slope);
-        return y;
-    }
-
     public LineSegment getLeftLineSegment() {
         return getSideLineSegment(true);
     }
@@ -163,8 +154,8 @@ public class Face {
     private LineSegment getSideLineSegment(boolean left) {
         // left == true: left side; left == false: right side
         final int x = left ? getLeftp().x : getRightp().x;
-        final int yLo = getIntersection(bottom, x);
-        final int yHi = getIntersection(top, x);
+        final int yLo = LineSegment.getIntersection(bottom, x);
+        final int yHi = LineSegment.getIntersection(top, x);
 
         final Point topPoint = new Point(x, yHi);
         final Point bottomPoint = new Point(x, yLo);
