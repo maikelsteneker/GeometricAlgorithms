@@ -12,7 +12,7 @@ import nl.tue.win.ga.utilities.*;
  *
  * @author Administrator
  */
-public class SweepLine {
+public class SweepLineA {
 
     final private List<Point> SortedPoints;
     final private TreeMap SearchTree = new TreeMap();
@@ -20,7 +20,7 @@ public class SweepLine {
     final private List<LineSegment> edges = new ArrayList<>();
     final private BoundingBox Box;
 
-    public SweepLine(ArrayList<Point> points) {
+    public SweepLineA(ArrayList<Point> points) {
         MergeSort ms = new MergeSort();
         SortedPoints = ms.sort(points);
         initializeEdges(points);

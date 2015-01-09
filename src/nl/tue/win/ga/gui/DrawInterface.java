@@ -417,7 +417,7 @@ public class DrawInterface extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         if (segments.isEmpty()) {
-            SweepLine sl = new SweepLine(points);
+            SweepLineA sl = new SweepLineA(points);
             sl.sweep();
             segments = sl.getVerticals();
         } else {
