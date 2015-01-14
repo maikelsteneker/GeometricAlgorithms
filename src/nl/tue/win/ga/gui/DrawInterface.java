@@ -91,6 +91,7 @@ public class DrawInterface extends javax.swing.JFrame {
             jButton5 = new javax.swing.JButton();
             jButton6 = new javax.swing.JButton();
             jCheckBox3 = new javax.swing.JCheckBox();
+            jButton7 = new javax.swing.JButton();
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -211,6 +212,13 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
+            jButton7.setText("Reset zoom");
+            jButton7.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jButton7ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -245,8 +253,10 @@ public class DrawInterface extends javax.swing.JFrame {
                                             .addComponent(jButton4)
                                             .addGap(31, 31, 31)
                                             .addComponent(jButton1))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addComponent(jButton6)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jButton7)
+                                                .addComponent(jButton6))
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(jButton2))))
                                 .addGroup(layout.createSequentialGroup()
@@ -299,7 +309,9 @@ public class DrawInterface extends javax.swing.JFrame {
                                 .addComponent(jLabel4)
                                 .addComponent(radiusSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jButton3)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jButton3)
+                                .addComponent(jButton7))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jButton5)))
                     .addGap(7, 7, 7))
@@ -512,6 +524,12 @@ public class DrawInterface extends javax.swing.JFrame {
         repaint();
     }//GEN-LAST:event_jPanel1MouseWheelMoved
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        DrawingUtilities.offset = new Point();
+        DrawingUtilities.zoom = 1;
+        repaint();
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
         /*polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
@@ -597,6 +615,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
