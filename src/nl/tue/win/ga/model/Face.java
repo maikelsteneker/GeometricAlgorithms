@@ -22,12 +22,14 @@ public class Face implements Drawable {
     
     public DrawingUtilities drawingUtilities;
     public int label;
+    private static int lastLabel;
 
     public Face() {
         top = null;
         bottom = null;
         leftp = null;
         rightp = null;
+        label = lastLabel++;
     }
 
     public Face(LineSegment top, LineSegment bottom, Point leftp, Point rightp) {
@@ -35,6 +37,7 @@ public class Face implements Drawable {
         this.bottom = bottom;
         this.leftp = leftp;
         this.rightp = rightp;
+        label = lastLabel++;
     }
 
     public Face(Face upperleft, Face lowerleft, Face upperright, Face lowerright) {
@@ -46,6 +49,7 @@ public class Face implements Drawable {
         neighbours[3] = lowerleft;
         neighbours[4] = upperright;
         neighbours[5] = lowerright;
+        label = lastLabel++;
     }
 
     public Node getNode() {
@@ -189,4 +193,12 @@ public class Face implements Drawable {
                 + getTop().getEndPoint().y + getBottom().getEndPoint().y) / 4;
         return new Point(x, y);
     }
-}
+    
+    public int getWidth() {
+        return Math.abs(this.rightp.x - this.leftp.x);
+    }
+    
+    public static void resetCounter() {
+        Face.lastLabel = 0;
+    }
+}    

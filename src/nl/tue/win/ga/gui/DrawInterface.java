@@ -36,7 +36,7 @@ public class DrawInterface extends javax.swing.JFrame {
     int selected = -1;
     List<LineSegment> segments = new ArrayList<>();
     Point dragStart;
-    boolean editing = true;
+    boolean editing = false;
     List<Face> faces = new ArrayList<>();
     List<LineSegment> partialProgress = new ArrayList<>();
 
@@ -216,7 +216,6 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
-            jCheckBox3.setSelected(true);
             jCheckBox3.setText("editing");
             jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -657,6 +656,7 @@ public class DrawInterface extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void trapezoidalMap() {
+        Face.resetCounter();
         TrapezoidalMap t = new TrapezoidalMap(points);
         t.lastStep = (int) jSpinner1.getValue();
         t.RandomIncrementalMap();

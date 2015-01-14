@@ -66,10 +66,8 @@ public class ResultDrawable implements Drawable {
             s.drawingUtilities = drawingUtilities;
             s.draw(g, scale, invertY);
         }
-        int label = 0;
         for (Face f : faces) {
             f.drawingUtilities = drawingUtilities;
-            f.label = label++;
             f.draw(g, scale, invertY);
         }
         for (LineSegment s : partial) {
