@@ -1,5 +1,6 @@
 package nl.tue.win.ga.gui;
 
+import java.awt.Frame;
 import nl.tue.win.ga.model.drawing.ResultDrawable;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import nl.tue.win.ga.io.ReadPolygonFromFile;
@@ -36,8 +38,9 @@ public class DrawInterface extends javax.swing.JFrame {
     int selected = -1;
     List<LineSegment> segments = new ArrayList<>();
     Point dragStart;
-    boolean editing = true;
+    boolean editing = false;
     List<Face> faces = new ArrayList<>();
+    List<LineSegment> partialProgress = new ArrayList<>();
 
     /**
      * Creates new form DrawInterface
@@ -52,6 +55,7 @@ public class DrawInterface extends javax.swing.JFrame {
         jTextFieldMax.setVisible(false);
         intensitySlider.setVisible(false);
         radiusSlider.setVisible(false);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -215,7 +219,6 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
-            jCheckBox3.setSelected(true);
             jCheckBox3.setText("editing");
             jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,6 +230,12 @@ public class DrawInterface extends javax.swing.JFrame {
             jButton7.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     jButton7ActionPerformed(evt);
+                }
+            });
+
+            jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+                public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                    jSpinner1StateChanged(evt);
                 }
             });
 
@@ -259,8 +268,8 @@ public class DrawInterface extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(jCheckBox3)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(jButton4)
@@ -433,6 +442,7 @@ public class DrawInterface extends javax.swing.JFrame {
         points.clear();
         segments.clear();
         faces.clear();
+        partialProgress.clear();
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -519,11 +529,7 @@ public class DrawInterface extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         if (segments.isEmpty()) {
-            TrapezoidalMap t = new TrapezoidalMap(points);
-            t.lastStep = (int) jSpinner1.getValue();
-            t.RandomIncrementalMap();
-            segments = t.getResult();
-            faces = t.getFaces();
+            this.trapezoidalMap();
         } else {
             segments.clear();
         }
@@ -548,6 +554,10 @@ public class DrawInterface extends javax.swing.JFrame {
         repaint();
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
+        trapezoidalMap();
+    }//GEN-LAST:event_jSpinner1StateChanged
+
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
         /*polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
@@ -555,7 +565,7 @@ public class DrawInterface extends javax.swing.JFrame {
          ls.drawingUtilities = polygon.drawingUtilities;
          ls.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
          }*/
-        ResultDrawable r = new ResultDrawable(polygon, segments, new BoundingBox(points, 0.1f), faces);
+        ResultDrawable r = new ResultDrawable(this.partialProgress.isEmpty() ? new SimplePolygon(points) : new SimplePolygon(), segments, new BoundingBox(points, 0.1f), faces, this.partialProgress);
         r.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
@@ -648,4 +658,15 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldMin;
     private javax.swing.JSlider radiusSlider;
     // End of variables declaration//GEN-END:variables
+
+    private void trapezoidalMap() {
+        Face.resetCounter();
+        TrapezoidalMap t = new TrapezoidalMap(points);
+        t.lastStep = (int) jSpinner1.getValue();
+        t.RandomIncrementalMap();
+        segments = t.getResult();
+        faces = t.getFaces();
+        partialProgress = t.handled;
+        repaint();
+    }
 }

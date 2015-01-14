@@ -3,6 +3,7 @@ package nl.tue.win.ga.algorithms;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -45,7 +46,9 @@ public class TrapezoidalMap {
     public int lastStep;
     private int currentStep;
 
-    private final static boolean SEPARATE_LINES = true; // no overlapping face borders
+    private final static boolean SEPARATE_LINES = false; // no overlapping face borders
+    
+    public ArrayList<LineSegment> handled = new ArrayList<>();
 
     public TrapezoidalMap() {
         /*//init the bounding box
@@ -70,7 +73,6 @@ public class TrapezoidalMap {
 
     public void RandomIncrementalMap() {
 
-        ArrayList<LineSegment> handled = new ArrayList<>();
         currentStep = 0;
         while (linesegments.size() > 0) {
             if (currentStep++ >= lastStep) return;
@@ -389,6 +391,14 @@ public class TrapezoidalMap {
                     trapFaces.add(f);
                 }
             }
+            
+                Iterator<Face> iterator = trapFaces.iterator();
+                while (iterator.hasNext()) {
+                    final Face f = iterator.next();
+                    if (f.getWidth() == 0) {
+                        iterator.remove();
+                    }
+                }
 
         }
         for (Face face : trapFaces) {
