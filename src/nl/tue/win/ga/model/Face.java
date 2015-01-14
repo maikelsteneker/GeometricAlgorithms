@@ -185,7 +185,8 @@ public class Face implements Drawable {
 
     private Point getMiddle() {
         final int x = (getLeftp().x + getRightp().x) / 2;
-        final int y = (getTop().getStartPoint().y + getBottom().getStartPoint().y) / 2;
+        final int y = (getTop().getStartPoint().y + getBottom().getStartPoint().y
+                + getTop().getEndPoint().y + getBottom().getEndPoint().y) / 4;
         return new Point(x, y);
     }
 }
