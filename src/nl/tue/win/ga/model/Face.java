@@ -170,7 +170,7 @@ public class Face implements Drawable {
 
     @Override
     public void draw(Graphics g, boolean scale, boolean invertY) {
-        Point location = this.getLeftp();
+        Point location = this.getMiddle();
         
         if (invertY) {
             location = drawingUtilities.invert(location);
@@ -181,5 +181,11 @@ public class Face implements Drawable {
         location = drawingUtilities.zoom(location);
         
         g.drawString(Integer.toString(label), location.x, location.y);
+    }
+
+    private Point getMiddle() {
+        final int x = (getLeftp().x + getRightp().x) / 2;
+        final int y = (getTop().getStartPoint().y + getBottom().getStartPoint().y) / 2;
+        return new Point(x, y);
     }
 }
