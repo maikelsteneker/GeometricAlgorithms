@@ -445,7 +445,6 @@ public class TrapezoidalMap {
                 while (xs.contains(f.getLeftp().x)) {
                     Point p = f.getLeftp();
                     f.setLeftp(new Point(p.x + 2, p.y));
-                    System.out.println(f.getLeftp().x);
                 }
                 while (xs.contains(f.getRightp().x)) {
                     Point p = f.getRightp();

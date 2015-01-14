@@ -2,6 +2,7 @@ package nl.tue.win.ga.gui;
 
 import nl.tue.win.ga.model.drawing.ResultDrawable;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -72,6 +73,13 @@ public class DrawInterface extends javax.swing.JFrame {
             @Override
             public void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                final int w = this.getWidth();
+                final int h = this.getHeight();
+                final int scale = DrawingUtilities.zoom;
+                final Graphics2D g2 = (Graphics2D) g;
+                g.translate(w/2, h/2);
+                g2.scale(scale, scale);
+                g.translate(-w/2, -h/2);
                 paintMainPanel(this, g);
             }};
             jTextFieldMin = new javax.swing.JTextField();
@@ -524,6 +532,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jPanel1MouseWheelMoved
         int degree = evt.getWheelRotation();
         DrawingUtilities.zoom -= degree;
+        DrawingUtilities.zoom = Math.max(DrawingUtilities.zoom, 1);
         repaint();
     }//GEN-LAST:event_jPanel1MouseWheelMoved
 

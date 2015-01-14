@@ -57,6 +57,6 @@ public class DrawingUtilities {
     }
 
     public Point zoom(Point p) {
-        return new Point(zoom * p.x + offset.x, zoom * p.y + offset.y);
+        return new Point(p.x + offset.x, p.y + offset.y); //return new Point(zoom * p.x + offset.x, zoom * p.y + offset.y);
     }
 }
