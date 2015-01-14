@@ -42,12 +42,12 @@ public class TrapezoidalMap {
      */
     private boolean done = false;
     private ArrayList<Face> trapFaces = new ArrayList<>();
-    
+
     public int lastStep;
     private int currentStep;
 
-    private final static boolean SEPARATE_LINES = false; // no overlapping face borders
-    
+    private final static boolean SEPARATE_LINES = true; // no overlapping face borders
+
     public ArrayList<LineSegment> handled = new ArrayList<>();
 
     public TrapezoidalMap() {
@@ -75,7 +75,9 @@ public class TrapezoidalMap {
 
         currentStep = 0;
         while (linesegments.size() > 0) {
-            if (currentStep++ >= lastStep) return;
+            if (currentStep++ >= lastStep) {
+                return;
+            }
             LineSegment seg = getRandomLineSegment();
             linesegments.remove(seg);
             handled.add(seg);
@@ -94,42 +96,126 @@ public class TrapezoidalMap {
                 Face C = new Face(face.getTop(), seg, begin, end);
                 Face D = new Face(seg, face.getBottom(), begin, end);
 
-                A.setAllSideNeighbours(face.getUpperLeftNeighbour(), face.getUpperRightNeighbour(), C, D);
-                B.setAllSideNeighbours(C, D, face.getUpperRightNeighbour(), face.getLowerRightNeighbour());
-                C.setAllSideNeighbours(A, A, B, B);
-                D.setAllSideNeighbours(A, A, B, B);
+                if (face.getLeftp().x == begin.x) {
+                    A = null;
+                    if (face.getUpperLeftNeighbour() != null && face.getUpperLeftNeighbour().getBottom().getEndPoint().y < seg.getStartPoint().y) {
+                        D.setUpperLeftNeighbour(face.getUpperLeftNeighbour());
+                        D.setLowerLeftNeighbour(face.getLowerLeftNeighbour());
+                        C.setUpperLeftNeighbour(face.getUpperLeftNeighbour());
+                        C.setLowerLeftNeighbour(face.getUpperLeftNeighbour());
 
-                trapFaces.add(A);
-                trapFaces.add(B);
+                    } else {
+                        D.setUpperLeftNeighbour(face.getLowerLeftNeighbour());
+                        D.setLowerLeftNeighbour(face.getLowerLeftNeighbour());
+                        C.setUpperLeftNeighbour(face.getUpperLeftNeighbour());
+                        C.setLowerLeftNeighbour(face.getLowerLeftNeighbour());
+                    }
+                } else {
+                    A.setAllSideNeighbours(face.getUpperLeftNeighbour(), face.getUpperRightNeighbour(), C, D);
+                    trapFaces.add(A);
+                    D.setUpperLeftNeighbour(A);
+                    D.setLowerLeftNeighbour(A);
+                    C.setUpperLeftNeighbour(A);
+                    C.setLowerLeftNeighbour(A);
+                }
+                if (face.getRightp().x == end.x) {
+                    B = null;
+                    if (face.getUpperRightNeighbour() != null && face.getUpperRightNeighbour().getBottom().getStartPoint().y < seg.getEndPoint().y) {
+                        D.setUpperRightNeighbour(face.getUpperRightNeighbour());
+                        D.setLowerRightNeighbour(face.getLowerRightNeighbour());
+                        C.setUpperRightNeighbour(face.getUpperRightNeighbour());
+                        C.setLowerRightNeighbour(face.getUpperRightNeighbour());
+
+                    } else {
+                        D.setUpperRightNeighbour(face.getLowerRightNeighbour());
+                        D.setLowerRightNeighbour(face.getLowerRightNeighbour());
+                        C.setUpperRightNeighbour(face.getUpperRightNeighbour());
+                        C.setLowerRightNeighbour(face.getLowerRightNeighbour());
+                    }
+                } else {
+                    B.setAllSideNeighbours(C, D, face.getUpperRightNeighbour(), face.getLowerRightNeighbour());
+                    trapFaces.add(B);
+                    D.setUpperRightNeighbour(B);
+                    D.setLowerRightNeighbour(B);
+                    C.setUpperRightNeighbour(B);
+                    C.setLowerRightNeighbour(B);
+                }
+
                 trapFaces.add(C);
                 trapFaces.add(D);
 
                 if (face.getUpperLeftNeighbour() != null) {
-                    if (face.getUpperLeftNeighbour().getUpperRightNeighbour() == face) {
-                        face.getUpperLeftNeighbour().setUpperRightNeighbour(A);
+                    if (A != null) {
+                        if (face.getUpperLeftNeighbour().getUpperRightNeighbour() == face) {
+                            face.getUpperLeftNeighbour().setUpperRightNeighbour(A);
+                        }
+                        face.getUpperLeftNeighbour().setLowerRightNeighbour(A);
+                    } else {
+                        if (face.getUpperLeftNeighbour().getUpperRightNeighbour() == face) {
+                            face.getUpperLeftNeighbour().setUpperRightNeighbour(C);
+                        }
+                        if (face.getUpperLeftNeighbour().getBottom().getEndPoint().y < seg.getStartPoint().y) {
+                            face.getUpperLeftNeighbour().setLowerRightNeighbour(D);
+                        } else {
+                            face.getUpperLeftNeighbour().setLowerRightNeighbour(C);
+                        }
                     }
-                    face.getUpperLeftNeighbour().setLowerRightNeighbour(A);
+
                 }
 
                 if (face.getLowerLeftNeighbour() != null) {
-                    if (face.getLowerLeftNeighbour().getLowerRightNeighbour() == face) {
-                        face.getLowerLeftNeighbour().setLowerRightNeighbour(A);
+                    if (A != null) {
+                        if (face.getLowerLeftNeighbour().getLowerRightNeighbour() == face) {
+                            face.getLowerLeftNeighbour().setLowerRightNeighbour(A);
+                        }
+                        face.getLowerLeftNeighbour().setUpperRightNeighbour(A);
+                    } else {
+                        if (face.getLowerLeftNeighbour().getLowerRightNeighbour() == face) {
+                            face.getLowerLeftNeighbour().setLowerRightNeighbour(D);
+                        }
+                        if (face.getLowerLeftNeighbour().getTop().getEndPoint().y < seg.getStartPoint().y) {
+                            face.getLowerLeftNeighbour().setUpperRightNeighbour(D);
+                        } else {
+                            face.getLowerLeftNeighbour().setUpperRightNeighbour(C);
+                        }
                     }
-                    face.getLowerLeftNeighbour().setUpperRightNeighbour(A);
                 }
 
                 if (face.getUpperRightNeighbour() != null) {
-                    if (face.getUpperRightNeighbour().getUpperLeftNeighbour() == face) {
-                        face.getUpperRightNeighbour().setUpperLeftNeighbour(B);
+                    if (B != null) {
+                        if (face.getUpperRightNeighbour().getUpperLeftNeighbour() == face) {
+                            face.getUpperRightNeighbour().setUpperLeftNeighbour(B);
+                        }
+                        face.getUpperRightNeighbour().setLowerLeftNeighbour(B);
+                    } else {
+                        if (face.getUpperRightNeighbour().getUpperLeftNeighbour() == face) {
+                            face.getUpperRightNeighbour().setUpperLeftNeighbour(C);
+                        }
+                        if (face.getUpperRightNeighbour().getBottom().getStartPoint().y < seg.getEndPoint().y) {
+                            face.getUpperRightNeighbour().setLowerLeftNeighbour(D);
+                        } else {
+                            face.getUpperRightNeighbour().setLowerLeftNeighbour(C);
+                        }
                     }
-                    face.getUpperRightNeighbour().setLowerLeftNeighbour(B);
+
                 }
 
                 if (face.getLowerRightNeighbour() != null) {
-                    if (face.getLowerRightNeighbour().getLowerLeftNeighbour() == face) {
-                        face.getLowerRightNeighbour().setLowerLeftNeighbour(B);
+                    if (B != null) {
+                        if (face.getLowerRightNeighbour().getLowerLeftNeighbour() == face) {
+                            face.getLowerRightNeighbour().setLowerLeftNeighbour(B);
+                        }
+                        face.getLowerRightNeighbour().setUpperLeftNeighbour(B);
+                    } else {
+                        if (face.getLowerRightNeighbour().getLowerLeftNeighbour() == face) {
+                            face.getLowerRightNeighbour().setLowerLeftNeighbour(D);
+                        }
+                        if (face.getLowerRightNeighbour().getTop().getStartPoint().y < seg.getEndPoint().y) {
+                            face.getLowerRightNeighbour().setUpperLeftNeighbour(D);
+                        } else {
+                            face.getLowerRightNeighbour().setUpperLeftNeighbour(C);
+                        }
                     }
-                    face.getLowerRightNeighbour().setUpperLeftNeighbour(B);
                 }
 
                 Node n = face.getNode();
@@ -138,18 +224,25 @@ public class TrapezoidalMap {
                 n.setType(NodeType.POINT);
                 n.setPoint(begin);
 
-                //set lefttree
-                Node leftchild = new Node(A);
-                n.setLchild(leftchild);
-
                 //set righttree
                 Node rightchild = new Node(end);
                 n.setRchild(rightchild);
+
+                //set lefttree
+                if (A != null) {
+                    Node leftchild = new Node(A);
+                    n.setLchild(leftchild);
+                } else {
+                    n = rightchild;
+                }
 
                 Node rrchild = new Node(B);
                 rightchild.setRchild(rrchild);
 
                 Node rlchild = new Node(seg);
+                if (B == null) {
+                    rlchild = rightchild;
+                }
                 rightchild.setLchild(rlchild);
 
                 Node rlrchild = new Node(C);
@@ -222,12 +315,9 @@ public class TrapezoidalMap {
                         Node rlchild = new Node(D);
                         rightchild.setLchild(rlchild);
 
-
-
                     } else if (intersections.indexOf(intersect) == intersections.size() - 1 && intersect.getRightp().x != end.x) {
 
                         //this is the last of the intersected faces
-
                         Face B = new Face(intersect.getTop(), intersect.getBottom(), intersect.getRightp(), end);
                         Face C = new Face(intersect.getTop(), seg, intersect.getLeftp(), end);
                         Face D = new Face(seg, intersect.getBottom(), intersect.getLeftp(), end);
@@ -319,9 +409,6 @@ public class TrapezoidalMap {
                             lower.setUpperRightNeighbour(D);
                         }
 
-
-
-
                         if (intersect.getUpperRightNeighbour() != null && intersect.getUpperRightNeighbour().getUpperLeftNeighbour() == intersect) {
                             intersect.getUpperRightNeighbour().setUpperLeftNeighbour(C);
                         }
@@ -391,15 +478,14 @@ public class TrapezoidalMap {
                     trapFaces.add(f);
                 }
             }
-            
-                Iterator<Face> iterator = trapFaces.iterator();
-                while (iterator.hasNext()) {
-                    final Face f = iterator.next();
-                    if (f.getWidth() == 0) {
-                        iterator.remove();
-                    }
-                }
 
+            /*Iterator<Face> iterator = trapFaces.iterator();
+             while (iterator.hasNext()) {
+             final Face f = iterator.next();
+             if (f.getWidth() == 0) {
+             iterator.remove();
+             }
+             }*/
         }
         for (Face face : trapFaces) {
             if (face.getLeftp().x == face.getRightp().x) {
