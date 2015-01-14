@@ -20,7 +20,7 @@ public class ResultDrawable implements Drawable {
     private final Iterable<LineSegment> segments;
     private final DrawingUtilities drawingUtilities;
     private final Iterable<LineSegment> bb;
-    private final Random generator = new Random();
+    private final Random generator = new Random(0);
     private final Iterable<Face> faces;
     private final static boolean COLORED_LINES = true;
 
