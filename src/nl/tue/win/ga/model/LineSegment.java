@@ -86,6 +86,8 @@ public class LineSegment implements Drawable {
             beginPoint = drawingUtilities.scaled(beginPoint);
             endPoint = drawingUtilities.scaled(endPoint);
         }
+        beginPoint = drawingUtilities.zoom(beginPoint);
+        endPoint = drawingUtilities.zoom(endPoint);
         g.drawLine(beginPoint.x, beginPoint.y, endPoint.x, endPoint.y);
     }
 }
