@@ -201,4 +201,9 @@ public class Face implements Drawable {
     public static void resetCounter() {
         Face.lastLabel = 0;
     }
+    
+    @Override
+    public String toString() {
+        return "Face " + this.label;
+    }
 }    
