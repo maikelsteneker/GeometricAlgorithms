@@ -15,7 +15,7 @@ import nl.tue.win.ga.utilities.*;
 public class SweepLineA {
 
     final private List<Point> sortedPoints;
-    final private TreeMap searchTree = new TreeMap();
+    final private List<Point> currentPoints = new ArrayList<>();
     final private List<LineSegment> verticals = new ArrayList<>();
     final private List<LineSegment> edges = new ArrayList<>();
     final private BoundingBox box;
@@ -29,60 +29,24 @@ public class SweepLineA {
 
     public void sweep() {
         for (Point p : sortedPoints) {
-            Point below = null;
-            Point above = null;
             if (isStartPoint(p)) {
-                searchTree.put(p.y, p);
+                currentPoints.add(p);
             }
 
             List<Point> begin = getBeginPoint(p);
 
             if (begin != null) {
                 for (Point po : begin) {
-                    searchTree.remove(po.y);
+                    currentPoints.remove(po);
                 }
 
             }
-
-            if (searchTree.lowerKey(p.y) != null) {
-                below = (Point) searchTree.get(searchTree.lowerKey(p.y));
-            }
-            if (searchTree.higherKey(p.y) != null) {
-                above = (Point) searchTree.get(searchTree.higherKey(p.y));
-            }
-
             LineSegment ls1;
             LineSegment ls2;
-
-            if (below != null) {
-                Point intersect1 = calculateIntersection(p, below, true);
-                ls1 = new LineSegment(p, new Point(intersect1.x, intersect1.y), null);
-            } else {
-                ls1 = new LineSegment(p, new Point(p.x, box.getMiny()), null);
-            }
-            if (above != null) {
-                Point intersect2 = calculateIntersection(p, above, false);
-                ls2 = new LineSegment(p, new Point(intersect2.x, intersect2.y), null);
-            } else {
-                ls2 = new LineSegment(p, new Point(p.x, box.getMaxy()), null);
-            }
-
-            if (ls1.getEndPoint().y > p.y && ls2.getEndPoint().y > p.y) {
-                Collection all = searchTree.values();
-                List<Point> Result = EmergencyCalculations(all, p);
-                ls1.getEndPoints()[0] = new Point(p.x, p.y);
-                ls1.getEndPoints()[1] = new Point(Result.get(0).x, Result.get(0).y);
-                ls2.getEndPoints()[0] = new Point(p.x, p.y);
-                ls2.getEndPoints()[1] = new Point(Result.get(1).x, Result.get(1).y);
-            }
-            if (ls1.getEndPoint().y < p.y && ls2.getEndPoint().y < p.y) {
-                Collection all = searchTree.values();
-                List<Point> Result = EmergencyCalculations(all, p);
-                ls1.getEndPoints()[0] = new Point(p.x, p.y);
-                ls1.getEndPoints()[1] = new Point(Result.get(0).x, Result.get(0).y);
-                ls2.getEndPoints()[0] = new Point(p.x, p.y);
-                ls2.getEndPoints()[1] = new Point(Result.get(1).x, Result.get(1).y);
-            }
+            
+            List<Point> result = intersectionsCalculations(currentPoints, p);
+            ls1 = new LineSegment(p, result.get(0));
+            ls2 = new LineSegment(p, result.get(1));
             verticals.add(ls1);
             verticals.add(ls2);
         }
@@ -163,81 +127,6 @@ public class SweepLineA {
 
     }
 
-    private Point calculateIntersection(Point p, Point start, boolean above) {
-        List<Point> end = new ArrayList<>();
-        List<Point> intersect = new ArrayList<>();
-        int k = sortedPoints.indexOf(p);
-        int l = sortedPoints.indexOf(start);
-        List<Point> winners = new ArrayList<>();
-        for (int i = l; i < k; i++) {
-            Point currPoint = sortedPoints.get(i);
-            if (isStartPoint(currPoint)) {
-                for (LineSegment edge : edges) {
-                    if (edge.getStartPoint().x == currPoint.x && edge.getStartPoint().y == currPoint.y) {
-                        end.add(new Point(edge.getEndPoint().x, edge.getEndPoint().y));
-                    }
-                }
-
-                if (end.isEmpty()) {
-                    return null;
-                } else {
-
-                    for (Point intersection : end) {
-                        double slope = ((double) currPoint.y - (double) intersection.y) / ((double) currPoint.x - (double) intersection.x);
-                        double y = currPoint.y + slope * p.x - slope * currPoint.x;
-                        intersect.add(new Point(p.x, (int) y));
-                    }
-
-                    if (intersect.size() > 1) {
-                        winners.add(getClosestPoint(intersect, p));
-                    } else {
-                        winners.add(intersect.get(0));
-                    }
-                }
-            }
-            end.clear();
-            intersect.clear();
-        }
-        Point winner = null;
-        if (winners.isEmpty()) {
-            if(above) {
-                winner = new Point(p.x, box.getMiny());
-            } else {
-                winner = new Point(p.x, box.getMaxy());
-            }
-            
-        } else {
-            winner = winners.get(0);
-            for (Point u : winners) {
-                if (u != winner) {
-                    if ((u.y > p.y && winner.y > p.y) || (u.y < p.y && winner.y < p.y)) {
-                        if (calculateDistance(winner, p) > calculateDistance(u, p)) {
-                            winner = u;
-                        }
-                    }
-                }
-            }
-        }
-        return winner;
-    }
-
-    private Point getClosestPoint(List<Point> candidates, Point p) {
-        double distanceTo1 = calculateDistance(candidates.get(0), p);
-        double distanceTo2 = calculateDistance(candidates.get(1), p);
-
-        if (distanceTo1 < distanceTo2) {
-            return candidates.get(0);
-        } else {
-            return candidates.get(1);
-        }
-    }
-
-    private double calculateDistance(Point p, Point q) {
-        double ydiff = Math.abs((double) p.y - (double) q.y);
-        double xdiff = Math.abs((double) p.x - (double) q.x);
-        return Math.sqrt((ydiff * ydiff) + (xdiff * xdiff));
-    }
-
     private List<Point> calculateAllIntersection(Point p, Point start) {
         List<Point> end = new ArrayList<>();
         List<Point> intersect = new ArrayList<>();
@@ -261,7 +150,7 @@ public class SweepLineA {
         return intersect;
     }
 
-    private List<Point> EmergencyCalculations(Collection<Point> all, Point p) {
+    private List<Point> intersectionsCalculations(Collection<Point> all, Point p) {
         List<Point> smallery = new ArrayList<>();
         List<Point> biggery = new ArrayList<>();
         List<Point> bigResult = new ArrayList<>();
