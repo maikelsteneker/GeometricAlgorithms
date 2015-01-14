@@ -1,5 +1,6 @@
 package nl.tue.win.ga.gui;
 
+import java.awt.Frame;
 import nl.tue.win.ga.model.drawing.ResultDrawable;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import nl.tue.win.ga.io.ReadPolygonFromFile;
@@ -53,6 +55,7 @@ public class DrawInterface extends javax.swing.JFrame {
         jTextFieldMax.setVisible(false);
         intensitySlider.setVisible(false);
         radiusSlider.setVisible(false);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
