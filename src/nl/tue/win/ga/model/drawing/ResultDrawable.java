@@ -23,6 +23,7 @@ public class ResultDrawable implements Drawable {
     private final Random generator = new Random(0);
     private final Iterable<Face> faces;
     private final static boolean COLORED_LINES = true;
+    private final Iterable<LineSegment> partial;
 
     public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments) {
         this(polygon, segments, new ArrayList<LineSegment>());
@@ -35,11 +36,17 @@ public class ResultDrawable implements Drawable {
 
     public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments,
             Iterable<LineSegment> bb, Iterable<Face> faces) {
+        this(polygon, segments, bb, faces, new ArrayList<LineSegment>());
+    }
+    
+    public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments,
+            Iterable<LineSegment> bb, Iterable<Face> faces, Iterable<LineSegment> partial) {
         this.polygon = polygon;
         this.segments = segments;
         this.drawingUtilities = polygon.drawingUtilities;
         this.bb = bb;
         this.faces = faces;
+        this.partial = partial;
     }
 
     @Override
@@ -64,6 +71,10 @@ public class ResultDrawable implements Drawable {
             f.drawingUtilities = drawingUtilities;
             f.label = label++;
             f.draw(g, scale, invertY);
+        }
+        for (LineSegment s : partial) {
+            s.drawingUtilities = drawingUtilities;
+            s.draw(g, scale, invertY);
         }
     }
 

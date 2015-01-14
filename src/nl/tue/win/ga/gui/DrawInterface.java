@@ -38,6 +38,7 @@ public class DrawInterface extends javax.swing.JFrame {
     Point dragStart;
     boolean editing = true;
     List<Face> faces = new ArrayList<>();
+    List<LineSegment> partialProgress = new ArrayList<>();
 
     /**
      * Creates new form DrawInterface
@@ -525,11 +526,7 @@ public class DrawInterface extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         if (segments.isEmpty()) {
-            TrapezoidalMap t = new TrapezoidalMap(points);
-            t.lastStep = (int) jSpinner1.getValue();
-            t.RandomIncrementalMap();
-            segments = t.getResult();
-            faces = t.getFaces();
+            this.trapezoidalMap();
         } else {
             segments.clear();
         }
@@ -555,12 +552,7 @@ public class DrawInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jSpinner1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner1StateChanged
-        TrapezoidalMap t = new TrapezoidalMap(points);
-        t.lastStep = (int) jSpinner1.getValue();
-        t.RandomIncrementalMap();
-        segments = t.getResult();
-        faces = t.getFaces();
-        repaint();
+        trapezoidalMap();
     }//GEN-LAST:event_jSpinner1StateChanged
 
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
@@ -570,7 +562,7 @@ public class DrawInterface extends javax.swing.JFrame {
          ls.drawingUtilities = polygon.drawingUtilities;
          ls.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
          }*/
-        ResultDrawable r = new ResultDrawable(polygon, segments, new BoundingBox(points, 0.1f), faces);
+        ResultDrawable r = new ResultDrawable(this.partialProgress.isEmpty() ? new SimplePolygon(points) : new SimplePolygon(), segments, new BoundingBox(points, 0.1f), faces, this.partialProgress);
         r.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));
@@ -663,4 +655,14 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldMin;
     private javax.swing.JSlider radiusSlider;
     // End of variables declaration//GEN-END:variables
+
+    private void trapezoidalMap() {
+        TrapezoidalMap t = new TrapezoidalMap(points);
+        t.lastStep = (int) jSpinner1.getValue();
+        t.RandomIncrementalMap();
+        segments = t.getResult();
+        faces = t.getFaces();
+        partialProgress = t.handled;
+        repaint();
+    }
 }
