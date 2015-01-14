@@ -174,7 +174,7 @@
         <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="jPanel1MouseDragged"/>
       </Events>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xa;    @Override&#xa;    public void paintComponent(Graphics g) {&#xa;        super.paintComponent(g);&#xa;        paintMainPanel(this, g);&#xa;    }}"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPanel() {&#xa;    @Override&#xa;    public void paintComponent(Graphics g) {&#xa;        super.paintComponent(g);&#xa;        final int w = this.getWidth();&#xa;        final int h = this.getHeight();&#xa;        final int scale = DrawingUtilities.zoom;&#xa;        final Graphics2D g2 = (Graphics2D) g;&#xa;        g.translate(w/2, h/2);&#xa;        g2.scale(scale, scale);&#xa;        g.translate(-w/2, -h/2);&#xa;        paintMainPanel(this, g);&#xa;    }}"/>
       </AuxValues>
 
       <Layout>
