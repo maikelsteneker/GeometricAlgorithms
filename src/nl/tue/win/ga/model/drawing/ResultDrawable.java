@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Random;
+import nl.tue.win.ga.model.Face;
 import nl.tue.win.ga.model.LineSegment;
 import nl.tue.win.ga.model.SimplePolygon;
 import nl.tue.win.ga.utilities.DrawingUtilities;
@@ -20,6 +21,7 @@ public class ResultDrawable implements Drawable {
     private final DrawingUtilities drawingUtilities;
     private final Iterable<LineSegment> bb;
     private final Random generator = new Random();
+    private final Iterable<Face> faces;
 
     public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments) {
         this(polygon,segments, new ArrayList<LineSegment>());
@@ -27,10 +29,16 @@ public class ResultDrawable implements Drawable {
     
     public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments,
             Iterable<LineSegment> bb) {
+        this(polygon, segments, bb, new ArrayList<Face>());
+    }
+    
+    public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments,
+            Iterable<LineSegment> bb, Iterable<Face> faces) {
         this.polygon = polygon;
         this.segments = segments;
         this.drawingUtilities = polygon.drawingUtilities;
         this.bb = bb;
+        this.faces = faces;
     }
 
     @Override
@@ -45,6 +53,12 @@ public class ResultDrawable implements Drawable {
         for (LineSegment s : bb) {
             s.drawingUtilities = drawingUtilities;
             s.draw(g, scale, invertY);
+        }
+        int label = 0;
+        for (Face f: faces) {
+            f.drawingUtilities = drawingUtilities;
+            f.label = label++;
+            f.draw(g, scale, invertY);
         }
     }
 

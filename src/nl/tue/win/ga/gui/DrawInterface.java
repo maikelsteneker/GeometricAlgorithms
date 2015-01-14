@@ -36,6 +36,7 @@ public class DrawInterface extends javax.swing.JFrame {
     List<LineSegment> segments = new ArrayList<>();
     Point dragStart;
     boolean editing = true;
+    List<Face> faces = new ArrayList<>();
 
     /**
      * Creates new form DrawInterface
@@ -507,6 +508,7 @@ public class DrawInterface extends javax.swing.JFrame {
             TrapezoidalMap t = new TrapezoidalMap(points);
             t.RandomIncrementalMap();
             segments = t.getResult();
+            faces = t.getFaces();
         } else {
             segments.clear();
         }
@@ -537,7 +539,7 @@ public class DrawInterface extends javax.swing.JFrame {
          ls.drawingUtilities = polygon.drawingUtilities;
          ls.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
          }*/
-        ResultDrawable r = new ResultDrawable(polygon, segments, new BoundingBox(points, 0.1f));
+        ResultDrawable r = new ResultDrawable(polygon, segments, new BoundingBox(points, 0.1f), faces);
         r.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
         jLabel5.setText("Number of points: " + this.points.size()
                 + (!polygon.invariant() ? "\t Invariant violated!!!" : ""));

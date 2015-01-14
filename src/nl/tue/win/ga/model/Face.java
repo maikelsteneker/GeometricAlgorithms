@@ -1,13 +1,16 @@
 package nl.tue.win.ga.model;
 
+import java.awt.Graphics;
 import java.awt.Point;
+import nl.tue.win.ga.model.drawing.Drawable;
+import nl.tue.win.ga.utilities.DrawingUtilities;
 
 /**
  * Represents a face (as given in the lecture).
  *
  * @author maikel
  */
-public class Face {
+public class Face implements Drawable {
 
     private LineSegment top;
     private LineSegment bottom;
@@ -16,6 +19,9 @@ public class Face {
     private Node node;
 
     private Face[] neighbours = new Face[6];
+    
+    public DrawingUtilities drawingUtilities;
+    public int label;
 
     public Face() {
         top = null;
@@ -160,5 +166,20 @@ public class Face {
         final Point topPoint = new Point(x, yHi);
         final Point bottomPoint = new Point(x, yLo);
         return new LineSegment(topPoint, bottomPoint, null);
+    }
+
+    @Override
+    public void draw(Graphics g, boolean scale, boolean invertY) {
+        Point location = this.getLeftp();
+        
+        if (invertY) {
+            location = drawingUtilities.invert(location);
+        }
+        if (scale) {
+            location = drawingUtilities.scaled(location);
+        }
+        location = drawingUtilities.zoom(location);
+        
+        g.drawString(Integer.toString(label), location.x, location.y);
     }
 }

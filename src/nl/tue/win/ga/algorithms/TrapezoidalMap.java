@@ -431,4 +431,8 @@ public class TrapezoidalMap {
         }
         return result;
     }
+
+    public List<Face> getFaces() {
+        return trapFaces;
+    }
 }
