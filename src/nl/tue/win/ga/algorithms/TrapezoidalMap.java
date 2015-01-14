@@ -2,8 +2,10 @@ package nl.tue.win.ga.algorithms;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import nl.tue.win.ga.model.Face;
 import nl.tue.win.ga.model.Graph;
 import nl.tue.win.ga.model.LineSegment;
@@ -39,6 +41,8 @@ public class TrapezoidalMap {
      */
     private boolean done = false;
     private ArrayList<Face> trapFaces = new ArrayList<>();
+
+    private final static boolean SEPARATE_LINES = true; // no overlapping face borders
 
     public TrapezoidalMap() {
         /*//init the bounding box
@@ -212,7 +216,6 @@ public class TrapezoidalMap {
                         Node rlchild = new Node(D);
                         rightchild.setLchild(rlchild);
 
-
                     } else if (intersections.indexOf(intersect) == intersections.size() - 1 && intersect.getRightp() != end) {
                         //this is the last of the intersected faces
 
@@ -290,7 +293,6 @@ public class TrapezoidalMap {
 
                         //trapFaces.add(C);
                         //trapFaces.add(D);
-
                         newFaces.add(C);
                         newFaces.add(D);
 
@@ -375,7 +377,6 @@ public class TrapezoidalMap {
                 }
             }
 
-
         }
         linesegments = handled;
     }
@@ -422,6 +423,22 @@ public class TrapezoidalMap {
     }
 
     public List<LineSegment> getResult() {
+        if (SEPARATE_LINES) {
+            Set<Integer> xs = new HashSet<>();
+            for (Face f : trapFaces) {
+                while (xs.contains(f.getLeftp().x)) {
+                    Point p = f.getLeftp();
+                    f.setLeftp(new Point(p.x + 2, p.y));
+                    System.out.println(f.getLeftp().x);
+                }
+                while (xs.contains(f.getRightp().x)) {
+                    Point p = f.getRightp();
+                    f.setRightp(new Point(p.x - 2, p.y));
+                }
+                xs.add(f.getLeftp().x);
+                xs.add(f.getRightp().x);
+            }
+        }
         List<LineSegment> result = new ArrayList<>();
         for (Face f : trapFaces) {
             result.add(f.getLeftLineSegment());
