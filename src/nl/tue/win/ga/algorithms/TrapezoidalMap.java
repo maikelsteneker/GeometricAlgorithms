@@ -248,7 +248,7 @@ public class TrapezoidalMap {
                             upper.setUpperRightNeighbour(C);
                         }
 
-                        if (lower.getLowerRightNeighbour() == null ||lower.getLowerRightNeighbour() == intersect) {
+                        if (lower.getLowerRightNeighbour() == null || lower.getLowerRightNeighbour() == intersect) {
                             lower.setLowerRightNeighbour(D);
                         }
 
@@ -303,16 +303,22 @@ public class TrapezoidalMap {
                         newFaces.add(C);
                         newFaces.add(D);
 
-                        if (upper.getUpperRightNeighbour() == null || upper.getUpperRightNeighbour() == intersect) {
-                            upper.setUpperRightNeighbour(C);
+                        if (upper != null) {
+                            if (upper.getUpperRightNeighbour() == null || upper.getUpperRightNeighbour() == intersect) {
+                                upper.setUpperRightNeighbour(C);
+                            }
+                            upper.setLowerRightNeighbour(C);
                         }
 
-                        if (lower.getLowerRightNeighbour() == null ||lower.getLowerRightNeighbour() == intersect) {
-                            lower.setLowerRightNeighbour(D);
+                        if (lower != null) {
+                            if (lower.getLowerRightNeighbour() == null || lower.getLowerRightNeighbour() == intersect) {
+                                lower.setLowerRightNeighbour(D);
+                            }
+                            lower.setUpperRightNeighbour(D);
                         }
 
-                        upper.setLowerRightNeighbour(C);
-                        lower.setUpperRightNeighbour(D);
+
+
 
                         if (intersect.getUpperRightNeighbour() != null && intersect.getUpperRightNeighbour().getUpperLeftNeighbour() == intersect) {
                             intersect.getUpperRightNeighbour().setUpperLeftNeighbour(C);
@@ -385,11 +391,11 @@ public class TrapezoidalMap {
             }
 
         }
-        for (Face face: trapFaces){
-            if(face.getLeftp().x == face.getRightp().x){
+        for (Face face : trapFaces) {
+            if (face.getLeftp().x == face.getRightp().x) {
                 System.out.println(face + " x values are both " + face.getLeftp().x);
             }
-            
+
         }
 
         linesegments = handled;
