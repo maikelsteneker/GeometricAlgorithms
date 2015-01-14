@@ -157,7 +157,7 @@ public class TrapezoidalMap {
                     trapFaces.remove(intersect);
 
                     //this is the first of the intersections
-                    if (intersections.indexOf(intersect) == 0) {
+                    if (intersections.indexOf(intersect) == 0 && intersect.getRightp() != begin) {
 
                         prev = intersect;
 
@@ -213,7 +213,7 @@ public class TrapezoidalMap {
                         rightchild.setLchild(rlchild);
 
 
-                    } else if (intersections.indexOf(intersect) == intersections.size() - 1) {
+                    } else if (intersections.indexOf(intersect) == intersections.size() - 1 && intersect.getRightp() != end) {
                         //this is the last of the intersected faces
 
                         Face B = new Face(intersect.getTop(), intersect.getBottom(), intersect.getRightp(), end);
