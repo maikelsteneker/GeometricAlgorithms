@@ -35,12 +35,12 @@ public class ResultDrawable implements Drawable {
     public void draw(Graphics g, boolean scale, boolean invertY) {
         polygon.draw(g, scale, invertY);
         for (LineSegment s : segments) {
-            float f = new Random().nextFloat();
-            int r1 = new Random().nextInt(1000);
-            int r11 = new Random().nextInt(r1);
-            int r2 = new Random().nextInt(1000);
-            int r22 = new Random().nextInt(r2);
-            g.setColor(java.awt.Color.getHSBColor(f, 1.0f-(float)r11/r1, 1.0f-(float)r22/r2));
+            /*float f = new Random().nextFloat();
+            int r1 = Math.abs(new Random().nextInt(1000));
+            int r11 = Math.abs(new Random().nextInt(r1));
+            int r2 = Math.abs(new Random().nextInt(1000));
+            int r22 = Math.abs(new Random().nextInt(r2));
+            g.setColor(java.awt.Color.getHSBColor(f, 1.0f-(float)r11/r1, 1.0f-(float)r22/r2));*/
             s.drawingUtilities = drawingUtilities;
             s.draw(g, scale, invertY);
         }
