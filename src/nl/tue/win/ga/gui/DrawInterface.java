@@ -439,6 +439,7 @@ public class DrawInterface extends javax.swing.JFrame {
         points.clear();
         segments.clear();
         faces.clear();
+        partialProgress.clear();
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
