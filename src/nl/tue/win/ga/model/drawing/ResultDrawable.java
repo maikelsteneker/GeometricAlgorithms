@@ -22,16 +22,17 @@ public class ResultDrawable implements Drawable {
     private final Iterable<LineSegment> bb;
     private final Random generator = new Random();
     private final Iterable<Face> faces;
+    private final static boolean COLORED_LINES = true;
 
     public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments) {
-        this(polygon,segments, new ArrayList<LineSegment>());
+        this(polygon, segments, new ArrayList<LineSegment>());
     }
-    
+
     public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments,
             Iterable<LineSegment> bb) {
         this(polygon, segments, bb, new ArrayList<Face>());
     }
-    
+
     public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments,
             Iterable<LineSegment> bb, Iterable<Face> faces) {
         this.polygon = polygon;
@@ -46,8 +47,10 @@ public class ResultDrawable implements Drawable {
         polygon.draw(g, scale, invertY);
         for (LineSegment s : segments) {
             final Color c = new Color(generator.nextInt());
-            Color old = g.getColor();
-            g.setColor(c);
+            final Color old = g.getColor();
+            if (COLORED_LINES) {
+                g.setColor(c);
+            }
             s.drawingUtilities = drawingUtilities;
             s.draw(g, scale, invertY);
             g.setColor(old);
@@ -57,7 +60,7 @@ public class ResultDrawable implements Drawable {
             s.draw(g, scale, invertY);
         }
         int label = 0;
-        for (Face f: faces) {
+        for (Face f : faces) {
             f.drawingUtilities = drawingUtilities;
             f.label = label++;
             f.draw(g, scale, invertY);
