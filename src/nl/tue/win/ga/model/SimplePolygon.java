@@ -44,6 +44,7 @@ public class SimplePolygon implements Iterable<Point>, Drawable {
         return Arrays.asList(hull);
     }
 
+    @Override
     public void draw(Graphics g, boolean scale, boolean invertY) {
         Point prev = size() > 0 ? hull[size() - 1] : null;
         if (prev != null) {
@@ -53,6 +54,7 @@ public class SimplePolygon implements Iterable<Point>, Drawable {
             if (scale) {
                 prev = drawingUtilities.scaled(prev);
             }
+            prev = drawingUtilities.zoom(prev);
         }
 
         for (Point p : hull) {
@@ -63,6 +65,7 @@ public class SimplePolygon implements Iterable<Point>, Drawable {
             if (scale) {
                 transformed = drawingUtilities.scaled(transformed);
             }
+            transformed = drawingUtilities.zoom(transformed);
             g.drawOval(transformed.x - 1, transformed.y - 1, 3, 3);
             g.fillOval(transformed.x - 1, transformed.y - 1, 3, 3);
             if (prev != null) {

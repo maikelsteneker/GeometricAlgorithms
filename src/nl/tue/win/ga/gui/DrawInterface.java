@@ -19,6 +19,7 @@ import nl.tue.win.ga.model.*;
 import nl.tue.win.ga.algorithms.*;
 import nl.tue.win.ga.io.ExportPolygonToBitmap;
 import nl.tue.win.ga.utilities.BoundingBox;
+import nl.tue.win.ga.utilities.DrawingUtilities;
 
 /**
  * GUI for drawing input files for DBL Algorithms
@@ -33,6 +34,8 @@ public class DrawInterface extends javax.swing.JFrame {
     final static String EXTENSION = "txt";
     int selected = -1;
     List<LineSegment> segments = new ArrayList<>();
+    Point dragStart;
+    boolean editing = true;
 
     /**
      * Creates new form DrawInterface
@@ -87,10 +90,16 @@ public class DrawInterface extends javax.swing.JFrame {
             jButton4 = new javax.swing.JButton();
             jButton5 = new javax.swing.JButton();
             jButton6 = new javax.swing.JButton();
+            jCheckBox3 = new javax.swing.JCheckBox();
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
             jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+            jPanel1.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+                public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                    jPanel1MouseWheelMoved(evt);
+                }
+            });
             jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mousePressed(java.awt.event.MouseEvent evt) {
                     jPanel1MousePressed(evt);
@@ -194,6 +203,14 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
+            jCheckBox3.setSelected(true);
+            jCheckBox3.setText("editing");
+            jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    jCheckBox3ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -219,8 +236,10 @@ public class DrawInterface extends javax.swing.JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jCheckBox1)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jCheckBox2)))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                                            .addComponent(jCheckBox2)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jCheckBox3)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(jButton4)
@@ -267,7 +286,8 @@ public class DrawInterface extends javax.swing.JFrame {
                         .addComponent(jButton2)
                         .addComponent(jCheckBox1)
                         .addComponent(jCheckBox2)
-                        .addComponent(jButton6))
+                        .addComponent(jButton6)
+                        .addComponent(jCheckBox3))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -318,7 +338,7 @@ public class DrawInterface extends javax.swing.JFrame {
                         "error", JOptionPane.ERROR_MESSAGE);
             }
         }
-        
+
         repaint();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -339,7 +359,7 @@ public class DrawInterface extends javax.swing.JFrame {
                 selected = -1;
                 break;
             default:
-                if (selected < 0) {
+                if (selected < 0 && editing) {
                     points.add(evt.getPoint());
                 }
                 removeDuplicates();
@@ -350,6 +370,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
         //stop dragging
         selected = -1;
+        dragStart = null;
     }//GEN-LAST:event_jPanel1MouseReleased
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
@@ -368,6 +389,16 @@ public class DrawInterface extends javax.swing.JFrame {
          }*/
         if (selected >= 0) {
             points.get(selected).setLocation(evt.getPoint());
+        } else {
+            if (!editing) {// drag entire view
+                if (dragStart == null) {
+                    dragStart = evt.getPoint();
+                }
+                Point point = evt.getPoint();
+                Point offset = new Point(point.x - dragStart.x, point.y - dragStart.y);
+                DrawingUtilities.offset = new Point(DrawingUtilities.offset.x + offset.x, DrawingUtilities.offset.y + offset.y);
+                dragStart = evt.getPoint();
+            }
         }
         repaint();
     }//GEN-LAST:event_jPanel1MouseDragged
@@ -471,6 +502,16 @@ public class DrawInterface extends javax.swing.JFrame {
         repaint();
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox3ActionPerformed
+        editing = jCheckBox3.isSelected();
+    }//GEN-LAST:event_jCheckBox3ActionPerformed
+
+    private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jPanel1MouseWheelMoved
+        int degree = evt.getWheelRotation();
+        DrawingUtilities.zoom -= degree;
+        repaint();
+    }//GEN-LAST:event_jPanel1MouseWheelMoved
+
     private void paintMainPanel(javax.swing.JPanel panel, Graphics g) {
         SimplePolygon polygon = new SimplePolygon(points);
         /*polygon.draw(g, jCheckBox1.isSelected(), jCheckBox2.isSelected());
@@ -558,6 +599,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

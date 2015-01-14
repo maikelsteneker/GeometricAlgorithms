@@ -37,7 +37,7 @@ public class TrapezoidalMap {
     /**
      * If the actual trapezoidalMap has been made
      */
-    private Boolean done = false;
+    private boolean done = false;
     private ArrayList<Face> trapFaces = new ArrayList<>();
 
     public TrapezoidalMap() {

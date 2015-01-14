@@ -17,6 +17,9 @@ public class DrawingUtilities {
     final private int miny;
     final private int maxx;
     final private int maxy;
+    
+    public static Point offset = new Point(0, 0);
+    public static int zoom = 1;
 
     public DrawingUtilities(Iterable<Point> points) {
         bb = new BoundingBox(points);
@@ -51,5 +54,9 @@ public class DrawingUtilities {
 
     public static Point invert(Point p, int miny, int maxy) {
         return new Point(p.x, -(p.y - maxy) + miny);
+    }
+
+    public Point zoom(Point p) {
+        return new Point(zoom * p.x + offset.x, zoom * p.y + offset.y);
     }
 }
