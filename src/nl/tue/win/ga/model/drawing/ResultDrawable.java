@@ -46,9 +46,11 @@ public class ResultDrawable implements Drawable {
         polygon.draw(g, scale, invertY);
         for (LineSegment s : segments) {
             final Color c = new Color(generator.nextInt());
+            Color old = g.getColor();
             g.setColor(c);
             s.drawingUtilities = drawingUtilities;
             s.draw(g, scale, invertY);
+            g.setColor(old);
         }
         for (LineSegment s : bb) {
             s.drawingUtilities = drawingUtilities;
