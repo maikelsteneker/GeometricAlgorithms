@@ -101,8 +101,10 @@ public class DrawInterface extends javax.swing.JFrame {
             jButton6 = new javax.swing.JButton();
             jCheckBox3 = new javax.swing.JCheckBox();
             jButton7 = new javax.swing.JButton();
+            jSpinner1 = new javax.swing.JSpinner();
 
             setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+            setPreferredSize(new java.awt.Dimension(1024, 768));
 
             jPanel1.setBackground(new java.awt.Color(255, 255, 255));
             jPanel1.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
@@ -255,8 +257,10 @@ public class DrawInterface extends javax.swing.JFrame {
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(jCheckBox2)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jCheckBox3)))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+                                            .addComponent(jCheckBox3)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                             .addComponent(jButton4)
@@ -306,7 +310,8 @@ public class DrawInterface extends javax.swing.JFrame {
                         .addComponent(jCheckBox1)
                         .addComponent(jCheckBox2)
                         .addComponent(jButton6)
-                        .addComponent(jCheckBox3))
+                        .addComponent(jCheckBox3)
+                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -515,6 +520,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         if (segments.isEmpty()) {
             TrapezoidalMap t = new TrapezoidalMap(points);
+            t.lastStep = (int) jSpinner1.getValue();
             t.RandomIncrementalMap();
             segments = t.getResult();
             faces = t.getFaces();
@@ -637,6 +643,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextFieldMax;
     private javax.swing.JTextField jTextFieldMin;
     private javax.swing.JSlider radiusSlider;

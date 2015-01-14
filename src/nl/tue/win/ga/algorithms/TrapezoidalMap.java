@@ -41,6 +41,9 @@ public class TrapezoidalMap {
      */
     private boolean done = false;
     private ArrayList<Face> trapFaces = new ArrayList<>();
+    
+    public int lastStep;
+    private int currentStep;
 
     private final static boolean SEPARATE_LINES = true; // no overlapping face borders
 
@@ -68,8 +71,9 @@ public class TrapezoidalMap {
     public void RandomIncrementalMap() {
 
         ArrayList<LineSegment> handled = new ArrayList<>();
-
+        currentStep = 0;
         while (linesegments.size() > 0) {
+            if (currentStep++ >= lastStep) return;
             LineSegment seg = getRandomLineSegment();
             linesegments.remove(seg);
             handled.add(seg);
