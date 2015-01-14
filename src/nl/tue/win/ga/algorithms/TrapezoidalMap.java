@@ -341,7 +341,7 @@ public class TrapezoidalMap {
             //start possible merges
             while (!newFaces.isEmpty()) {
                 final Face f = newFaces.get(0);
-                if (f.getUpperRightNeighbour().getTop() == f.getTop() && f.getUpperRightNeighbour().getBottom() == f.getBottom()) {
+                if (f.getUpperRightNeighbour() != null && f.getUpperRightNeighbour().getTop() == f.getTop() && f.getUpperRightNeighbour().getBottom() == f.getBottom()) {
                     Face neigh = f.getUpperRightNeighbour();
                     f.setUpperRightNeighbour(neigh.getUpperRightNeighbour());
                     f.setLowerRightNeighbour(neigh.getLowerRightNeighbour());
@@ -355,7 +355,7 @@ public class TrapezoidalMap {
                     }
 
                     newFaces.remove(neigh);
-                } else if (f.getLowerRightNeighbour().getBottom() == f.getBottom() && f.getLowerRightNeighbour().getTop() == f.getTop()) {
+                } else if (f.getLowerRightNeighbour() != null && f.getLowerRightNeighbour().getBottom() == f.getBottom() && f.getLowerRightNeighbour().getTop() == f.getTop()) {
                     Face neigh = f.getLowerRightNeighbour();
                     f.setUpperRightNeighbour(neigh.getUpperRightNeighbour());
                     f.setLowerRightNeighbour(neigh.getLowerRightNeighbour());
