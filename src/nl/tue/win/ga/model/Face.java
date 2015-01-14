@@ -1,7 +1,9 @@
 package nl.tue.win.ga.model;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.Random;
 import nl.tue.win.ga.model.drawing.Drawable;
 import nl.tue.win.ga.utilities.DrawingUtilities;
 
@@ -19,11 +21,14 @@ public class Face implements Drawable {
     private Node node;
 
     private Face[] neighbours = new Face[6];
-    
+
     public DrawingUtilities drawingUtilities;
     public int label;
     private static int lastLabel;
-
+    
+    private final static boolean COLORED_LINES = true;
+    private final static Random generator = new Random(0);
+    
     public Face() {
         top = null;
         bottom = null;
@@ -175,7 +180,7 @@ public class Face implements Drawable {
     @Override
     public void draw(Graphics g, boolean scale, boolean invertY) {
         Point location = this.getMiddle();
-        
+
         if (invertY) {
             location = drawingUtilities.invert(location);
         }
@@ -183,8 +188,18 @@ public class Face implements Drawable {
             location = drawingUtilities.scaled(location);
         }
         location = drawingUtilities.zoom(location);
-        
+
+        final Color c = new Color(generator.nextInt());
+        final Color old = g.getColor();
+        g.setColor(c);
+        final LineSegment left = getLeftLineSegment();
+        final LineSegment right = getRightLineSegment();
+        left.drawingUtilities = drawingUtilities;
+        right.drawingUtilities = drawingUtilities;
         g.drawString(Integer.toString(label), location.x, location.y);
+        left.draw(g, scale, invertY);
+        right.draw(g, scale, invertY);
+        g.setColor(old);
     }
 
     private Point getMiddle() {
@@ -193,17 +208,17 @@ public class Face implements Drawable {
                 + getTop().getEndPoint().y + getBottom().getEndPoint().y) / 4;
         return new Point(x, y);
     }
-    
+
     public int getWidth() {
         return Math.abs(this.rightp.x - this.leftp.x);
     }
-    
+
     public static void resetCounter() {
         Face.lastLabel = 0;
     }
-    
+
     @Override
     public String toString() {
         return "Face " + this.label;
     }
-}    
+}

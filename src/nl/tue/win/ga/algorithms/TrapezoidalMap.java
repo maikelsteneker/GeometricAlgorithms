@@ -46,7 +46,7 @@ public class TrapezoidalMap {
     public int lastStep;
     private int currentStep;
 
-    private final static boolean SEPARATE_LINES = false; // no overlapping face borders
+    private final static boolean SEPARATE_LINES = true; // no overlapping face borders
     
     public ArrayList<LineSegment> handled = new ArrayList<>();
 
