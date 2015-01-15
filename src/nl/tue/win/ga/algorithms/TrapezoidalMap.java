@@ -43,12 +43,9 @@ public class TrapezoidalMap {
      */
     private boolean done = false;
     private ArrayList<Face> trapFaces = new ArrayList<>();
-
     public int lastStep;
     private int currentStep;
-
     private final static boolean SEPARATE_LINES = true; // no overlapping face borders
-
     public ArrayList<LineSegment> handled = new ArrayList<>();
 
     public TrapezoidalMap() {
@@ -270,8 +267,8 @@ public class TrapezoidalMap {
                             }
                             intersect.getLowerRightNeighbour().setUpperLeftNeighbour(B);
                         }
-                        
-                                                if (intersect.getLowerLeftNeighbour() != null) {
+
+                        if (intersect.getLowerLeftNeighbour() != null) {
                             if (intersect.getLowerLeftNeighbour().getLowerRightNeighbour() == intersect) {
                                 intersect.getLowerLeftNeighbour().setLowerRightNeighbour(D);
                             }
@@ -311,7 +308,7 @@ public class TrapezoidalMap {
 
                         Face CUpper = (intersect.getUpperLeftNeighbour() == prev) ? upper : intersect.getUpperLeftNeighbour();
                         Face DLower = (intersect.getLowerLeftNeighbour() == prev) ? lower : intersect.getLowerLeftNeighbour();
-
+                        
                         C.setAllSideNeighbours(CUpper, upper, intersect.getUpperRightNeighbour(), null);
                         D.setAllSideNeighbours(lower, DLower, null, intersect.getLowerRightNeighbour());
 
@@ -333,7 +330,7 @@ public class TrapezoidalMap {
                             }
                             lower.setUpperRightNeighbour(D);
                         }
-                        
+
                         if (intersect.getLowerLeftNeighbour() != null) {
                             if (intersect.getLowerLeftNeighbour().getLowerRightNeighbour() == intersect) {
                                 intersect.getLowerLeftNeighbour().setLowerRightNeighbour(D);
@@ -392,11 +389,7 @@ public class TrapezoidalMap {
                     f.setRightp(neigh.getRightp());
 
                     Node neighn = neigh.getNode();
-                    if (neighn.getParent().getLchild() == neighn) {
-                        neighn.getParent().setLchild(f.getNode());
-                    } else {
-                        neighn.getParent().setRchild(f.getNode());
-                    }
+                    neighn = f.getNode();
 
                     newFaces.remove(neigh);
                 } else if (f.getLowerRightNeighbour() != null && f.getLowerRightNeighbour().getBottom() == f.getBottom() && f.getLowerRightNeighbour().getTop() == f.getTop()) {
@@ -406,11 +399,7 @@ public class TrapezoidalMap {
                     f.setRightp(neigh.getRightp());
 
                     Node neighn = neigh.getNode();
-                    if (neighn.getParent().getLchild() == neighn) {
-                        neighn.getParent().setLchild(f.getNode());
-                    } else {
-                        neighn.getParent().setRchild(f.getNode());
-                    }
+                    neighn = f.getNode();
 
                     newFaces.remove(neigh);
                 } else {
