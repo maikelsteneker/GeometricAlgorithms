@@ -20,9 +20,9 @@ public class ResultDrawable implements Drawable {
     private final Iterable<LineSegment> segments;
     private final DrawingUtilities drawingUtilities;
     private final Iterable<LineSegment> bb;
-    private final Random generator = new Random(0);
     private final Iterable<Face> faces;
     private final static boolean COLORED_LINES = true;
+    private final Random generator = new Random(0);
     private final Iterable<LineSegment> partial;
 
     public ResultDrawable(SimplePolygon polygon, Iterable<LineSegment> segments) {
@@ -66,10 +66,8 @@ public class ResultDrawable implements Drawable {
             s.drawingUtilities = drawingUtilities;
             s.draw(g, scale, invertY);
         }
-        int label = 0;
         for (Face f : faces) {
             f.drawingUtilities = drawingUtilities;
-            f.label = label++;
             f.draw(g, scale, invertY);
         }
         for (LineSegment s : partial) {

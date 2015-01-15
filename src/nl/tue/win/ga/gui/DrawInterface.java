@@ -1,5 +1,6 @@
 package nl.tue.win.ga.gui;
 
+import java.awt.Frame;
 import nl.tue.win.ga.model.drawing.ResultDrawable;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import nl.tue.win.ga.io.ReadPolygonFromFile;
@@ -36,7 +38,7 @@ public class DrawInterface extends javax.swing.JFrame {
     int selected = -1;
     List<LineSegment> segments = new ArrayList<>();
     Point dragStart;
-    boolean editing = true;
+    boolean editing = false;
     List<Face> faces = new ArrayList<>();
     List<LineSegment> partialProgress = new ArrayList<>();
 
@@ -53,6 +55,7 @@ public class DrawInterface extends javax.swing.JFrame {
         jTextFieldMax.setVisible(false);
         intensitySlider.setVisible(false);
         radiusSlider.setVisible(false);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -216,7 +219,6 @@ public class DrawInterface extends javax.swing.JFrame {
                 }
             });
 
-            jCheckBox3.setSelected(true);
             jCheckBox3.setText("editing");
             jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -440,6 +442,7 @@ public class DrawInterface extends javax.swing.JFrame {
         points.clear();
         segments.clear();
         faces.clear();
+        partialProgress.clear();
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -657,6 +660,7 @@ public class DrawInterface extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void trapezoidalMap() {
+        Face.resetCounter();
         TrapezoidalMap t = new TrapezoidalMap(points);
         t.lastStep = (int) jSpinner1.getValue();
         t.RandomIncrementalMap();

@@ -3,6 +3,7 @@ package nl.tue.win.ga.algorithms;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -390,6 +391,14 @@ public class TrapezoidalMap {
                     trapFaces.add(f);
                 }
             }
+            
+                Iterator<Face> iterator = trapFaces.iterator();
+                while (iterator.hasNext()) {
+                    final Face f = iterator.next();
+                    if (f.getWidth() == 0) {
+                        iterator.remove();
+                    }
+                }
 
         }
         for (Face face : trapFaces) {

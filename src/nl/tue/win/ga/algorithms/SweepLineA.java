@@ -20,6 +20,11 @@ public class SweepLineA {
     final private List<LineSegment> edges = new ArrayList<>();
     final private BoundingBox box;
 
+    /**
+     * Initialize the sweep line and the corresponding data structures
+     * 
+     * @param points of the polygon
+     */
     public SweepLineA(ArrayList<Point> points) {
         MergeSort ms = new MergeSort();
         sortedPoints = ms.sort(points);
@@ -27,36 +32,46 @@ public class SweepLineA {
         box = new BoundingBox(sortedPoints, 0.1f);
     }
 
+    /**
+     * Start sweeping and construct a trapezoidal map
+     */
     public void sweep() {
         for (Point p : sortedPoints) {
-            if (isStartPoint(p)) {
+            if (isStartPoint(p)) {  //check if p is a start, else we do not need to add it
                 currentPoints.add(p);
             }
 
             List<Point> begin = getBeginPoint(p);
 
-            if (begin != null) {
+            if (begin != null) { //get all the start points for endpoint p and remove them
                 for (Point po : begin) {
                     currentPoints.remove(po);
                 }
 
             }
-            LineSegment ls1;
-            LineSegment ls2;
             
-            List<Point> result = intersectionsCalculations(currentPoints, p);
-            ls1 = new LineSegment(p, result.get(0));
-            ls2 = new LineSegment(p, result.get(1));
+            //calculate all the intersections with rays trough p and take the closest ones
+            List<Point> result = intersectionCalculations(currentPoints, p);
+            LineSegment ls1 = new LineSegment(p, result.get(0));
+            LineSegment ls2 = new LineSegment(p, result.get(1));
             verticals.add(ls1);
             verticals.add(ls2);
         }
 
     }
 
+    /**
+     * Get the vertical line segments of the map
+     * @return The line segments of the map
+     */
     public List<LineSegment> getVerticals() {
         return verticals;
     }
 
+    /**
+     * Initialize the points into edges
+     * @param hull input points
+     */
     private void initializeEdges(List<Point> hull) {
 
         Point prev = null;
@@ -64,7 +79,7 @@ public class SweepLineA {
             if (prev == null) {
                 prev = p;
             } else {
-                Face f = null;//p.x > prev.x ? outside : inside;
+                Face f = null;//
                 LineSegment l;
                 if (p.x > prev.x) {
                     l = new LineSegment(prev, p, f);
@@ -86,6 +101,11 @@ public class SweepLineA {
         edges.add(closingSegment);
     }
 
+    /**
+     * Get the begin points of an endpoint of a linesegment that need to be removed from the list
+     * @param end endpoint of the line
+     * @return Start points to be removed
+     */
     private List<Point> getBeginPoint(Point end) {
         ArrayList<Point> multiple = new ArrayList<>();
         ArrayList<LineSegment> edge = new ArrayList<>();
@@ -117,6 +137,11 @@ public class SweepLineA {
         return multiple;
     }
 
+    /**
+     * Check if a point is a startpoint of a linesegment
+     * @param p potential start point
+     * @return true or false
+     */
     private boolean isStartPoint(Point p) {
         for (LineSegment edge : edges) {
             if (edge.getStartPoint().x == p.x && edge.getStartPoint().y == p.y) {
@@ -127,6 +152,12 @@ public class SweepLineA {
 
     }
 
+    /**
+     * calculate all the intersections between a ray from point p trough the edges with start point start
+     * @param p point p
+     * @param start start point start of linesegment
+     * @return list of intersection points
+     */
     private List<Point> calculateAllIntersection(Point p, Point start) {
         List<Point> end = new ArrayList<>();
         List<Point> intersect = new ArrayList<>();
@@ -150,7 +181,13 @@ public class SweepLineA {
         return intersect;
     }
 
-    private List<Point> intersectionsCalculations(Collection<Point> all, Point p) {
+    /**
+     * Calculate for each point the intersection with a ray trough p
+     * @param all all points to be possibly intersected
+     * @param p point p
+     * @return the two best intersection points
+     */
+    private List<Point> intersectionCalculations(Collection<Point> all, Point p) {
         List<Point> smallery = new ArrayList<>();
         List<Point> biggery = new ArrayList<>();
         List<Point> bigResult = new ArrayList<>();

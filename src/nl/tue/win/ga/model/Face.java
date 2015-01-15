@@ -1,7 +1,9 @@
 package nl.tue.win.ga.model;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.Random;
 import nl.tue.win.ga.model.drawing.Drawable;
 import nl.tue.win.ga.utilities.DrawingUtilities;
 
@@ -19,15 +21,21 @@ public class Face implements Drawable {
     private Node node;
 
     private Face[] neighbours = new Face[6];
-    
+
     public DrawingUtilities drawingUtilities;
     public int label;
+    private static int lastLabel;
+
+    private final static boolean COLORED_LINES = true;
+    private static Random generator = new Random(0);
+    private final Color color = new Color(generator.nextInt());
 
     public Face() {
         top = null;
         bottom = null;
         leftp = null;
         rightp = null;
+        label = lastLabel++;
     }
 
     public Face(LineSegment top, LineSegment bottom, Point leftp, Point rightp) {
@@ -35,6 +43,7 @@ public class Face implements Drawable {
         this.bottom = bottom;
         this.leftp = leftp;
         this.rightp = rightp;
+        label = lastLabel++;
     }
 
     public Face(Face upperleft, Face lowerleft, Face upperright, Face lowerright) {
@@ -46,6 +55,7 @@ public class Face implements Drawable {
         neighbours[3] = lowerleft;
         neighbours[4] = upperright;
         neighbours[5] = lowerright;
+        label = lastLabel++;
     }
 
     public Node getNode() {
@@ -171,7 +181,7 @@ public class Face implements Drawable {
     @Override
     public void draw(Graphics g, boolean scale, boolean invertY) {
         Point location = this.getMiddle();
-        
+
         if (invertY) {
             location = drawingUtilities.invert(location);
         }
@@ -179,8 +189,17 @@ public class Face implements Drawable {
             location = drawingUtilities.scaled(location);
         }
         location = drawingUtilities.zoom(location);
-        
+
+        final Color old = g.getColor();
+        if (COLORED_LINES) g.setColor(color);
+        final LineSegment left = getLeftLineSegment();
+        final LineSegment right = getRightLineSegment();
+        left.drawingUtilities = drawingUtilities;
+        right.drawingUtilities = drawingUtilities;
         g.drawString(Integer.toString(label), location.x, location.y);
+        left.draw(g, scale, invertY);
+        right.draw(g, scale, invertY);
+        g.setColor(old);
     }
 
     private Point getMiddle() {
@@ -188,5 +207,19 @@ public class Face implements Drawable {
         final int y = (getTop().getStartPoint().y + getBottom().getStartPoint().y
                 + getTop().getEndPoint().y + getBottom().getEndPoint().y) / 4;
         return new Point(x, y);
+    }
+
+    public int getWidth() {
+        return Math.abs(this.rightp.x - this.leftp.x);
+    }
+
+    public static void resetCounter() {
+        Face.lastLabel = 0;
+        generator = new Random(0); // to keep the same colors
+    }
+
+    @Override
+    public String toString() {
+        return "Face " + this.label;
     }
 }
