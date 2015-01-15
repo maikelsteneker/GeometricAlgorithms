@@ -441,6 +441,8 @@ public class TrapezoidalMap {
     private void checkInvariant() {
         assert !DrawInterface.ASSERTIONS
                 || invariant() : "Graph does not contain the right faces";
+        assert !DrawInterface.ASSERTIONS
+                || invariant2() : "Neighbours not updated correctly";
     }
 
     private LineSegment getRandomLineSegment() {
@@ -529,5 +531,20 @@ public class TrapezoidalMap {
             }
         }
         return result;
+    }
+    
+    public boolean invariant2() {
+        Set<Face> storedFaces = new HashSet<>(trapFaces);
+        for (Face f: storedFaces) {
+            Face[] neighbours = f.getNeighbours();
+            for (Face g : neighbours) {
+                if (g != null && !storedFaces.contains(g)) {
+                    System.err.println(g.toString() + " is still neighbour of "
+                            + f.toString() + ", but it has been removed.");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
