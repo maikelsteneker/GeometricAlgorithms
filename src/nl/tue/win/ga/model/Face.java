@@ -196,9 +196,13 @@ public class Face implements Drawable {
         final LineSegment right = getRightLineSegment();
         left.drawingUtilities = drawingUtilities;
         right.drawingUtilities = drawingUtilities;
+        top.drawingUtilities = drawingUtilities;
+        bottom.drawingUtilities = drawingUtilities;
         g.drawString(Integer.toString(label), location.x, location.y);
         left.draw(g, scale, invertY);
         right.draw(g, scale, invertY);
+        top.draw(g, scale, invertY);
+        bottom.draw(g, scale, invertY);
         g.setColor(old);
     }
 
