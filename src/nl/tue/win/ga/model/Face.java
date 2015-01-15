@@ -67,6 +67,7 @@ public class Face implements Drawable {
 
     public void setNode(Node node) {
         this.node = node;
+
     }
 
     public Point getLeftp() {
