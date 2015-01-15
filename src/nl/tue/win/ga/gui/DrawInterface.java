@@ -1,6 +1,5 @@
 package nl.tue.win.ga.gui;
 
-import java.awt.Frame;
 import nl.tue.win.ga.model.drawing.ResultDrawable;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -681,7 +680,8 @@ public class DrawInterface extends javax.swing.JFrame {
         Face.resetCounter();
         TrapezoidalMap t = new TrapezoidalMap(points);
         t.lastStep = (int) jSpinner1.getValue();
-        t.RandomIncrementalMap();
+        t.randomIncrementalMap();
+        //t.inOrderIncrementalMap();
         segments = t.getResult();
         faces = t.getFaces();
         partialProgress = t.handled;
