@@ -52,7 +52,7 @@ public class LineSegment implements Drawable {
         return face;
     }
 
-    public Boolean belowPoint(Point p){
+    public boolean belowPoint(Point p){
         return ((endPoints[1].y-endPoints[0].y)/(endPoints[1].x-endPoints[0].x)*(p.x - endPoints[0].x))
                 + endPoints[0].y < p.y;
     }
