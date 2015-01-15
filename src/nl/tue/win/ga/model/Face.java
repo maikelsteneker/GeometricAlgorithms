@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
+import nl.tue.win.ga.gui.DrawInterface;
 import nl.tue.win.ga.model.drawing.Drawable;
 import nl.tue.win.ga.utilities.DrawingUtilities;
 
@@ -43,10 +44,9 @@ public class Face implements Drawable {
         this.leftp = leftp;
         this.rightp = rightp;
         label = lastLabel++;
-        /*if (leftp.x > rightp.x) {
-            throw new IllegalStateException("Rightp should be to the right of "
-                    + "leftp (face " + label + ")");
-        }*/
+        assert !DrawInterface.ASSERTIONS ||
+                leftp.x <= rightp.x: "Rightp should be to the right of "
+                    + "leftp (face " + label + ")";
     }
 
     public Face(Face upperleft, Face lowerleft, Face upperright, Face lowerright) {
@@ -230,5 +230,12 @@ public class Face implements Drawable {
     @Override
     public String toString() {
         return "Face " + this.label;
+    }
+    
+    public boolean contains(Point p) {
+        final int yBottom = this.getBottom().getIntersection(p.x);
+        final int yTop = this.getTop().getIntersection(p.x);
+        return leftp.x <= p.x && p.x <= rightp.x
+                && yBottom <= p.y && p.y <= yTop;
     }
 }

@@ -5,6 +5,7 @@
 package nl.tue.win.ga.model;
 
 import java.awt.Point;
+import nl.tue.win.ga.gui.DrawInterface;
 import nl.tue.win.ga.model.Node.NodeType;
 
 /**
@@ -53,6 +54,10 @@ public class Graph {
                 throw new IllegalArgumentException("Reached the last else in getFace");
             }
         }
-        return check.getFace();
+        final Face result = check.getFace();
+        assert !DrawInterface.ASSERTIONS ||
+                result.contains(p): "Graph returns face that does not contain"
+                + "query point (" + result.toString() + " for point " + p + ")";
+        return result;
     }
 }

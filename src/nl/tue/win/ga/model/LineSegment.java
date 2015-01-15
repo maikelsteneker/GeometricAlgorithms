@@ -53,8 +53,11 @@ public class LineSegment implements Drawable {
     }
 
     public boolean belowPoint(Point p){
-        return ((endPoints[1].y-endPoints[0].y)/(endPoints[1].x-endPoints[0].x)*(p.x - endPoints[0].x))
-                + endPoints[0].y < p.y;
+        /* return (((endPoints[1].y-endPoints[0].y)/(endPoints[1].x-endPoints[0].x))*(p.x - endPoints[0].x))
+         + endPoints[0].y < p.y;*/
+        double slope = ((double) endPoints[0].y - (double) endPoints[1].y) / ((double) endPoints[0].x - (double) endPoints[1].x);
+        double y = endPoints[0].y + slope * p.x - slope * endPoints[0].x;
+        return (y < p.y);
     }
 
     @Override
