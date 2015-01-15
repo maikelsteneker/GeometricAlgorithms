@@ -43,10 +43,8 @@ public class Face implements Drawable {
         this.leftp = leftp;
         this.rightp = rightp;
         label = lastLabel++;
-        if (leftp.x > rightp.x) {
-            throw new IllegalStateException("Rightp should be to the right of "
-                    + "leftp (face " + label + ")");
-        }
+        assert leftp.x <= rightp.x: "Rightp should be to the right of "
+                    + "leftp (face " + label + ")";
     }
 
     public Face(Face upperleft, Face lowerleft, Face upperright, Face lowerright) {
