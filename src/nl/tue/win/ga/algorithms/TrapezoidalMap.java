@@ -196,6 +196,22 @@ public class TrapezoidalMap {
                             }
                             intersect.getLowerLeftNeighbour().setUpperRightNeighbour(A);
                         }
+                        
+                        if (intersect.getUpperRightNeighbour() != null ) {
+                            if (intersect.getUpperRightNeighbour().getUpperLeftNeighbour() == intersect) {
+                                intersect.getUpperRightNeighbour().setUpperLeftNeighbour(C);
+                            }
+                            intersect.getUpperRightNeighbour().setLowerLeftNeighbour(C);
+                        }
+
+                        if (intersect.getLowerRightNeighbour() != null) {
+                            if (intersect.getLowerRightNeighbour().getLowerLeftNeighbour() == intersect) {
+                                intersect.getLowerRightNeighbour().setLowerLeftNeighbour(D);
+                            }
+                            intersect.getLowerRightNeighbour().setUpperLeftNeighbour(D);
+                        }
+                        
+                        
 
                         trapFaces.add(A);
                         //trapFaces.add(C);
@@ -346,21 +362,20 @@ public class TrapezoidalMap {
                             intersect.getUpperLeftNeighbour().setLowerRightNeighbour(C);
                         }
 
-                        if (intersect.getUpperRightNeighbour() != null && intersect.getUpperRightNeighbour().getUpperLeftNeighbour() == intersect) {
-                            intersect.getUpperRightNeighbour().setUpperLeftNeighbour(C);
+                        if (intersect.getUpperRightNeighbour() != null ) {
+                            if (intersect.getUpperRightNeighbour().getUpperLeftNeighbour() == intersect) {
+                                intersect.getUpperRightNeighbour().setUpperLeftNeighbour(C);
+                            }
+                            intersect.getUpperRightNeighbour().setLowerLeftNeighbour(C);
                         }
 
-                        if (intersect.getLowerRightNeighbour() != null && intersect.getLowerRightNeighbour().getLowerLeftNeighbour() == intersect) {
-                            intersect.getLowerRightNeighbour().setLowerLeftNeighbour(D);
+                        if (intersect.getLowerRightNeighbour() != null) {
+                            if (intersect.getLowerRightNeighbour().getLowerLeftNeighbour() == intersect) {
+                                intersect.getLowerRightNeighbour().setLowerLeftNeighbour(D);
+                            }
+                            intersect.getLowerRightNeighbour().setUpperLeftNeighbour(D);
                         }
 
-                        if (intersect.getUpperLeftNeighbour() != null && intersect.getUpperLeftNeighbour().getUpperRightNeighbour() == intersect) {
-                            intersect.getUpperLeftNeighbour().setUpperRightNeighbour(C);
-                        }
-
-                        if (intersect.getLowerLeftNeighbour() != null && intersect.getLowerLeftNeighbour().getLowerRightNeighbour() == intersect) {
-                            intersect.getLowerLeftNeighbour().setLowerRightNeighbour(D);
-                        }
 
                         upper = C;
                         lower = D;
