@@ -30,20 +30,22 @@ public class Face implements Drawable {
     private static Random generator = new Random(0);
     private final Color color = new Color(generator.nextInt());
 
-    public Face() {
-        top = null;
-        bottom = null;
-        leftp = null;
-        rightp = null;
-        label = lastLabel++;
-    }
-
+    /*public Face() {
+     top = null;
+     bottom = null;
+     leftp = null;
+     rightp = null;
+     label = lastLabel++;
+     }*/
     public Face(LineSegment top, LineSegment bottom, Point leftp, Point rightp) {
         this.top = top;
         this.bottom = bottom;
         this.leftp = leftp;
         this.rightp = rightp;
         label = lastLabel++;
+        if (leftp.x > rightp.x) {
+            throw new IllegalStateException("Rightp should be to the right of leftp");
+        }
     }
 
     public Face(Face upperleft, Face lowerleft, Face upperright, Face lowerright) {
@@ -191,7 +193,9 @@ public class Face implements Drawable {
         location = drawingUtilities.zoom(location);
 
         final Color old = g.getColor();
-        if (COLORED_LINES) g.setColor(color);
+        if (COLORED_LINES) {
+            g.setColor(color);
+        }
         final LineSegment left = getLeftLineSegment();
         final LineSegment right = getRightLineSegment();
         left.drawingUtilities = drawingUtilities;
