@@ -228,7 +228,7 @@ public class TrapezoidalMap {
 
                         //this is the last of the intersected faces
 
-                        Face B = new Face(intersect.getTop(), intersect.getBottom(), intersect.getRightp(), end);
+                        Face B = new Face(intersect.getTop(), intersect.getBottom(), end, intersect.getRightp());
                         Face C = new Face(intersect.getTop(), seg, intersect.getLeftp(), end);
                         Face D = new Face(seg, intersect.getBottom(), intersect.getLeftp(), end);
                         B.setAllSideNeighbours(C, D, intersect.getUpperRightNeighbour(), intersect.getLowerRightNeighbour());
@@ -432,7 +432,7 @@ public class TrapezoidalMap {
         Point startp = endpoints[0];
         Point endp = endpoints[1];
 
-        Face start = graph.getFace(startp);
+        Face start = graph.getFace(startp, endp);
 
         faces.add(start);
 
