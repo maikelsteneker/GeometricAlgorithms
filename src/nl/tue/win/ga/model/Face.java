@@ -20,6 +20,8 @@ public class Face implements Drawable {
     private Point leftp;
     private Point rightp;
     private Node node;
+    
+    public boolean merged;
 
     private Face[] neighbours = new Face[6];
 
