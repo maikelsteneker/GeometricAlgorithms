@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
+import nl.tue.win.ga.gui.DrawInterface;
 import nl.tue.win.ga.model.drawing.Drawable;
 import nl.tue.win.ga.utilities.DrawingUtilities;
 
@@ -43,7 +44,8 @@ public class Face implements Drawable {
         this.leftp = leftp;
         this.rightp = rightp;
         label = lastLabel++;
-        assert leftp.x <= rightp.x: "Rightp should be to the right of "
+        assert !DrawInterface.ASSERTIONS ||
+                leftp.x <= rightp.x: "Rightp should be to the right of "
                     + "leftp (face " + label + ")";
     }
 
