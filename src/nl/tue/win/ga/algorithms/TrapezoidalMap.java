@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import nl.tue.win.ga.gui.DrawInterface;
 import nl.tue.win.ga.model.Face;
 import nl.tue.win.ga.model.Graph;
 import nl.tue.win.ga.model.LineSegment;
@@ -42,12 +43,12 @@ public class TrapezoidalMap {
      */
     private boolean done = false;
     private ArrayList<Face> trapFaces = new ArrayList<>();
-    
+
     public int lastStep;
     private int currentStep;
 
     private final static boolean SEPARATE_LINES = true; // no overlapping face borders
-    
+
     public ArrayList<LineSegment> handled = new ArrayList<>();
 
     public TrapezoidalMap() {
@@ -75,7 +76,9 @@ public class TrapezoidalMap {
 
         currentStep = 0;
         while (linesegments.size() > 0) {
-            if (currentStep++ >= lastStep) return;
+            if (currentStep++ >= lastStep) {
+                return;
+            }
             LineSegment seg = getRandomLineSegment();
             linesegments.remove(seg);
             handled.add(seg);
@@ -222,12 +225,9 @@ public class TrapezoidalMap {
                         Node rlchild = new Node(D);
                         rightchild.setLchild(rlchild);
 
-
-
                     } else if (intersections.indexOf(intersect) == intersections.size() - 1 && intersect.getRightp().x != end.x) {
 
                         //this is the last of the intersected faces
-
                         Face B = new Face(intersect.getTop(), intersect.getBottom(), end, intersect.getRightp());
                         Face C = new Face(intersect.getTop(), seg, intersect.getLeftp(), end);
                         Face D = new Face(seg, intersect.getBottom(), intersect.getLeftp(), end);
@@ -319,9 +319,6 @@ public class TrapezoidalMap {
                             lower.setUpperRightNeighbour(D);
                         }
 
-
-
-
                         if (intersect.getUpperRightNeighbour() != null && intersect.getUpperRightNeighbour().getUpperLeftNeighbour() == intersect) {
                             intersect.getUpperRightNeighbour().setUpperLeftNeighbour(C);
                         }
@@ -391,15 +388,17 @@ public class TrapezoidalMap {
                     trapFaces.add(f);
                 }
             }
-            
-                Iterator<Face> iterator = trapFaces.iterator();
-                while (iterator.hasNext()) {
-                    final Face f = iterator.next();
-                    if (f.getWidth() == 0) {
-                        iterator.remove();
-                    }
-                }
 
+            Iterator<Face> iterator = trapFaces.iterator();
+            while (iterator.hasNext()) {
+                final Face f = iterator.next();
+                if (f.getWidth() == 0) {
+                    iterator.remove();
+                }
+            }
+
+            assert !DrawInterface.ASSERTIONS
+                    || invariant() : "Graph does not contain the right faces";
         }
         for (Face face : trapFaces) {
             if (face.getLeftp().x == face.getRightp().x) {
@@ -478,5 +477,11 @@ public class TrapezoidalMap {
 
     public List<Face> getFaces() {
         return trapFaces;
+    }
+
+    public boolean invariant() {
+        Set<Face> storedFaces = new HashSet<>(trapFaces);
+        Set<Face> graphFaces = graph.allFaces();
+        return storedFaces.equals(graphFaces);
     }
 }
