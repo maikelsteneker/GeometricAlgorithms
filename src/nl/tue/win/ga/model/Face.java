@@ -231,4 +231,11 @@ public class Face implements Drawable {
     public String toString() {
         return "Face " + this.label;
     }
+    
+    public boolean contains(Point p) {
+        final int yBottom = this.getBottom().getIntersection(p.x);
+        final int yTop = this.getTop().getIntersection(p.x);
+        return leftp.x <= p.x && p.x <= rightp.x
+                && yBottom <= p.y && p.y <= yTop;
+    }
 }
