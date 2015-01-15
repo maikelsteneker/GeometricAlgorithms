@@ -25,10 +25,11 @@ public class Face implements Drawable {
     public DrawingUtilities drawingUtilities;
     public int label;
     private static int lastLabel;
-    
+
     private final static boolean COLORED_LINES = true;
-    private final static Random generator = new Random(0);
-    
+    private static Random generator = new Random(0);
+    private final Color color = new Color(generator.nextInt());
+
     public Face() {
         top = null;
         bottom = null;
@@ -189,9 +190,8 @@ public class Face implements Drawable {
         }
         location = drawingUtilities.zoom(location);
 
-        final Color c = new Color(generator.nextInt());
         final Color old = g.getColor();
-        g.setColor(c);
+        if (COLORED_LINES) g.setColor(color);
         final LineSegment left = getLeftLineSegment();
         final LineSegment right = getRightLineSegment();
         left.drawingUtilities = drawingUtilities;
@@ -215,6 +215,7 @@ public class Face implements Drawable {
 
     public static void resetCounter() {
         Face.lastLabel = 0;
+        generator = new Random(0); // to keep the same colors
     }
 
     @Override
