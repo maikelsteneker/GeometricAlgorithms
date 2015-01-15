@@ -169,7 +169,7 @@ public class TrapezoidalMap {
                     trapFaces.remove(intersect);
 
                     //this is the first of the intersections
-                    if (intersections.indexOf(intersect) == 0 && intersect.getRightp().x != begin.x) {
+                    if (intersections.indexOf(intersect) == 0 && intersect.getLeftp().x != begin.x) {
 
                         prev = intersect;
 
@@ -210,7 +210,6 @@ public class TrapezoidalMap {
                             }
                             intersect.getLowerRightNeighbour().setUpperLeftNeighbour(D);
                         }
-                        
                         
 
                         trapFaces.add(A);
@@ -403,8 +402,25 @@ public class TrapezoidalMap {
                     f.setLowerRightNeighbour(neigh.getLowerRightNeighbour());
                     f.setRightp(neigh.getRightp());
 
+                    if (neigh.getUpperRightNeighbour() != null && neigh.getUpperRightNeighbour().getUpperLeftNeighbour() == neigh ){
+                        neigh.getUpperRightNeighbour().setUpperLeftNeighbour(f);
+                    }
+                    if (neigh.getUpperRightNeighbour() != null && neigh.getUpperRightNeighbour().getLowerLeftNeighbour() == neigh){
+                        neigh.getUpperRightNeighbour().setLowerLeftNeighbour(f);
+                    }
+                    if (neigh.getLowerRightNeighbour() != null && neigh.getLowerRightNeighbour().getUpperLeftNeighbour() == neigh){
+                        neigh.getLowerRightNeighbour().setUpperLeftNeighbour(f);
+                    }
+                    if (neigh.getLowerRightNeighbour() != null && neigh.getLowerRightNeighbour().getLowerLeftNeighbour() == neigh){
+                        neigh.getLowerRightNeighbour().setLowerLeftNeighbour(f);
+                    }
+                    
                     Node neighn = neigh.getNode();
-                    neighn = f.getNode();
+                    if (neighn.getParent().getLchild() == neighn){
+                        neighn.getParent().setLchild(f.getNode());
+                    } else {
+                        neighn.getParent().setRchild(f.getNode());
+                    }
 
                     newFaces.remove(neigh);
                 } else if (f.getLowerRightNeighbour() != null && f.getLowerRightNeighbour().getBottom() == f.getBottom() && f.getLowerRightNeighbour().getTop() == f.getTop()) {
@@ -413,8 +429,25 @@ public class TrapezoidalMap {
                     f.setLowerRightNeighbour(neigh.getLowerRightNeighbour());
                     f.setRightp(neigh.getRightp());
 
+                    if (neigh.getUpperRightNeighbour() != null && neigh.getUpperRightNeighbour().getUpperLeftNeighbour() == neigh ){
+                        neigh.getUpperRightNeighbour().setUpperLeftNeighbour(f);
+                    }
+                    if (neigh.getUpperRightNeighbour() != null && neigh.getUpperRightNeighbour().getLowerLeftNeighbour() == neigh){
+                        neigh.getUpperRightNeighbour().setLowerLeftNeighbour(f);
+                    }
+                    if (neigh.getLowerRightNeighbour() != null && neigh.getLowerRightNeighbour().getUpperLeftNeighbour() == neigh){
+                        neigh.getLowerRightNeighbour().setUpperLeftNeighbour(f);
+                    }
+                    if (neigh.getLowerRightNeighbour() != null && neigh.getLowerRightNeighbour().getLowerLeftNeighbour() == neigh){
+                        neigh.getLowerRightNeighbour().setLowerLeftNeighbour(f);
+                    }
+                    
                     Node neighn = neigh.getNode();
-                    neighn = f.getNode();
+                    if (neighn.getParent().getLchild() == neighn){
+                        neighn.getParent().setLchild(f.getNode());
+                    } else {
+                        neighn.getParent().setRchild(f.getNode());
+                    }
 
                     newFaces.remove(neigh);
                 } else {
