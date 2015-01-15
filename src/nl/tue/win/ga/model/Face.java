@@ -104,6 +104,10 @@ public class Face implements Drawable {
     public void setAllNeighbours(Face[] neighbours) {
         this.neighbours = neighbours;
     }
+    
+    public Face[] getNeighbours() {
+        return neighbours;
+    }
 
     public void setAllSideNeighbours(Face upperleft, Face lowerleft, Face upperright, Face lowerright) {
 
