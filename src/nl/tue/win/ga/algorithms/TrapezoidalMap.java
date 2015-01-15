@@ -252,6 +252,7 @@ public class TrapezoidalMap {
 
                         C.setAllSideNeighbours(CUpper, upper, B, B);
                         D.setAllSideNeighbours(lower, DLower, B, B);
+                        //nonsensecomments
 
                         trapFaces.add(B);
                         //trapFaces.add(C);
