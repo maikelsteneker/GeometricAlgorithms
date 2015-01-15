@@ -270,6 +270,21 @@ public class TrapezoidalMap {
                             }
                             intersect.getLowerRightNeighbour().setUpperLeftNeighbour(B);
                         }
+                        
+                                                if (intersect.getLowerLeftNeighbour() != null) {
+                            if (intersect.getLowerLeftNeighbour().getLowerRightNeighbour() == intersect) {
+                                intersect.getLowerLeftNeighbour().setLowerRightNeighbour(D);
+                            }
+                            intersect.getLowerLeftNeighbour().setUpperRightNeighbour(D);
+                        }
+
+
+                        if (intersect.getUpperLeftNeighbour() != null) {
+                            if (intersect.getUpperLeftNeighbour().getUpperRightNeighbour() == intersect) {
+                                intersect.getUpperLeftNeighbour().setUpperRightNeighbour(C);
+                            }
+                            intersect.getUpperLeftNeighbour().setLowerRightNeighbour(C);
+                        }
 
                         Node n = intersect.getNode();
                         n.setFace(null);
@@ -318,9 +333,21 @@ public class TrapezoidalMap {
                             }
                             lower.setUpperRightNeighbour(D);
                         }
+                        
+                        if (intersect.getLowerLeftNeighbour() != null) {
+                            if (intersect.getLowerLeftNeighbour().getLowerRightNeighbour() == intersect) {
+                                intersect.getLowerLeftNeighbour().setLowerRightNeighbour(D);
+                            }
+                            intersect.getLowerLeftNeighbour().setUpperRightNeighbour(D);
+                        }
 
 
-
+                        if (intersect.getUpperLeftNeighbour() != null) {
+                            if (intersect.getUpperLeftNeighbour().getUpperRightNeighbour() == intersect) {
+                                intersect.getUpperLeftNeighbour().setUpperRightNeighbour(C);
+                            }
+                            intersect.getUpperLeftNeighbour().setLowerRightNeighbour(C);
+                        }
 
                         if (intersect.getUpperRightNeighbour() != null && intersect.getUpperRightNeighbour().getUpperLeftNeighbour() == intersect) {
                             intersect.getUpperRightNeighbour().setUpperLeftNeighbour(C);
