@@ -423,7 +423,7 @@ public class TrapezoidalMap {
         Point startp = endpoints[0];
         Point endp = endpoints[1];
 
-        Face start = graph.getFace(startp);
+        Face start = graph.getFace(startp, endp);
 
         faces.add(start);
 

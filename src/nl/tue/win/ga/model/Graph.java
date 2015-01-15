@@ -26,7 +26,7 @@ public class Graph {
      * @param p point to find the face for
      * @return Current face the point is in
      */
-    public Face getFace(Point p){   
+    public Face getFace(Point p, Point p1){   
         Node check = this.root;
         while (check.getType() != NodeType.LEAF){
             if (check.getType() == NodeType.POINT){
@@ -36,10 +36,18 @@ public class Graph {
                     check = check.getRchild();
                 }
             } else if (check.getType() == NodeType.SEGMENT){
-                if (check.getSegment().belowPoint(p)){
-                    check = check.getRchild();
+                if (check.getSegment().getStartPoint() == p){
+                    if (check.getSegment().getEndPoint().y < p1.y){
+                        check = check.getRchild();
+                    } else {
+                        check = check.getLchild();
+                    } 
                 } else {
-                    check = check.getLchild();
+                    if (check.getSegment().belowPoint(p)){
+                        check = check.getRchild();
+                    } else {
+                        check = check.getLchild();
+                    }
                 }
             } else {
                 throw new IllegalArgumentException("Reached the last else in getFace");
