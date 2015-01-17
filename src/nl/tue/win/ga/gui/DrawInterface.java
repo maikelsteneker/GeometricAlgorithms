@@ -680,8 +680,8 @@ public class DrawInterface extends javax.swing.JFrame {
 
     private void trapezoidalMap() {
         Face.resetCounter();
-        TrapezoidalMap t = new TrapezoidalMap(points);
-       // RandomIncrementalConstruction t = new RandomIncrementalConstruction(points);
+        //TrapezoidalMap t = new TrapezoidalMap(points);
+        RandomIncrementalConstruction t = new RandomIncrementalConstruction(points);
         t.lastStep = (int) jSpinner1.getValue();
         t.randomIncrementalMap();
         //t.inOrderIncrementalMap();

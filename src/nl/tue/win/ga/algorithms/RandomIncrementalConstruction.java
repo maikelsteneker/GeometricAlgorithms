@@ -86,7 +86,6 @@ public class RandomIncrementalConstruction {
      */
     private void merge(LineSegment s) {
         while (!mergeFaces.isEmpty()) {
-            System.out.println("Infinite!");
             Face merged = null;
             List<Face> help = new ArrayList<>();
             help.addAll(mergeFaces);
@@ -136,7 +135,7 @@ public class RandomIncrementalConstruction {
                             // case above
                             merged = new Face(f2.getTop(), handled.get(handled.size() - 1), f1.getLeftp(), f2.getRightp());
                             setMergeNeighbours(merged, f2, f1);
-                            setMergeTree(merged, f1, f2, true);
+                            setMergeTree(merged, f1, f2, false);
                             trapezoidalMap.remove(f1);
                             mergeFaces.remove(f1);
                             trapezoidalMap.remove(f2);
@@ -238,7 +237,7 @@ public class RandomIncrementalConstruction {
         Face first = intersections.get(0);
         Face B = splitFirst(first, p);
         intersections.remove(first);
-        intersections.add(0,B);
+        intersections.add(0, B);
         Face last = intersections.get(intersections.size() - 1);
         Face A = splitLast(last, q);
         intersections.remove(last);
@@ -258,21 +257,8 @@ public class RandomIncrementalConstruction {
         Face A = new Face(last.getTop(), last.getBottom(), last.getLeftp(), q);
         Face B = new Face(last.getTop(), last.getBottom(), q, last.getRightp());
 
-        A.setAllSideNeighbours(last.getUpperLeftNeighbour(), last.getLowerLeftNeighbour(), B, B);
-        B.setAllSideNeighbours(A, A, last.getUpperRightNeighbour(), last.getLowerRightNeighbour());
-
-        if (last.getUpperLeftNeighbour() != null) {          
-            last.getUpperLeftNeighbour().setUpperRightNeighbour(A);
-        }
-        if (last.getLowerLeftNeighbour() != null) {
-            last.getLowerLeftNeighbour().setLowerRightNeighbour(A);
-        }
-        if (last.getUpperRightNeighbour() != null) {
-            last.getUpperRightNeighbour().setUpperLeftNeighbour(B);
-        }
-        if (last.getLowerRightNeighbour() != null) {
-            last.getLowerRightNeighbour().setLowerLeftNeighbour(B);
-        }
+        FirstandLastNeighbours(last, A, B);
+        
         Node n1 = last.getNode();
         n1.setFace(null);
         n1.setType(Node.NodeType.POINT);
@@ -297,22 +283,8 @@ public class RandomIncrementalConstruction {
         Face A = new Face(first.getTop(), first.getBottom(), first.getLeftp(), p);
         Face B = new Face(first.getTop(), first.getBottom(), p, first.getRightp());
 
-        A.setAllSideNeighbours(first.getUpperLeftNeighbour(), first.getLowerLeftNeighbour(), B, B);
-        B.setAllSideNeighbours(A, A, first.getUpperRightNeighbour(), first.getLowerRightNeighbour());
-
-        if (first.getUpperLeftNeighbour() != null) {
-            first.getUpperLeftNeighbour().setUpperRightNeighbour(A);
-        }
-        if (first.getLowerLeftNeighbour() != null) {
-            first.getLowerLeftNeighbour().setLowerRightNeighbour(A);
-        }
-        if (first.getUpperRightNeighbour() != null) {
-            first.getUpperRightNeighbour().setUpperLeftNeighbour(B);
-        }
-        if (first.getLowerRightNeighbour() != null) {
-            first.getLowerRightNeighbour().setLowerLeftNeighbour(B);
-        }
-
+        FirstandLastNeighbours(first, A, B);
+        
         Node n1 = first.getNode();
         n1.setFace(null);
         n1.setType(Node.NodeType.POINT);
@@ -323,6 +295,47 @@ public class RandomIncrementalConstruction {
         trapezoidalMap.add(A);
         trapezoidalMap.add(B);
         return B;
+    }
+
+    /**
+     *
+     */
+    private void FirstandLastNeighbours(Face f, Face A, Face B) {
+        A.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getLowerLeftNeighbour(), B, B);
+        B.setAllSideNeighbours(A, A, f.getUpperRightNeighbour(), f.getLowerRightNeighbour());
+
+        if (f.getUpperLeftNeighbour() != null) {
+            if (f.getUpperLeftNeighbour().getUpperRightNeighbour() == f) {
+                f.getUpperLeftNeighbour().setUpperRightNeighbour(A);
+            }
+            if (f.getUpperLeftNeighbour().getLowerRightNeighbour() == f) {
+                f.getUpperLeftNeighbour().setLowerRightNeighbour(A);
+            }
+        }
+        if (f.getLowerLeftNeighbour() != null) {
+            if (f.getLowerLeftNeighbour().getLowerRightNeighbour() == f) {
+                f.getLowerLeftNeighbour().setLowerRightNeighbour(A);
+            }
+            if (f.getLowerLeftNeighbour().getUpperRightNeighbour() == f) {
+                f.getLowerLeftNeighbour().setUpperRightNeighbour(A);
+            }
+        }
+        if (f.getUpperRightNeighbour() != null) {
+            if (f.getUpperRightNeighbour().getUpperLeftNeighbour() == f) {
+                f.getUpperRightNeighbour().setUpperLeftNeighbour(B);
+            }
+            if (f.getUpperRightNeighbour().getLowerLeftNeighbour() == f) {
+                f.getUpperRightNeighbour().setLowerLeftNeighbour(B);
+            }
+        }
+        if (f.getLowerRightNeighbour() != null) {
+            if (f.getLowerRightNeighbour().getLowerLeftNeighbour() == f) {
+                f.getLowerRightNeighbour().setLowerLeftNeighbour(B);
+            }
+            if (f.getLowerRightNeighbour().getUpperLeftNeighbour() == f) {
+                f.getLowerRightNeighbour().setUpperLeftNeighbour(B);
+            }
+        }
     }
 
     /**
@@ -437,20 +450,32 @@ public class RandomIncrementalConstruction {
             if (f1.getLowerRightNeighbour().getLowerLeftNeighbour() == f1) {
                 f1.getLowerRightNeighbour().setLowerLeftNeighbour(merged);
             }
+            if(f1.getLowerRightNeighbour().getUpperLeftNeighbour() == f1) {
+                f1.getLowerRightNeighbour().setUpperLeftNeighbour(merged);
+            }
         }
         if (f1.getUpperRightNeighbour() != null) {
             if (f1.getUpperRightNeighbour().getLowerLeftNeighbour() == f1) {
                 f1.getUpperRightNeighbour().setLowerLeftNeighbour(merged);
+            }
+            if (f1.getUpperRightNeighbour().getUpperLeftNeighbour() == f1) {
+                f1.getUpperRightNeighbour().setUpperLeftNeighbour(merged);
             }
         }
         if (f2.getLowerLeftNeighbour() != null) {
             if (f2.getLowerLeftNeighbour().getLowerRightNeighbour() == f2) {
                 f2.getLowerLeftNeighbour().setLowerRightNeighbour(merged);
             }
+            if (f2.getLowerLeftNeighbour().getUpperRightNeighbour() == f2) {
+                f2.getLowerLeftNeighbour().setUpperRightNeighbour(merged);
+            }
         }
         if (f2.getUpperLeftNeighbour() != null) {
             if (f2.getUpperLeftNeighbour().getLowerRightNeighbour() == f2) {
                 f2.getUpperLeftNeighbour().setLowerRightNeighbour(merged);
+            }
+            if (f2.getUpperLeftNeighbour().getUpperRightNeighbour() == f2) {
+                f2.getUpperLeftNeighbour().setUpperRightNeighbour(merged);
             }
         }
         merged.setAllSideNeighbours(f2.getUpperLeftNeighbour(), f2.getLowerLeftNeighbour(), f1.getUpperRightNeighbour(), f1.getLowerRightNeighbour());
@@ -475,7 +500,7 @@ public class RandomIncrementalConstruction {
             n2.getParent().setLchild(nmerged);
         } else {
             n1.getParent().setRchild(nmerged);
-            n2.getParent().setLchild(nmerged);
+            n2.getParent().setRchild(nmerged);
         }
 
     }
