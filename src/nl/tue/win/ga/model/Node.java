@@ -1,6 +1,7 @@
 package nl.tue.win.ga.model;
 
 import java.awt.Point;
+import nl.tue.win.ga.gui.DrawInterface;
 
 /**
  *
@@ -18,10 +19,6 @@ public final class Node {
     private Face face;
     private Point point;
     private LineSegment segment;
-
-    public Node() {
-
-    }
 
     public Node(Face face) {
         setFace(face);
@@ -60,6 +57,7 @@ public final class Node {
 
     public void setFace(Face face) {
         this.face = face;
+        checkInvariant();
         if (face != null) {
             face.setNode(this);
         }
@@ -106,5 +104,25 @@ public final class Node {
 
     public boolean isRoot() {
         return this.parent == null;
+    }
+    
+    public void checkInvariant() {
+        assert !DrawInterface.ASSERTIONS || this.invariant():
+                "Leaf has a null face" + type + face;
+    }
+    
+    public boolean invariant() {
+        return this.type != NodeType.LEAF || this.face != null;
+    }
+    
+    public boolean contains(Node n) {
+        boolean result = this == n;
+        if (this.getLchild() != null) {
+            result |= this.getLchild().contains(n);
+        }
+        if (this.getRchild() != null) {
+            result |= this.getRchild().contains(n);
+        }
+        return result;
     }
 }

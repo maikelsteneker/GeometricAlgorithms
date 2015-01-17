@@ -79,4 +79,8 @@ public class Graph {
             }
         }
     }
+
+    public boolean contains(Node n) {
+        return this.root.contains(n);
+    }
 }

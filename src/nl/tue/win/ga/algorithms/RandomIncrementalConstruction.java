@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import nl.tue.win.ga.gui.*;
+import nl.tue.win.ga.gui.DrawInterface;
 import nl.tue.win.ga.model.*;
 import nl.tue.win.ga.utilities.BoundingBox;
 
@@ -260,8 +259,8 @@ public class RandomIncrementalConstruction {
         FirstandLastNeighbours(last, A, B);
         
         Node n1 = last.getNode();
-        n1.setFace(null);
         n1.setType(Node.NodeType.POINT);
+        n1.setFace(null);
         n1.setPoint(q);
         n1.setLchild(new Node(A));
         n1.setRchild(new Node(B));
@@ -286,8 +285,8 @@ public class RandomIncrementalConstruction {
         FirstandLastNeighbours(first, A, B);
         
         Node n1 = first.getNode();
-        n1.setFace(null);
         n1.setType(Node.NodeType.POINT);
+        n1.setFace(null);
         n1.setPoint(p);
         n1.setLchild(new Node(A));
         n1.setRchild(new Node(B));
@@ -423,8 +422,8 @@ public class RandomIncrementalConstruction {
         trapezoidalMap.add(D);
 
         Node leaf = f.getNode();
-        leaf.setFace(null);
         leaf.setType(Node.NodeType.SEGMENT);
+        leaf.setFace(null);
         leaf.setSegment(ls);
         Node rchild = new Node(C);
         leaf.setRchild(rchild);
@@ -492,17 +491,22 @@ public class RandomIncrementalConstruction {
     private void setMergeTree(Face merged, Face f1, Face f2, boolean left) {
         Node n1 = f1.getNode();
         Node n2 = f2.getNode();
-        n1.setFace(null);
-        n2.setFace(null);
+        //n1.setFace(null);
+        //n2.setFace(null);
         Node nmerged = new Node(merged);
         if (left) {
+            assert !DrawInterface.ASSERTIONS || n1.getParent().getLchild() == n1;
+            assert !DrawInterface.ASSERTIONS || n2.getParent().getLchild() == n2;
             n1.getParent().setLchild(nmerged);
             n2.getParent().setLchild(nmerged);
         } else {
+            assert !DrawInterface.ASSERTIONS || n1.getParent().getRchild() == n1;
+            assert !DrawInterface.ASSERTIONS || n2.getParent().getRchild() == n2;
             n1.getParent().setRchild(nmerged);
             n2.getParent().setRchild(nmerged);
         }
-
+        assert !DrawInterface.ASSERTIONS || (!inGraph(n1) && !inGraph(n2)):
+                "Merged node is still in graph";
     }
 
     /**
@@ -562,5 +566,9 @@ public class RandomIncrementalConstruction {
 
     public List<Face> getFaces() {
         return trapezoidalMap;
+    }
+
+    private boolean inGraph(Node n) {
+        return this.searchGraph.contains(n);
     }
 }
