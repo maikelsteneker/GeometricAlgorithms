@@ -57,7 +57,7 @@ public class RandomIncrementalConstruction {
             }
             LineSegment s = iterator.next();
             Point start = s.getStartPoint();
-            Point end = s.getEndPoint();          
+            Point end = s.getEndPoint();
             List<Face> intersections = getIntersectedFaces(s);
             //distinguish 4 cases
             if (presentPoints.contains(start) && presentPoints.contains(end)) { //both points are in the plane already
@@ -81,7 +81,8 @@ public class RandomIncrementalConstruction {
 
     /**
      * Merge the faces that need merging
-     * @param s 
+     *
+     * @param s
      */
     private void merge(LineSegment s) {
         while (!mergeFaces.isEmpty()) {
@@ -174,7 +175,7 @@ public class RandomIncrementalConstruction {
                 Face next = intersections.get(i);
                 newIntersection = new Point(next.getRightp().x, ls.getIntersection(next.getRightp().x));
                 if (prevIntersection.y > next.getLeftp().y && newIntersection.y > next.getRightp().y) {
-                    calculateTopandBottomForMiddle(next,  prevIntersection, newIntersection, next.getLeftp(), next.getRightp(), ls);
+                    calculateTopandBottomForMiddle(next, prevIntersection, newIntersection, next.getLeftp(), next.getRightp(), ls);
                 } else if (prevIntersection.y > next.getLeftp().y && newIntersection.y < next.getRightp().y) {
                     calculateTopandBottomForMiddle(next, prevIntersection, next.getRightp(), next.getLeftp(), newIntersection, ls);
                 } else if (prevIntersection.y < next.getLeftp().y && newIntersection.y > next.getRightp().y) {
@@ -207,8 +208,8 @@ public class RandomIncrementalConstruction {
     }
 
     /**
-     * Calculate the case where the start point of the line segment is new in the
-     * plane
+     * Calculate the case where the start point of the line segment is new in
+     * the plane
      *
      * @param intersections
      * @param ls
@@ -216,7 +217,7 @@ public class RandomIncrementalConstruction {
      * @param q
      */
     private void startComputation(List<Face> intersections, LineSegment ls, Point p, Point q) {
-         //Calculate the left face that needs to be added and then treat this as middle computation where both points are known in the plane
+        //Calculate the left face that needs to be added and then treat this as middle computation where both points are known in the plane
         Face first = intersections.get(0);
         Face B = splitFirst(first, p);
         intersections.remove(first);
@@ -225,18 +226,19 @@ public class RandomIncrementalConstruction {
     }
 
     /**
-     * Calculate the case where both the start and end point of the line segment are new in the plane
+     * Calculate the case where both the start and end point of the line segment
+     * are new in the plane
      *
      * @param last
      * @param q
      * @return
      */
     private void fullComputation(List<Face> intersections, LineSegment ls, Point p, Point q) {
-         //Calculate the left and right faces that need to be added and then treat this as middle computation where both points are known in the plane
-        Face first = intersections.get(intersections.size() - 1);
+        //Calculate the left and right faces that need to be added and then treat this as middle computation where both points are known in the plane
+        Face first = intersections.get(0);
         Face B = splitFirst(first, p);
         intersections.remove(first);
-        intersections.add(B);
+        intersections.add(0,B);
         Face last = intersections.get(intersections.size() - 1);
         Face A = splitLast(last, q);
         intersections.remove(last);
@@ -245,10 +247,12 @@ public class RandomIncrementalConstruction {
     }
 
     /**
-     * Split a face in which point q falls, in two faces with point q as border of the 2
+     * Split a face in which point q falls, in two faces with point q as border
+     * of the 2
+     *
      * @param last
      * @param q
-     * @return 
+     * @return
      */
     private Face splitLast(Face last, Point q) {
         Face A = new Face(last.getTop(), last.getBottom(), last.getLeftp(), q);
@@ -257,7 +261,7 @@ public class RandomIncrementalConstruction {
         A.setAllSideNeighbours(last.getUpperLeftNeighbour(), last.getLowerLeftNeighbour(), B, B);
         B.setAllSideNeighbours(A, A, last.getUpperRightNeighbour(), last.getLowerRightNeighbour());
 
-        if (last.getUpperLeftNeighbour() != null) {
+        if (last.getUpperLeftNeighbour() != null) {          
             last.getUpperLeftNeighbour().setUpperRightNeighbour(A);
         }
         if (last.getLowerLeftNeighbour() != null) {
@@ -282,7 +286,8 @@ public class RandomIncrementalConstruction {
     }
 
     /**
-     * Split a face in which point p falls, in two faces with point p as border of the 2
+     * Split a face in which point p falls, in two faces with point p as border
+     * of the 2
      *
      * @param first
      * @param q
@@ -344,7 +349,7 @@ public class RandomIncrementalConstruction {
      */
     private void calculateLastForMiddle(Face last, Point intersect, Point q, LineSegment ls) {
         if (intersect.y > last.getLeftp().y) {
-            calculateTopandBottomForMiddle(last, intersect, q, last.getLeftp(), q, ls);
+            calculateTopandBottomForMiddle(last, intersect, q, intersect, q, ls);
         } else {
             calculateTopandBottomForMiddle(last, last.getLeftp(), q, intersect, q, ls);
         }
@@ -368,20 +373,36 @@ public class RandomIncrementalConstruction {
         D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
 
         if (f.getLowerLeftNeighbour() != null) {
-            f.getLowerLeftNeighbour().setUpperRightNeighbour(C);
-            f.getLowerLeftNeighbour().setLowerRightNeighbour(D);
+            if (f.getLowerLeftNeighbour().getUpperRightNeighbour() == f) {
+                f.getLowerLeftNeighbour().setUpperRightNeighbour(C);
+            }
+            if (f.getLowerLeftNeighbour().getLowerRightNeighbour() == f) {
+                f.getLowerLeftNeighbour().setLowerRightNeighbour(D);
+            }
         }
         if (f.getLowerRightNeighbour() != null) {
-            f.getLowerRightNeighbour().setUpperLeftNeighbour(C);
-            f.getLowerRightNeighbour().setLowerLeftNeighbour(D);
+            if (f.getLowerRightNeighbour().getUpperLeftNeighbour() == f) {
+                f.getLowerRightNeighbour().setUpperLeftNeighbour(C);
+            }
+            if (f.getLowerRightNeighbour().getLowerLeftNeighbour() == f) {
+                f.getLowerRightNeighbour().setLowerLeftNeighbour(D);
+            }
         }
         if (f.getUpperLeftNeighbour() != null) {
-            f.getUpperLeftNeighbour().setUpperRightNeighbour(C);
-            f.getUpperLeftNeighbour().setLowerRightNeighbour(D);
+            if (f.getUpperLeftNeighbour().getUpperRightNeighbour() == f) {
+                f.getUpperLeftNeighbour().setUpperRightNeighbour(C);
+            }
+            if (f.getUpperLeftNeighbour().getLowerRightNeighbour() == f) {
+                f.getUpperLeftNeighbour().setLowerRightNeighbour(D);
+            }
         }
         if (f.getUpperRightNeighbour() != null) {
-            f.getUpperRightNeighbour().setUpperLeftNeighbour(C);
-            f.getUpperRightNeighbour().setLowerLeftNeighbour(D);
+            if (f.getUpperRightNeighbour().getUpperLeftNeighbour() == f) {
+                f.getUpperRightNeighbour().setUpperLeftNeighbour(C);
+            }
+            if (f.getUpperRightNeighbour().getLowerLeftNeighbour() == f) {
+                f.getUpperRightNeighbour().setLowerLeftNeighbour(D);
+            }
         }
 
         trapezoidalMap.remove(f);
@@ -413,16 +434,24 @@ public class RandomIncrementalConstruction {
      */
     private void setMergeNeighbours(Face merged, Face f1, Face f2) {
         if (f1.getLowerRightNeighbour() != null) {
-            f1.getLowerRightNeighbour().setLowerLeftNeighbour(merged);
+            if (f1.getLowerRightNeighbour().getLowerLeftNeighbour() == f1) {
+                f1.getLowerRightNeighbour().setLowerLeftNeighbour(merged);
+            }
         }
         if (f1.getUpperRightNeighbour() != null) {
-            f1.getUpperRightNeighbour().setLowerLeftNeighbour(merged);
+            if (f1.getUpperRightNeighbour().getLowerLeftNeighbour() == f1) {
+                f1.getUpperRightNeighbour().setLowerLeftNeighbour(merged);
+            }
         }
         if (f2.getLowerLeftNeighbour() != null) {
-            f2.getLowerLeftNeighbour().setLowerRightNeighbour(merged);
+            if (f2.getLowerLeftNeighbour().getLowerRightNeighbour() == f2) {
+                f2.getLowerLeftNeighbour().setLowerRightNeighbour(merged);
+            }
         }
         if (f2.getUpperLeftNeighbour() != null) {
-            f2.getUpperLeftNeighbour().setLowerRightNeighbour(merged);
+            if (f2.getUpperLeftNeighbour().getLowerRightNeighbour() == f2) {
+                f2.getUpperLeftNeighbour().setLowerRightNeighbour(merged);
+            }
         }
         merged.setAllSideNeighbours(f2.getUpperLeftNeighbour(), f2.getLowerLeftNeighbour(), f1.getUpperRightNeighbour(), f1.getLowerRightNeighbour());
     }
