@@ -39,6 +39,8 @@ public class BoundingBox implements Iterable<LineSegment>, Drawable {
         }
         miny -= verticalOffset * height();
         maxy += verticalOffset * height();
+        minx -= verticalOffset * width();
+        maxx += verticalOffset * width();
     }
 
     public int getMinx() {

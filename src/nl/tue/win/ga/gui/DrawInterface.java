@@ -455,6 +455,7 @@ public class DrawInterface extends javax.swing.JFrame {
         segments.clear();
         faces.clear();
         partialProgress.clear();
+        
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -542,6 +543,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         if (segments.isEmpty()) {
             this.trapezoidalMap();
+        repaint();
         } else {
             segments.clear();
         }
@@ -678,7 +680,8 @@ public class DrawInterface extends javax.swing.JFrame {
 
     private void trapezoidalMap() {
         Face.resetCounter();
-        TrapezoidalMap t = new TrapezoidalMap(points);
+        //TrapezoidalMap t = new TrapezoidalMap(points);
+        RandomIncrementalConstruction t = new RandomIncrementalConstruction(points);
         t.lastStep = (int) jSpinner1.getValue();
         t.randomIncrementalMap();
         //t.inOrderIncrementalMap();
