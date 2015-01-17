@@ -1,6 +1,8 @@
 package nl.tue.win.ga.model;
 
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 import nl.tue.win.ga.gui.DrawInterface;
 
 /**
@@ -15,7 +17,8 @@ public final class Node {
     }
 
     private NodeType type;
-    private Node parent, lchild, rchild;
+    private Node lchild, rchild;
+    private final Set<Node> parents = new HashSet<>();
     private Face face;
     private Point point;
     private LineSegment segment;
@@ -65,7 +68,7 @@ public final class Node {
 
     public Node(NodeType type, Node parent) {
         this.type = type;
-        this.parent = parent;
+        this.parents.add(parent);
     }
 
     public NodeType getType() {
@@ -76,12 +79,19 @@ public final class Node {
         this.type = type;
     }
 
-    public Node getParent() {
-        return parent;
+    public void addParent(Node parent) {
+        if (parent != null) {
+            this.parents.add(parent);
+        }
     }
 
-    public void setParent(Node parent) {
-        this.parent = parent;
+    @Deprecated
+    public Node getParent() {
+        return this.parents.iterator().next(); // returns one of the parents
+    }
+
+    public Set<Node> getParents() {
+        return this.parents;
     }
 
     public Node getLchild() {
@@ -90,7 +100,7 @@ public final class Node {
 
     public void setLchild(Node lchild) {
         this.lchild = lchild;
-        lchild.setParent(this);
+        lchild.addParent(this);
     }
 
     public Node getRchild() {
@@ -99,22 +109,22 @@ public final class Node {
 
     public void setRchild(Node rchild) {
         this.rchild = rchild;
-        rchild.setParent(this);
+        rchild.addParent(this);
     }
 
     public boolean isRoot() {
-        return this.parent == null;
+        return this.parents.isEmpty();
     }
-    
+
     public void checkInvariant() {
-        assert !DrawInterface.ASSERTIONS || this.invariant():
+        assert !DrawInterface.ASSERTIONS || this.invariant() :
                 "Leaf has a null face" + type + face;
     }
-    
+
     public boolean invariant() {
         return this.type != NodeType.LEAF || this.face != null;
     }
-    
+
     public boolean contains(Node n) {
         boolean result = this == n;
         if (this.getLchild() != null) {

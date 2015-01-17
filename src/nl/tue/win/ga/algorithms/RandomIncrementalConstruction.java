@@ -257,7 +257,7 @@ public class RandomIncrementalConstruction {
         Face B = new Face(last.getTop(), last.getBottom(), q, last.getRightp());
 
         FirstandLastNeighbours(last, A, B);
-        
+
         Node n1 = last.getNode();
         n1.setType(Node.NodeType.POINT);
         n1.setFace(null);
@@ -283,7 +283,7 @@ public class RandomIncrementalConstruction {
         Face B = new Face(first.getTop(), first.getBottom(), p, first.getRightp());
 
         FirstandLastNeighbours(first, A, B);
-        
+
         Node n1 = first.getNode();
         n1.setType(Node.NodeType.POINT);
         n1.setFace(null);
@@ -449,7 +449,7 @@ public class RandomIncrementalConstruction {
             if (f1.getLowerRightNeighbour().getLowerLeftNeighbour() == f1) {
                 f1.getLowerRightNeighbour().setLowerLeftNeighbour(merged);
             }
-            if(f1.getLowerRightNeighbour().getUpperLeftNeighbour() == f1) {
+            if (f1.getLowerRightNeighbour().getUpperLeftNeighbour() == f1) {
                 f1.getLowerRightNeighbour().setUpperLeftNeighbour(merged);
             }
         }
@@ -494,18 +494,21 @@ public class RandomIncrementalConstruction {
         //n1.setFace(null);
         //n2.setFace(null);
         Node nmerged = new Node(merged);
-        if (left) {
-            assert !DrawInterface.ASSERTIONS || n1.getParent().getLchild() == n1;
-            assert !DrawInterface.ASSERTIONS || n2.getParent().getLchild() == n2;
-            n1.getParent().setLchild(nmerged);
-            n2.getParent().setLchild(nmerged);
-        } else {
-            assert !DrawInterface.ASSERTIONS || n1.getParent().getRchild() == n1;
-            assert !DrawInterface.ASSERTIONS || n2.getParent().getRchild() == n2;
-            n1.getParent().setRchild(nmerged);
-            n2.getParent().setRchild(nmerged);
+        Set<Node> parents = new HashSet<>();
+        parents.addAll(n1.getParents());
+        parents.addAll(n2.getParents());
+        for (Node parent : parents) {
+            if (left) {
+                assert !DrawInterface.ASSERTIONS || parent.getLchild() == n1 || parent.getLchild() == n2 : "child=" + parent.getLchild() + ", n1=" + n1 + ", n2=" + n2;
+                parent.setLchild(nmerged);
+                parent.setLchild(nmerged);
+            } else {
+                assert !DrawInterface.ASSERTIONS || parent.getRchild() == n1 || parent.getRchild() == n2 : "child=" + parent.getRchild() + ", n1=" + n1 + ", n2=" + n2;
+                parent.setRchild(nmerged);
+                parent.setRchild(nmerged);
+            }
         }
-        assert !DrawInterface.ASSERTIONS || (!inGraph(n1) && !inGraph(n2)):
+        assert !DrawInterface.ASSERTIONS || (!inGraph(n1) && !inGraph(n2)) :
                 "Merged node is still in graph";
     }
 
