@@ -24,7 +24,7 @@ public class RandomIncrementalConstruction {
     private List<Face> trapezoidalMap = new ArrayList<>();
     public int lastStep;
     private int currentStep;
-    private final static boolean SEPARATE_LINES = false; // no overlapping face borders
+    private final static boolean SEPARATE_LINES = true; // no overlapping face borders
     public List<Face> mergeFaces = new ArrayList<>();
     public List<LineSegment> handled = new ArrayList<>();
     public List<Point> presentPoints = new ArrayList<>();
@@ -344,9 +344,9 @@ public class RandomIncrementalConstruction {
      */
     private void calculateLastForMiddle(Face last, Point intersect, Point q, LineSegment ls) {
         if (intersect.y > last.getLeftp().y) {
-            calculateTopandBottomForMiddle(last, last.getLeftp(), q, intersect, q, ls);
-        } else {
             calculateTopandBottomForMiddle(last, intersect, q, last.getLeftp(), q, ls);
+        } else {
+            calculateTopandBottomForMiddle(last, last.getLeftp(), q, intersect, q, ls);
         }
     }
 
