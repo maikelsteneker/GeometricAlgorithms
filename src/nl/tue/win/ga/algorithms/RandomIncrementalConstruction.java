@@ -498,7 +498,7 @@ public class RandomIncrementalConstruction {
         parents.addAll(n1.getParents());
         parents.addAll(n2.getParents());
         for (Node parent : parents) {
-            if (left) {
+            if (parent.getLchild() == n1 || parent.getLchild() == n2) {
                 assert !DrawInterface.ASSERTIONS || parent.getLchild() == n1 || parent.getLchild() == n2 : "child=" + parent.getLchild() + ", n1=" + n1 + ", n2=" + n2;
                 parent.setLchild(nmerged);
                 parent.setLchild(nmerged);
