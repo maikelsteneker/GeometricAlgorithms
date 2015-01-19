@@ -1,4 +1,4 @@
-package nl.tue.win.ga.algorithms;
+package nl.tue.win.ga.algorithms.iterators;
 
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +10,7 @@ import nl.tue.win.ga.model.LineSegment;
  *
  * @author maikel
  */
-class RandomIterator implements Iterator<LineSegment> {
+public class RandomIterator implements Iterator<LineSegment> {
     
     private final List<LineSegment> linesegments;
     private final Random generator = new Random(0);
