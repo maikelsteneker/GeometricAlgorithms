@@ -455,7 +455,7 @@ public class RandomIncrementalConstruction {
 
         if (f.getLowerLeftNeighbour() != null) {
             if (f.getLowerLeftNeighbour().getUpperRightNeighbour() == f) {
-                if (f.getLowerLeftNeighbour().getTop().getEndPoint().y <= ls.getStartPoint().y) {
+                if (f.getLowerLeftNeighbour().getTop().getIntersection(f.getLeftp().x) <= ls.getIntersection(f.getLeftp().x)) {
                     f.getLowerLeftNeighbour().setUpperRightNeighbour(D);
                 } else {
                     f.getLowerLeftNeighbour().setUpperRightNeighbour(C);
@@ -467,7 +467,7 @@ public class RandomIncrementalConstruction {
         }
         if (f.getLowerRightNeighbour() != null) {
             if (f.getLowerRightNeighbour().getUpperLeftNeighbour() == f) {
-                if (f.getLowerRightNeighbour().getTop().getStartPoint().y <= ls.getEndPoint().y) {
+                if (f.getLowerRightNeighbour().getTop().getIntersection(f.getRightp().x) <= ls.getIntersection(f.getRightp().x)) {
                     f.getLowerRightNeighbour().setUpperLeftNeighbour(D);
                 } else {
                     f.getLowerRightNeighbour().setUpperLeftNeighbour(C);
@@ -482,7 +482,7 @@ public class RandomIncrementalConstruction {
                 f.getUpperLeftNeighbour().setUpperRightNeighbour(C);
             }
             if (f.getUpperLeftNeighbour().getLowerRightNeighbour() == f) {
-                if (f.getUpperLeftNeighbour().getBottom().getEndPoint().y >= ls.getStartPoint().y) {
+                if (f.getUpperLeftNeighbour().getBottom().getIntersection(f.getLeftp().x) >= ls.getIntersection(f.getLeftp().x)) {
                     f.getUpperLeftNeighbour().setLowerRightNeighbour(C);
                 } else {
                     f.getUpperLeftNeighbour().setLowerRightNeighbour(D);
@@ -494,7 +494,7 @@ public class RandomIncrementalConstruction {
                 f.getUpperRightNeighbour().setUpperLeftNeighbour(C);
             }
             if (f.getUpperRightNeighbour().getLowerLeftNeighbour() == f) {
-                if (f.getUpperRightNeighbour().getBottom().getStartPoint().y >= ls.getEndPoint().y) {
+                if (f.getUpperRightNeighbour().getBottom().getIntersection(f.getRightp().x) >= ls.getIntersection(f.getRightp().x)) {
                     f.getUpperRightNeighbour().setLowerLeftNeighbour(C);
                 } else {
                     f.getUpperRightNeighbour().setLowerLeftNeighbour(D);
