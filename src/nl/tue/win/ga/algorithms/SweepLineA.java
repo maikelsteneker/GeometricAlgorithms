@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import nl.tue.win.ga.model.*;
-import java.util.TreeMap;
 import nl.tue.win.ga.utilities.*;
 
 /**
@@ -25,7 +24,7 @@ public class SweepLineA {
      * 
      * @param points of the polygon
      */
-    public SweepLineA(ArrayList<Point> points) {
+    public SweepLineA(List<Point> points) {
         MergeSort ms = new MergeSort();
         sortedPoints = ms.sort(points);
         initializeEdges(points);

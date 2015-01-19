@@ -100,7 +100,7 @@ public class RandomIncrementalConstruction {
             for (Face f2 : help) {
                 if (f1 != f2) {
                     if (f1.getLeftp().x == f2.getRightp().x && f1.getLeftp().y == f2.getRightp().y) { //check if the faces are adjacent on one side
-                        if (f1.getBottom().getStartPoint().x != s.getStartPoint().x && f1.getBottom().getStartPoint().y != s.getStartPoint().y) { //does the face lie above or beneath s
+                        if (f1.getBottom() != s) { //does the face lie above or beneath s
                             assert f1.getTop().getStartPoint().x == s.getStartPoint().x && f1.getTop().getStartPoint().y == s.getStartPoint().y;
                             // case beneath
                             final Face merged = new Face(handled.get(handled.size() - 1), f2.getBottom(), f2.getLeftp(), f1.getRightp());
@@ -127,7 +127,7 @@ public class RandomIncrementalConstruction {
                             break;
                         }
                     } else if (f1.getRightp().x == f2.getLeftp().x && f1.getRightp().y == f2.getLeftp().y) { //check if adjacent on the other side
-                        if (f2.getBottom().getStartPoint().x != s.getStartPoint().x && f2.getBottom().getStartPoint().y != s.getStartPoint().y) { //does the face lie above or beneath s
+                        if (f2.getBottom() != s) { //does the face lie above or beneath s
                             // case beneath
                             final Face merged = new Face(handled.get(handled.size() - 1), f2.getBottom(), f1.getLeftp(), f2.getRightp());
                             setMergeNeighbours(merged, f2, f1);
