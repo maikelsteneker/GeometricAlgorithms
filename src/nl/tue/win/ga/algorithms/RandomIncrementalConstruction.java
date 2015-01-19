@@ -1,5 +1,6 @@
 package nl.tue.win.ga.algorithms;
 
+import nl.tue.win.ga.algorithms.iterators.RandomIterator;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,16 +18,15 @@ import nl.tue.win.ga.utilities.BoundingBox;
 public class RandomIncrementalConstruction {
 
     private List<LineSegment> edges = new ArrayList<>();
-    private Face boundingBox;
-    private Graph searchGraph;
-    private boolean done = false;
-    private List<Face> trapezoidalMap = new ArrayList<>();
+    private final Face boundingBox;
+    private final Graph searchGraph;
+    private final List<Face> trapezoidalMap = new ArrayList<>();
     public int lastStep;
     private int currentStep;
     private final static boolean SEPARATE_LINES = true; // no overlapping face borders
     public List<Face> mergeFaces = new ArrayList<>();
     public List<LineSegment> handled = new ArrayList<>();
-    public List<Point> presentPoints = new ArrayList<>();
+    public Set<Point> presentPoints = new HashSet<>();
 
     public RandomIncrementalConstruction(List<Point> points) {
         edges = PreprocessedEdges.preprocess(points);
@@ -62,16 +62,14 @@ public class RandomIncrementalConstruction {
             if (presentPoints.contains(start) && presentPoints.contains(end)) { //both points are in the plane already
                 middleComputation(intersections, s, start, end);
             } else if (presentPoints.contains(start) && !presentPoints.contains(end)) { //start point is in the plane already
-                presentPoints.add(end);
                 endComputation(intersections, s, start, end);
             } else if (!presentPoints.contains(start) && presentPoints.contains(end)) { //endpoint is in the plane already
-                presentPoints.add(start);
                 startComputation(intersections, s, start, end);
             } else { //no points are in the plane
-                presentPoints.add(start);
-                presentPoints.add(end);
                 fullComputation(intersections, s, start, end);
             }
+            presentPoints.add(start);
+            presentPoints.add(end);
 
             handled.add(s);
             merge(s);
@@ -86,7 +84,6 @@ public class RandomIncrementalConstruction {
      */
     private void merge(LineSegment s) {
         while (!mergeFaces.isEmpty()) {
-            Face merged = null;
             List<Face> help = new ArrayList<>();
             help.addAll(mergeFaces);
             Face f1 = mergeFaces.get(0);
@@ -94,8 +91,9 @@ public class RandomIncrementalConstruction {
                 if (f1 != f2) {
                     if (f1.getLeftp().x == f2.getRightp().x && f1.getLeftp().y == f2.getRightp().y) { //check if the faces are adjacent on one side
                         if (f1.getBottom().getStartPoint().x != s.getStartPoint().x && f1.getBottom().getStartPoint().y != s.getStartPoint().y) { //does the face lie above or beneath s
+                            assert f1.getTop().getStartPoint().x == s.getStartPoint().x && f1.getTop().getStartPoint().y == s.getStartPoint().y;                            
                             // case beneath
-                            merged = new Face(handled.get(handled.size() - 1), f2.getBottom(), f2.getLeftp(), f1.getRightp());
+                            final Face merged = new Face(handled.get(handled.size() - 1), f2.getBottom(), f2.getLeftp(), f1.getRightp());
                             setMergeNeighbours(merged, f1, f2);
                             setMergeTree(merged, f1, f2, true);
                             trapezoidalMap.remove(f1);
@@ -107,7 +105,7 @@ public class RandomIncrementalConstruction {
                             break;
                         } else {
                             // case above
-                            merged = new Face(f2.getTop(), handled.get(handled.size() - 1), f2.getLeftp(), f1.getRightp());
+                            final Face merged = new Face(f2.getTop(), handled.get(handled.size() - 1), f2.getLeftp(), f1.getRightp());
                             setMergeNeighbours(merged, f1, f2);
                             setMergeTree(merged, f1, f2, false);
                             trapezoidalMap.remove(f1);
@@ -121,7 +119,7 @@ public class RandomIncrementalConstruction {
                     } else if (f1.getRightp().x == f2.getLeftp().x && f1.getRightp().y == f2.getLeftp().y) { //check if adjacent on the other side
                         if (f2.getBottom().getStartPoint().x != s.getStartPoint().x && f2.getBottom().getStartPoint().y != s.getStartPoint().y) { //does the face lie above or beneath s
                             // case beneath
-                            merged = new Face(handled.get(handled.size() - 1), f2.getBottom(), f1.getLeftp(), f2.getRightp());
+                            final Face merged = new Face(handled.get(handled.size() - 1), f2.getBottom(), f1.getLeftp(), f2.getRightp());
                             setMergeNeighbours(merged, f2, f1);
                             setMergeTree(merged, f1, f2, true);
                             trapezoidalMap.remove(f1);
@@ -133,7 +131,7 @@ public class RandomIncrementalConstruction {
                             break;
                         } else {
                             // case above
-                            merged = new Face(f2.getTop(), handled.get(handled.size() - 1), f1.getLeftp(), f2.getRightp());
+                            final Face merged = new Face(f2.getTop(), handled.get(handled.size() - 1), f1.getLeftp(), f2.getRightp());
                             setMergeNeighbours(merged, f2, f1);
                             setMergeTree(merged, f1, f2, false);
                             trapezoidalMap.remove(f1);
@@ -514,17 +512,21 @@ public class RandomIncrementalConstruction {
         Set<Node> parents = new HashSet<>();
         parents.addAll(n1.getParents());
         parents.addAll(n2.getParents());
+        boolean l = false, r = false;
         for (Node parent : parents) {
             if (parent.getLchild() == n1 || parent.getLchild() == n2) {
                 assert !DrawInterface.ASSERTIONS || parent.getLchild() == n1 || parent.getLchild() == n2 : "child=" + parent.getLchild() + ", n1=" + n1 + ", n2=" + n2;
                 parent.setLchild(nmerged);
                 parent.setLchild(nmerged);
+                l = true;
             } else {
                 assert !DrawInterface.ASSERTIONS || parent.getRchild() == n1 || parent.getRchild() == n2 : "child=" + parent.getRchild() + ", n1=" + n1 + ", n2=" + n2;
                 parent.setRchild(nmerged);
                 parent.setRchild(nmerged);
+                r = true;
             }
         }
+        assert !(l&&r): "Child occurred on both left and right in tree";
         assert !DrawInterface.ASSERTIONS || (!inGraph(n1) && !inGraph(n2)) :
                 "Merged node is still in graph";
     }
