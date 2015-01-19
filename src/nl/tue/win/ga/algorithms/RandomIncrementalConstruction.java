@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import nl.tue.win.ga.algorithms.iterators.BucketIterator;
 import nl.tue.win.ga.gui.DrawInterface;
 import nl.tue.win.ga.model.*;
 import nl.tue.win.ga.utilities.BoundingBox;
@@ -45,6 +46,14 @@ public class RandomIncrementalConstruction {
 
     public void randomIncrementalMap() {
         computeIncrementalMap(new RandomIterator(edges));
+    }
+    
+    public void bucketIncrementalMap(int nBuckets) {
+        computeIncrementalMap(new BucketIterator(edges, nBuckets));
+    }
+    
+    public void fixedBucketIncrementalMap(int bucketSize) {
+        computeIncrementalMap(BucketIterator.fixedSizeBucketIterator(edges, bucketSize));
     }
 
     public void computeIncrementalMap(final Iterator<LineSegment> iterator) {
