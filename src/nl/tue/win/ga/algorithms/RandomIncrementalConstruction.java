@@ -405,7 +405,9 @@ public class RandomIncrementalConstruction {
             } else if ((invis2.getLowerRightNeighbour() == f) && f.getLowerLeftNeighbour() != invis2) {
                 C.setAllSideNeighbours(f.getUpperLeftNeighbour(), invis2, f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
                 D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
-                invis2.setUpperRightNeighbour(C);
+                if (invis2.getUpperRightNeighbour() == f) {
+                    invis2.setUpperRightNeighbour(C);
+                }
                 invis2.setLowerRightNeighbour(C);
             } else {
                 C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
@@ -420,7 +422,9 @@ public class RandomIncrementalConstruction {
                 C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
                 D.setAllSideNeighbours(invis1, f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
                 invis1.setUpperRightNeighbour(D);
-                invis1.setLowerRightNeighbour(D);
+                if (invis1.getLowerRightNeighbour() == f){
+                    invis1.setLowerRightNeighbour(D);
+                }
             } else {
                 C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
                 D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
