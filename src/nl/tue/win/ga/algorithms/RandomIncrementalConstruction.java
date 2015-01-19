@@ -414,6 +414,13 @@ public class RandomIncrementalConstruction {
                 D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
             }
         }
+        
+        if(presentPoints.contains(q)) {
+            C.setLowerRightNeighbour(f.getLowerRightNeighbour());
+        }
+        if(presentPoints.contains(u)) {
+            D.setUpperRightNeighbour(f.getUpperRightNeighbour());
+        }
 
         if (f.getLowerLeftNeighbour() != null) {
             if (f.getLowerLeftNeighbour().getUpperRightNeighbour() == f) {
