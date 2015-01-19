@@ -18,7 +18,7 @@ import nl.tue.win.ga.utilities.BoundingBox;
  */
 public class RandomIncrementalConstruction {
 
-    private List<LineSegment> edges = new ArrayList<>();
+    private final List<LineSegment> edges;
     private final Face boundingBox;
     private final Graph searchGraph;
     private final List<Face> trapezoidalMap = new ArrayList<>();
