@@ -71,13 +71,16 @@ public class RandomIncrementalConstruction {
             if (presentPoints.contains(start) && presentPoints.contains(end)) { //both points are in the plane already
                 middleComputation(intersections, s, start, end);
             } else if (presentPoints.contains(start) && !presentPoints.contains(end)) { //start point is in the plane already
+                presentPoints.add(end);
                 endComputation(intersections, s, start, end);
             } else if (!presentPoints.contains(start) && presentPoints.contains(end)) { //endpoint is in the plane already
+                presentPoints.add(start);
                 startComputation(intersections, s, start, end);
             } else { //no points are in the plane
+                presentPoints.add(start);
+                presentPoints.add(end);
                 fullComputation(intersections, s, start, end);
             }
-
             handled.add(s);
             merge(s);
             checkInvariant();
