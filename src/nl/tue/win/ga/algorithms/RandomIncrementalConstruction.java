@@ -417,7 +417,11 @@ public class RandomIncrementalConstruction {
 
         if (f.getLowerLeftNeighbour() != null) {
             if (f.getLowerLeftNeighbour().getUpperRightNeighbour() == f) {
-                f.getLowerLeftNeighbour().setUpperRightNeighbour(C);
+                if (f.getLowerLeftNeighbour().getTop().getEndPoint().y <= ls.getStartPoint().y) {
+                    f.getLowerLeftNeighbour().setUpperRightNeighbour(D);
+                } else {
+                    f.getLowerLeftNeighbour().setUpperRightNeighbour(C);
+                }
             }
             if (f.getLowerLeftNeighbour().getLowerRightNeighbour() == f) {
                 f.getLowerLeftNeighbour().setLowerRightNeighbour(D);
@@ -425,7 +429,11 @@ public class RandomIncrementalConstruction {
         }
         if (f.getLowerRightNeighbour() != null) {
             if (f.getLowerRightNeighbour().getUpperLeftNeighbour() == f) {
-                f.getLowerRightNeighbour().setUpperLeftNeighbour(C);
+                if (f.getLowerRightNeighbour().getTop().getStartPoint().y <= ls.getEndPoint().y) {
+                    f.getLowerRightNeighbour().setUpperLeftNeighbour(D);
+                } else {
+                    f.getLowerRightNeighbour().setUpperLeftNeighbour(C);
+                }
             }
             if (f.getLowerRightNeighbour().getLowerLeftNeighbour() == f) {
                 f.getLowerRightNeighbour().setLowerLeftNeighbour(D);
@@ -436,7 +444,11 @@ public class RandomIncrementalConstruction {
                 f.getUpperLeftNeighbour().setUpperRightNeighbour(C);
             }
             if (f.getUpperLeftNeighbour().getLowerRightNeighbour() == f) {
-                f.getUpperLeftNeighbour().setLowerRightNeighbour(D);
+                if (f.getUpperLeftNeighbour().getBottom().getEndPoint().y >= ls.getStartPoint().y) {
+                    f.getUpperLeftNeighbour().setLowerRightNeighbour(C);
+                } else {
+                    f.getUpperLeftNeighbour().setLowerRightNeighbour(D);
+                }
             }
         }
         if (f.getUpperRightNeighbour() != null) {
@@ -444,7 +456,11 @@ public class RandomIncrementalConstruction {
                 f.getUpperRightNeighbour().setUpperLeftNeighbour(C);
             }
             if (f.getUpperRightNeighbour().getLowerLeftNeighbour() == f) {
-                f.getUpperRightNeighbour().setLowerLeftNeighbour(D);
+                if (f.getUpperRightNeighbour().getBottom().getStartPoint().y >= ls.getEndPoint().y) {
+                    f.getUpperRightNeighbour().setLowerLeftNeighbour(C);
+                } else {
+                    f.getUpperRightNeighbour().setLowerLeftNeighbour(D);
+                }
             }
         }
 
