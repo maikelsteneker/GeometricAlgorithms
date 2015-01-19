@@ -596,7 +596,7 @@ public class RandomIncrementalConstruction {
                 r = true;
             }
         }
-        assert !(l&&r): "Child occurred on both left and right in tree";
+        assert !DrawInterface.ASSERTIONS || !(l&&r): "Child occurred on both left and right in tree";
         assert !DrawInterface.ASSERTIONS || (!inGraph(n1) && !inGraph(n2)) :
                 "Merged node is still in graph";
     }

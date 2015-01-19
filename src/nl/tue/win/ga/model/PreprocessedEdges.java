@@ -1,12 +1,11 @@
 package nl.tue.win.ga.model;
 
 import java.awt.Point;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import nl.tue.win.ga.io.ReadPolygonFromFile;
 
 /**
+ * Converts a point representation of a hull to an edge representation.
  *
  * @author maikel
  */
@@ -36,13 +35,5 @@ public class PreprocessedEdges {
         segments.add(closingSegment);
 
         return segments;
-    }
-
-    public static void main(String[] args) throws IOException {
-        SimplePolygon polygon = ReadPolygonFromFile.readPolygonFromFile("/home/maikel/polygon.txt");
-        List<LineSegment> segments = preprocess(polygon);
-        for (LineSegment s : segments) {
-            System.out.println(s);
-        }
     }
 }
