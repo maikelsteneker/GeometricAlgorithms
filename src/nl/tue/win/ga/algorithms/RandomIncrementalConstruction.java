@@ -47,11 +47,11 @@ public class RandomIncrementalConstruction {
     public void randomIncrementalMap() {
         computeIncrementalMap(new RandomIterator(edges));
     }
-    
+
     public void bucketIncrementalMap(int nBuckets) {
         computeIncrementalMap(new BucketIterator(edges, nBuckets));
     }
-    
+
     public void fixedBucketIncrementalMap(int bucketSize) {
         computeIncrementalMap(BucketIterator.fixedSizeBucketIterator(edges, bucketSize));
     }
@@ -100,7 +100,7 @@ public class RandomIncrementalConstruction {
                 if (f1 != f2) {
                     if (f1.getLeftp().x == f2.getRightp().x && f1.getLeftp().y == f2.getRightp().y) { //check if the faces are adjacent on one side
                         if (f1.getBottom().getStartPoint().x != s.getStartPoint().x && f1.getBottom().getStartPoint().y != s.getStartPoint().y) { //does the face lie above or beneath s
-                            assert f1.getTop().getStartPoint().x == s.getStartPoint().x && f1.getTop().getStartPoint().y == s.getStartPoint().y;                            
+                            assert f1.getTop().getStartPoint().x == s.getStartPoint().x && f1.getTop().getStartPoint().y == s.getStartPoint().y;
                             // case beneath
                             final Face merged = new Face(handled.get(handled.size() - 1), f2.getBottom(), f2.getLeftp(), f1.getRightp());
                             setMergeNeighbours(merged, f1, f2);
@@ -425,11 +425,10 @@ public class RandomIncrementalConstruction {
                 D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
             }
         }
-        
-        if(q != u && presentPoints.contains(q)) {
+
+        if (q != u && presentPoints.contains(q)) {
             C.setLowerRightNeighbour(f.getLowerRightNeighbour());
-        }
-        else if (q != u && presentPoints.contains(u)) {
+        } else if (q != u && presentPoints.contains(u)) {
             D.setUpperRightNeighbour(f.getUpperRightNeighbour());
         }
 
@@ -443,12 +442,12 @@ public class RandomIncrementalConstruction {
             D.setLowerLeftNeighbour(null);
         }
 
-        if (f.getTop().getEndPoint().equals(ls.getEndPoint()) &&ls.getEndPoint().x == f.getRightp().x) {
+        if (f.getTop().getEndPoint().equals(ls.getEndPoint()) && ls.getEndPoint().x == f.getRightp().x) {
             C.setUpperRightNeighbour(null);
             C.setLowerRightNeighbour(null);
         }
-        
-        if (f.getBottom().getEndPoint().equals(ls.getEndPoint()) && ls.getEndPoint().x == f.getRightp().x){
+
+        if (f.getBottom().getEndPoint().equals(ls.getEndPoint()) && ls.getEndPoint().x == f.getRightp().x) {
             D.setUpperRightNeighbour(null);
             D.setLowerRightNeighbour(null);
         }
@@ -582,21 +581,31 @@ public class RandomIncrementalConstruction {
         Set<Node> parents = new HashSet<>();
         parents.addAll(n1.getParents());
         parents.addAll(n2.getParents());
-        boolean l = false, r = false;
+        boolean l1 = false, r1 = false, l2 = false, r2 = false;
         for (Node parent : parents) {
             if (parent.getLchild() == n1 || parent.getLchild() == n2) {
                 assert !DrawInterface.ASSERTIONS || parent.getLchild() == n1 || parent.getLchild() == n2 : "child=" + parent.getLchild() + ", n1=" + n1 + ", n2=" + n2;
                 parent.setLchild(nmerged);
                 parent.setLchild(nmerged);
-                l = true;
+                if (parent.getLchild() == n1) {
+                    l1 = true;
+                }
+                if (parent.getLchild() == n2) {
+                    l2 = true;
+                }
             } else {
                 assert !DrawInterface.ASSERTIONS || parent.getRchild() == n1 || parent.getRchild() == n2 : "child=" + parent.getRchild() + ", n1=" + n1 + ", n2=" + n2;
                 parent.setRchild(nmerged);
                 parent.setRchild(nmerged);
-                r = true;
+                if (parent.getRchild() == n1) {
+                    r1 = true;
+                }
+                if (parent.getRchild() == n2) {
+                    r2 = true;
+                }
             }
         }
-        assert !DrawInterface.ASSERTIONS || !(l&&r): "Child occurred on both left and right in tree";
+        assert !DrawInterface.ASSERTIONS || !(l1 && r1) || !(l2 && r2) : "Child occurred on both left and right in tree";
         assert !DrawInterface.ASSERTIONS || (!inGraph(n1) && !inGraph(n2)) :
                 "Merged node is still in graph";
     }
