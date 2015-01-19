@@ -49,12 +49,13 @@ public class Graph {
                     }
                 }
             } else {
-                throw new IllegalArgumentException("Reached the last else in getFace");
+                assert !DrawInterface.ASSERTIONS:
+                        "Reached the last else in getFace";
             }
         }
         final Face result = check.getFace();
         assert !DrawInterface.ASSERTIONS ||
-                result.contains(p): "Graph returns face that does not contain"
+                result.contains(p): "Graph returns face that does not contain "
                 + "query point (" + result.toString() + " for point " + p + ")";
         return result;
     }
@@ -77,5 +78,9 @@ public class Graph {
                 allFaces(n.getRchild(), result);
             }
         }
+    }
+
+    public boolean contains(Node n) {
+        return this.root.contains(n);
     }
 }

@@ -1,6 +1,5 @@
 package nl.tue.win.ga.gui;
 
-import java.awt.Frame;
 import nl.tue.win.ga.model.drawing.ResultDrawable;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -456,6 +455,7 @@ public class DrawInterface extends javax.swing.JFrame {
         segments.clear();
         faces.clear();
         partialProgress.clear();
+        
         repaint();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -543,6 +543,7 @@ public class DrawInterface extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         if (segments.isEmpty()) {
             this.trapezoidalMap();
+        repaint();
         } else {
             segments.clear();
         }
@@ -679,9 +680,11 @@ public class DrawInterface extends javax.swing.JFrame {
 
     private void trapezoidalMap() {
         Face.resetCounter();
-        TrapezoidalMap t = new TrapezoidalMap(points);
+        //TrapezoidalMap t = new TrapezoidalMap(points);
+        RandomIncrementalConstruction t = new RandomIncrementalConstruction(points);
         t.lastStep = (int) jSpinner1.getValue();
-        t.RandomIncrementalMap();
+        t.randomIncrementalMap();
+        //t.inOrderIncrementalMap();
         segments = t.getResult();
         faces = t.getFaces();
         partialProgress = t.handled;

@@ -35,10 +35,6 @@ public class TrapezoidalMap {
      */
     private Graph graph;
     /**
-     * Random Generator
-     */
-    private Random randomGen = new Random(20);
-    /**
      * If the actual trapezoidalMap has been made
      */
     private boolean done = false;
@@ -68,16 +64,22 @@ public class TrapezoidalMap {
         boundingbox.setNode(root);
         graph = new Graph(root);
     }
+    
+    public void inOrderIncrementalMap() {
+        computeIncrementalMap(linesegments.iterator());
+    }
+    
+    public void randomIncrementalMap() {
+        computeIncrementalMap(new RandomIterator(linesegments));
+    }
 
-    public void RandomIncrementalMap() {
-
+    public void computeIncrementalMap(final Iterator<LineSegment> iterator) {
         currentStep = 0;
-        while (linesegments.size() > 0) {
+        while (iterator.hasNext()) {
             if (currentStep++ >= lastStep) {
                 return;
             }
-            LineSegment seg = getRandomLineSegment();
-            linesegments.remove(seg);
+            LineSegment seg = iterator.next();
             handled.add(seg);
             List<Face> intersections = getIntersectedFaces(seg);
             Point begin = seg.getStartPoint();
@@ -480,19 +482,6 @@ public class TrapezoidalMap {
                 || invariant() : "Graph does not contain the right faces";
         assert !DrawInterface.ASSERTIONS
                 || invariant2() : "Neighbours not updated correctly";
-    }
-
-    private LineSegment getRandomLineSegment() {
-        if (linesegments == null) {
-
-            return null;
-
-        } else {
-
-            int index = randomGen.nextInt(linesegments.size());
-            return linesegments.get(index);
-
-        }
     }
 
     private List<Face> getIntersectedFaces(LineSegment linesegment) {
