@@ -426,10 +426,10 @@ public class RandomIncrementalConstruction {
             }
         }
         
-        if(!presentPoints.contains(q)) {
+        if(q != u && presentPoints.contains(q)) {
             C.setLowerRightNeighbour(f.getLowerRightNeighbour());
         }
-        if(!presentPoints.contains(u)) {
+        else if (q != u && presentPoints.contains(u)) {
             D.setUpperRightNeighbour(f.getUpperRightNeighbour());
         }
 
