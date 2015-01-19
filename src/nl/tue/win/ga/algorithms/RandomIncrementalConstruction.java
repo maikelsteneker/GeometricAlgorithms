@@ -77,8 +77,6 @@ public class RandomIncrementalConstruction {
             } else { //no points are in the plane
                 fullComputation(intersections, s, start, end);
             }
-            presentPoints.add(start);
-            presentPoints.add(end);
 
             handled.add(s);
             merge(s);
@@ -369,7 +367,7 @@ public class RandomIncrementalConstruction {
      */
     private void calculateLastForMiddle(Face last, Point intersect, Point q, LineSegment ls) {
         if (intersect.y > last.getLeftp().y) {
-            calculateTopandBottomForMiddle(last, intersect, q, intersect, q, ls);
+            calculateTopandBottomForMiddle(last, intersect, q, last.getLeftp(), q, ls);
         } else {
             calculateTopandBottomForMiddle(last, last.getLeftp(), q, intersect, q, ls);
         }
