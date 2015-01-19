@@ -31,28 +31,29 @@ public class BucketIterator implements Iterator<LineSegment> {
     public BucketIterator(List<LineSegment> linesegments, int nBuckets) {
         buckets = new List[nBuckets];
         iterators = new Iterator[nBuckets];
-        final int nSegments = linesegments.size();
-        final int segmentsPerBucket = nSegments / nBuckets;
         Iterator<LineSegment> it = new RandomIterator(linesegments);
         for (int i = 0; i < nBuckets; i++) {
             buckets[i] = new ArrayList<>(); // construct a bucket
-            for (int j = 0; j < segmentsPerBucket; j++) {
-                if (it.hasNext()) {
-                    buckets[i].add(it.next()); // add each line segment
-                }
-            }
-            Collections.sort(linesegments, COMP); // sort the bucket
-            iterators[i] = buckets[i].iterator();
         }
+        int i = 0;
+        while (it.hasNext()) {
+            buckets[(i++) % buckets.length].add(it.next());
+        }
+        for (int j = 0; j < buckets.length; j++) {
+            Collections.sort(buckets[j], COMP); // sort the bucket
+            assert buckets[j].size() > 0 : "Empty bucket " + i;
+            iterators[j] = buckets[j].iterator();
+        }
+        assert !it.hasNext() : "Leftover segments were not assigned to bucket";
     }
-    
+
     public final static BucketIterator fixedSizeBucketIterator(List<LineSegment> lineSegments, int bucketSize) {
-        return new BucketIterator(lineSegments, lineSegments.size() / bucketSize);
+        return new BucketIterator(lineSegments, (lineSegments.size() / bucketSize)+1);
     }
 
     @Override
     public boolean hasNext() {
-        return iterators[currentBucket].hasNext() || iterators[(currentBucket+1) % iterators.length].hasNext();
+        return iterators[currentBucket].hasNext() || iterators[(currentBucket + 1) % iterators.length].hasNext();
     }
 
     @Override
@@ -60,7 +61,7 @@ public class BucketIterator implements Iterator<LineSegment> {
         if (iterators[currentBucket].hasNext() || currentBucket >= iterators.length) {
             return iterators[currentBucket].next();
         } else {
-            return iterators[currentBucket++].next();
+            return iterators[++currentBucket].next();
         }
     }
 
