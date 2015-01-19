@@ -93,4 +93,8 @@ public class LineSegment implements Drawable {
         endPoint = drawingUtilities.zoom(endPoint);
         g.drawLine(beginPoint.x, beginPoint.y, endPoint.x, endPoint.y);
     }
+
+    public float getLength() {
+        return (float) Math.abs(this.endPoints[0].distance(this.endPoints[1].x, this.endPoints[1].y));
+    }
 }
