@@ -422,6 +422,26 @@ public class RandomIncrementalConstruction {
             D.setUpperRightNeighbour(f.getUpperRightNeighbour());
         }
 
+        if (f.getTop().getStartPoint().equals(ls.getStartPoint())) {
+            C.setLowerLeftNeighbour(null);
+            C.setUpperLeftNeighbour(null);
+        }
+
+        if (f.getBottom().getStartPoint().equals(ls.getStartPoint())) {
+            D.setUpperLeftNeighbour(null);
+            D.setLowerLeftNeighbour(null);
+        }
+
+        if (f.getTop().getEndPoint().equals(ls.getEndPoint())) {
+            C.setUpperRightNeighbour(null);
+            C.setLowerRightNeighbour(null);
+        }
+        
+        if (f.getBottom().getEndPoint().equals(ls.getEndPoint())){
+            D.setUpperRightNeighbour(null);
+            D.setLowerRightNeighbour(null);
+        }
+
         if (f.getLowerLeftNeighbour() != null) {
             if (f.getLowerLeftNeighbour().getUpperRightNeighbour() == f) {
                 if (f.getLowerLeftNeighbour().getTop().getEndPoint().y <= ls.getStartPoint().y) {
