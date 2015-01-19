@@ -426,22 +426,22 @@ public class RandomIncrementalConstruction {
             D.setUpperRightNeighbour(f.getUpperRightNeighbour());
         }
 
-        if (f.getTop().getStartPoint().equals(ls.getStartPoint())) {
+        if (f.getTop().getStartPoint().equals(ls.getStartPoint()) && ls.getStartPoint().x == f.getLeftp().x) {
             C.setLowerLeftNeighbour(null);
             C.setUpperLeftNeighbour(null);
         }
 
-        if (f.getBottom().getStartPoint().equals(ls.getStartPoint())) {
+        if (f.getBottom().getStartPoint().equals(ls.getStartPoint()) && ls.getStartPoint().x == f.getLeftp().x) {
             D.setUpperLeftNeighbour(null);
             D.setLowerLeftNeighbour(null);
         }
 
-        if (f.getTop().getEndPoint().equals(ls.getEndPoint())) {
+        if (f.getTop().getEndPoint().equals(ls.getEndPoint()) &&ls.getEndPoint().x == f.getRightp().x) {
             C.setUpperRightNeighbour(null);
             C.setLowerRightNeighbour(null);
         }
         
-        if (f.getBottom().getEndPoint().equals(ls.getEndPoint())){
+        if (f.getBottom().getEndPoint().equals(ls.getEndPoint()) && ls.getEndPoint().x == f.getRightp().x){
             D.setUpperRightNeighbour(null);
             D.setLowerRightNeighbour(null);
         }
