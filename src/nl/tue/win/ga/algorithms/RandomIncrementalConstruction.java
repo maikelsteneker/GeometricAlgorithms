@@ -75,6 +75,7 @@ public class RandomIncrementalConstruction {
 
             handled.add(s);
             merge(s);
+            checkInvariant();
         }
     }
 
@@ -573,5 +574,46 @@ public class RandomIncrementalConstruction {
 
     private boolean inGraph(Node n) {
         return this.searchGraph.contains(n);
+    }
+    
+    private void checkInvariant() {
+        assert !DrawInterface.ASSERTIONS
+                || invariant() : "Graph does not contain the right faces";
+        assert !DrawInterface.ASSERTIONS
+                || invariant2() : "Neighbours not updated correctly";
+    }
+    
+    public boolean invariant() {
+        Set<Face> storedFaces = new HashSet<>(trapezoidalMap);
+        Set<Face> graphFaces = searchGraph.allFaces();
+        boolean result = storedFaces.equals(graphFaces);
+        if (!result) {
+            for (Face f : storedFaces) {
+                if (!graphFaces.contains(f)) {
+                    System.err.println(f.toString() + " missing in graph");
+                }
+            }
+            for (Face f : graphFaces) {
+                if (!storedFaces.contains(f)) {
+                    System.err.println(f.toString() + " missing in map");
+                }
+            }
+        }
+        return result;
+    }
+    
+    public boolean invariant2() {
+        Set<Face> storedFaces = new HashSet<>(trapezoidalMap);
+        for (Face f: storedFaces) {
+            Face[] neighbours = f.getNeighbours();
+            for (Face g : neighbours) {
+                if (g != null && !storedFaces.contains(g)) {
+                    System.err.println(g.toString() + " is still neighbour of "
+                            + f.toString() + ", but it has been removed.");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
