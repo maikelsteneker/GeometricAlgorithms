@@ -1,11 +1,11 @@
 package nl.tue.win.ga.algorithms;
 
+import nl.tue.win.ga.algorithms.iterators.RandomIterator;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import nl.tue.win.ga.gui.DrawInterface;
 import nl.tue.win.ga.model.Face;
