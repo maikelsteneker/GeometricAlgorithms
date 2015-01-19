@@ -382,8 +382,38 @@ public class RandomIncrementalConstruction {
         Face C = new Face(f.getTop(), ls, p, q);
         Face D = new Face(ls, f.getBottom(), r, u);
 
-        C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
-        D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
+        Face invis1 = null;
+        Face invis2 = null;
+
+        if (trapezoidalMap.size() > 2) {
+            invis1 = trapezoidalMap.get(trapezoidalMap.size() - 1);
+            invis2 = trapezoidalMap.get(trapezoidalMap.size() - 2);
+        }
+
+        if (presentPoints.contains(p)) {
+            if (invis2 == null) {
+                C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
+                D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
+            } else if ((invis2.getLowerRightNeighbour() == f) && f.getLowerLeftNeighbour() != invis2) {
+                C.setAllSideNeighbours(f.getUpperLeftNeighbour(), invis2, f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
+                D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
+            } else {
+                C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
+                D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
+            }
+
+        } else {
+            if (invis1 == null) {
+                C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
+                D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
+            } else if (invis1.getLowerRightNeighbour() == f && f.getUpperLeftNeighbour() != invis1) {
+                C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
+                D.setAllSideNeighbours(invis1, f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
+            } else {
+                C.setAllSideNeighbours(f.getUpperLeftNeighbour(), f.getUpperLeftNeighbour(), f.getUpperRightNeighbour(), f.getUpperRightNeighbour());
+                D.setAllSideNeighbours(f.getLowerLeftNeighbour(), f.getLowerLeftNeighbour(), f.getLowerRightNeighbour(), f.getLowerRightNeighbour());
+            }
+        }
 
         if (f.getLowerLeftNeighbour() != null) {
             if (f.getLowerLeftNeighbour().getUpperRightNeighbour() == f) {
@@ -575,14 +605,14 @@ public class RandomIncrementalConstruction {
     private boolean inGraph(Node n) {
         return this.searchGraph.contains(n);
     }
-    
+
     private void checkInvariant() {
         assert !DrawInterface.ASSERTIONS
                 || invariant() : "Graph does not contain the right faces";
         assert !DrawInterface.ASSERTIONS
                 || invariant2() : "Neighbours not updated correctly";
     }
-    
+
     public boolean invariant() {
         Set<Face> storedFaces = new HashSet<>(trapezoidalMap);
         Set<Face> graphFaces = searchGraph.allFaces();
@@ -601,10 +631,10 @@ public class RandomIncrementalConstruction {
         }
         return result;
     }
-    
+
     public boolean invariant2() {
         Set<Face> storedFaces = new HashSet<>(trapezoidalMap);
-        for (Face f: storedFaces) {
+        for (Face f : storedFaces) {
             Face[] neighbours = f.getNeighbours();
             for (Face g : neighbours) {
                 if (g != null && !storedFaces.contains(g)) {
