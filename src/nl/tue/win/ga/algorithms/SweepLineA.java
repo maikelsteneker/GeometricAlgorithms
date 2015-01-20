@@ -167,7 +167,7 @@ public class SweepLineA {
         }
 
         if (end.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         } else {
 
             for (Point intersection : end) {
