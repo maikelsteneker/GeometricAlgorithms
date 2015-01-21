@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Random;
 import nl.tue.win.ga.io.WritePolygonToFile;
 import nl.tue.win.ga.model.SimplePolygon;
@@ -15,8 +16,8 @@ import nl.tue.win.ga.model.SimplePolygon;
  */
 public class GenerateRandomPolygon {
 
-    final static int XRES = 1024;
-    final static int YRES = 768;
+    final static int XRES = Integer.MAX_VALUE / 100;
+    final static int YRES = Integer.MAX_VALUE / 100;
     final static int MAX_SIZE = 100;
     final static private Random GENERATOR = new Random();
 
@@ -43,7 +44,9 @@ public class GenerateRandomPolygon {
     }
 
     public static void main(String[] args) throws IOException {
-        WritePolygonToFile.writePolygonToFile("random.txt", generateRandomPolygon());
+        int[] sizes = {5000, 10000, 20000, 50000, 100000};
+        for (int x : sizes)
+        WritePolygonToFile.writePolygonToFile("random" + x + ".txt", generateRandomPolygon(x));
     }
 
     private static class PolarPointComparator implements Comparator<Point> {
@@ -105,7 +108,7 @@ public class GenerateRandomPolygon {
             if (p1.y < 0 && p2.y > 0) {
                 return 1;
             }
-            return crossProduct(p1, p2) > 0 ? -1 : 1; // p1<p2 if p1 is clockwise from p2
+            return crossProduct(p1, p2);
         }
     }
 }
